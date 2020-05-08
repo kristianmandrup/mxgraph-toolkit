@@ -1,6 +1,6 @@
 # mxgraph toolkit
 
-Toolkit for [mxgraph]((https://www.npmjs.com/package/mxgraph) built in TypeScript.
+Toolkit for [mxgraph](https://www.npmjs.com/package/mxgraph) built in TypeScript.
 
 ## Dependecies
 
