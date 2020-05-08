@@ -236,7 +236,12 @@ export class Style {
   }
 
   get styles() {
-    return ['strokeColor', 'edgeStyle', 'fillColor']
+    return [
+      'strokeColor', 'edgeStyle', 'fillColor', 'shape', 
+      'verticalLabelPosition', 'verticalAlign', 'startsize',
+      'image', 'imageBackground', 'imageBorder', 'noLabel',
+      'labelPosition'
+    ]
   } 
 
   get style() {
