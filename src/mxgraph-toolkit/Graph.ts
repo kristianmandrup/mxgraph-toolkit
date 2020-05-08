@@ -7,7 +7,8 @@ import { Editing } from './Editing';
 import { Guides } from './Guides';
 import { Group } from './Group';
 import { Cell } from './Cell';
-const { mxEdgeHandler, mxGraphHandler, mxMorphing, mxEvent, 
+import { GraphToggler } from './GraphToggler';
+const { mxMorphing, mxEvent, 
   mxCellState, mxRubberband, mxKeyHandler, mxGraphModel, mxGraph } = mx
 
 type IsCellVisibleFn = (cell: any) => boolean
@@ -32,6 +33,7 @@ export class Graph {
   _guides: any
   _cell: any
   _wstylesheet: any
+  _toggler: any
 
   constructor(graph: any, { editor, currentPermission }: any = {}) {
     this.graph = graph
@@ -82,6 +84,11 @@ export class Graph {
     return this._keyHandler      
   }
 
+  get toggle() {
+    this._toggler = this._toggler || new GraphToggler(this.graph);
+    return this._toggler
+  }
+
   setEditing(editing?: any) {
     this._editing = editing || this.createEditing(this.graph)
     return this._editing
@@ -129,51 +136,6 @@ export class Graph {
     return this.graph.getModel()
   }
 
-  setDropEnabled(value: boolean) {
-    this.graph.setDropEnabled(value)
-  }
-
-  setSplitEnabled(value: boolean) {
-    this.graph.setSplitEnabled(value)
-  }
-
-  setResizeContainerEnabled(value: boolean) {
-    this.graph.setResizeContainer(value)
-  }
-
-  setIsCellVisible(isCellVisible: IsCellVisibleFn) {
-    const { graph } = this
-    graph.isCellVisible = isCellVisible
-  }
-
-  setAllowLoops(value: boolean) {
-    this.graph.setAllowLoops(value);
-  }
-    
-  setFoldingEnabled(value: boolean) {
-    this.graph.foldingEnabled = value;
-  }
-
-  setRecursiveResizeEnabled(value: boolean) {
-    this.graph.recursiveResize = value;
-  }
-
-  setCellsDisconnectable(value: boolean) {
-    this.graph.setCellsDisconnectable(value);
-  }
-
-  setAllowDanglingEdges(value: boolean) {
-    this.graph.setAllowDanglingEdges(value);
-  }
-
-  setCellsEditable(value: boolean) {
-    this.graph.setCellsEditable(value);
-  }
-  
-  setCenterZoom(value: boolean) {
-    this.graph.centerZoom = value;
-  }
-
   get draw(): DrawLayer {
     return this.createDrawLayer()
   }
@@ -181,24 +143,10 @@ export class Graph {
   protected createDrawLayer() {
     return new DrawLayer(this, this.defaultParent)
   }
-  
-  setGuidesEnabled(value: boolean) {
-    mxGraphHandler.prototype.guidesEnabled = true;
-  }
-  
-  setSnapToTerminals(value: boolean) {
-    mxEdgeHandler.prototype.snapToTerminals = value;
-  }
-  
-  // Disables automatic handling of ports. This disables the reset of the
-  // respective style in mxGraph.cellConnected. Note that this feature may
-  // be useful if floating and fixed connections are combined.
-  disableAutoPorts() {
-    this.setPortsEnabled(false);
-  }
 
-  setPortsEnabled(value: boolean) {
-    this.graph.setPortsEnabled(value);
+  setIsCellVisible(isCellVisible: IsCellVisibleFn) {
+    const { graph } = this
+    graph.isCellVisible = isCellVisible
   }
 
   morph(onDone: () => void) {
@@ -224,34 +172,6 @@ export class Graph {
     this.model.beginUpdate()
     fn(this)
     this.model.endUpdate()
-  }
-
-  stopEditing(value: boolean) {
-    this.graph.stopEditing(value);
-  }
-
-  setHtmlLabels(value: boolean) {
-    this.graph.setHtmlLabels(value);  
-  }
-  
-  setPanning(value: boolean) {
-    this.graph.setPanning(value)
-  }
-
-  setEnabled(value: boolean) {
-    this.graph.setEnabled(value);
-  }
-
-  setConnectable(value: boolean) {
-    this.graph.setConnectable(value);
-  }
-  
-  setMultigraph(value: boolean) {
-    this.graph.setMultigraph(value);
-  }   
-  
-  setTooltips(value: boolean) {
-    this.graph.setTooltips(value);
   }
 
   hidePopupMenu() {
