@@ -19,8 +19,23 @@ export class Cell {
   };
 
   isPart(cell: any) {
-    this.graph.isPart(cell)
+    const { graph } = this
+    graph.isPart(cell)
   }
+
+  disableFolding() {
+    this.graph.isCellFoldable = (cell) => false
+  }
+
+  setGetLabelFn(getLabelFn: (cell) => any) {
+    const { graph } = this
+    this.graph.getLabel = getLabelFn.bind(graph)
+  }
+  
+  addCellOverlay(cell, overlay) {
+    const { graph } = this
+    graph.addCellOverlay(cell, overlay)
+  };
 
   // See lod (level-of-detail) example
   setDetailLevel(cell, level) {

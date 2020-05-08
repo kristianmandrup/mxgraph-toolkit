@@ -27,6 +27,24 @@ graph.setIsCellVisible((cell): true => {
 })
 ```
 
+## disable folding
+
+```ts
+cell.disableFolding()
+```
+
+## set getLabel function
+
+```ts
+cell.setGetLabelFn((cell) => any)
+```
+
+## add cell overlay
+
+```ts
+graph.addCellOverlay(cell, overlay)
+```
+
 ## Detail level
 
 Set at what detail level the cell should display

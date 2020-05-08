@@ -6,6 +6,7 @@ import { Permission } from './Permission';
 import { Editing } from './Editing';
 import { Guides } from './Guides';
 import { Group } from './Group';
+import { Cell } from './Cell';
 const { mxEdgeHandler, mxGraphHandler, mxMorphing, mxEvent, 
   mxCellState, mxRubberband, mxKeyHandler, mxGraphModel, mxGraph } = mx
 
@@ -29,6 +30,8 @@ export class Graph {
   currentPermission: Permission
   _editing: any
   _guides: any
+  _cell: any
+  _wstylesheet: any
 
   constructor(graph: any, { editor, currentPermission }: any = {}) {
     this.graph = graph
@@ -56,9 +59,27 @@ export class Graph {
     container.style.background = background
     return container
   }
+
+  get defaultParent() {
+    return this.graph.getDefaultParent();
+  }
   
   get editing() {
     return this._editing
+  }
+
+  get stylesheet() {
+    return this.graph.getStylesheet()
+  }
+
+  get rubberband() {
+    this._rubberband = this._rubberband || new mxRubberband(this.graph)
+    return this._rubberband
+  }
+
+  get keyHandler() {
+    this._keyHandler = this._keyHandler || new mxKeyHandler(this.graph);
+    return this._keyHandler      
   }
 
   setEditing(editing?: any) {
@@ -69,13 +90,13 @@ export class Graph {
   protected createEditing(props) {
     new Editing(this.graph, props)
   }
-  
-  get guides() {
-    return this._guides
-  }
 
   createGroup(name: string = 'Group', label: string = 'group') {
     return new Group(name, label)
+  }
+
+  get guides() {
+    return this._guides
   }
 
   setGuides(guides?: any) {
@@ -85,6 +106,19 @@ export class Graph {
 
   protected createGuides(): any {
     return new Guides()
+  }
+
+  get cell() {
+    return this._cell
+  }
+
+  setCell(cell?: any) {
+    this._cell = cell || this.createGuides()
+    return this._cell
+  }
+
+  protected createCell(): any {
+    return new Cell(this.graph)
   }
 
   get model() {
@@ -186,80 +220,20 @@ export class Graph {
     this.model.endUpdate()
   }
 
-  updateTransaction(fn) {
+  modelTransaction(fn) {
     this.model.beginUpdate()
     fn(this)
     this.model.endUpdate()
   }
 
-  get defaultParent() {
-    return this.graph.getDefaultParent();
-  }
-
-  addCellOverlay(cell, overlay) {
-    this.graph.addCellOverlay(cell, overlay)
-  };
-
   stopEditing(value: boolean) {
     this.graph.stopEditing(value);
   }
-  
-  hidePopupMenu() {
-    this.graph.popupMenuHandler.hideMenu();
-  }
-
-  disableFolding() {
-    this.graph.isCellFoldable = (cell) => false
-  }
-
-  enablePorts() {
-    this.graph.isPort = createIsPort(this.graph)
-  }
-
-  setTooltips(value: boolean) {
-    this.graph.setTooltips(value);
-  }
-
-  setGetToolTipFn(getTooltipFn: (state) => any) {
-    const { graph } = this
-    this.graph.getTooltip = getTooltipFn.bind(graph)
-  }
-
-  setGetLabelFn(getLabelFn: (cell) => any) {
-    const { graph } = this
-    this.graph.getLabel = getLabelFn.bind(graph)
-  }
-
-  get stylesheet() {
-    return this.graph.getStylesheet()
-  }
-
-  withStylesheet() {
-    return new StyleSheet(this.stylesheet)
-  }
-
-  enableConnectPreview() {
-    this.graph.connectionHandler.createEdgeState = (me) => {
-      var edge = this.graph.createEdge(null, null, null, null, null);      
-      return new mxCellState(this.graph.view, edge, this.graph.getCellStyle(edge));
-    };
-  }
-
-  createVertexHandler(...args) {
-    this.graph.createHandler = (state) => {
-      if (state != null && this.model.isVertex(state.cell)) {
-        return new VertexToolHandler(this.graph, state);
-      }
-
-      return mxGraph.prototype.createHandler(state);
-    }
-  };  
 
   setHtmlLabels(value: boolean) {
     this.graph.setHtmlLabels(value);  
   }
   
-
   setPanning(value: boolean) {
     this.graph.setPanning(value)
   }
@@ -274,15 +248,45 @@ export class Graph {
   
   setMultigraph(value: boolean) {
     this.graph.setMultigraph(value);
-  }
+  }   
   
-  get rubberband() {
-    this._rubberband = this._rubberband || new mxRubberband(this.graph)
-    return this._rubberband
+  setTooltips(value: boolean) {
+    this.graph.setTooltips(value);
   }
 
-  get keyHandler() {
-    this._keyHandler = this._keyHandler || new mxKeyHandler(this.graph);
-    return this._keyHandler      
+  hidePopupMenu() {
+    this.graph.popupMenuHandler.hideMenu();
   }
+
+  enablePorts() {
+    this.graph.isPort = this.cell.createIsPort(this.graph)
+  }
+
+  setGetToolTipFn(getTooltipFn: (state: any) => string) {
+    const { graph } = this
+    this.graph.getTooltip = getTooltipFn.bind(graph)
+  }
+
+  withStylesheet(clear: boolean = false): any {
+    this._wstylesheet = (!clear && this._wstylesheet) || new StyleSheet(this.stylesheet)
+    return this._wstylesheet
+  }
+
+  enableConnectPreview() {
+    const { graph } = this
+    graph.connectionHandler.createEdgeState = (me) => {
+      var edge = graph.createEdge(null, null, null, null, null);      
+      return new mxCellState(this.graph.view, edge, graph.getCellStyle(edge));
+    };
+  }
+
+  createVertexHandler() {
+    const { graph } = this
+    graph.createHandler = (state) => {
+      if (state != null && this.model.isVertex(state.cell)) {
+        return new VertexToolHandler(graph, state);
+      }
+      return mxGraph.prototype.createHandler(state);
+    }
+  };  
 }
