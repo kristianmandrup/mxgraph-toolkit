@@ -8,6 +8,25 @@ API used to operate on cells (vertices and edges) the primitive graph entities.
 const cellApi = new Cell(graph)
 ```
 
+## isPart
+
+Tests if cell is part of graph.
+
+```ts
+const isInGraph: boolean = cell.isPart(cell)
+```
+
+## cell visibility
+
+Set function to determine cell visibility.
+
+```ts
+graph.setIsCellVisible((cell): true => {
+  // ...
+  return isVisible
+})
+```
+
 ## Detail level
 
 Set at what detail level the cell should display

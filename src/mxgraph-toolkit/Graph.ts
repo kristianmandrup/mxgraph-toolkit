@@ -6,26 +6,8 @@ import { Permission } from './Permission';
 import { Editing } from './Editing';
 import { Guides } from './Guides';
 import { Group } from './Group';
-const { mxEdgeHandler, mxGraphHandler, mxMorphing, mxEvent, mxCellState, mxRubberband, mxKeyHandler, mxGraphModel, mxGraph } = mx
-
-export const createGraphWithModel = (container: Element, model?: any) => {
-  model = model || new mxGraphModel();
-  return new mxGraph(container, model);
-}
-
-export const createGraphDOMElement = ({left, top}: {left: number, top: number} = {left: 24, top: 26}): Element => {
-  left = left || 24
-  top = top || 26
-  const container = document.createElement('div');
-  container.style.position = 'absolute';
-  container.style.overflow = 'hidden';
-  container.style.left = `${left}px`;
-  container.style.top = `${top}px`;
-  container.style.right = '0px';
-  container.style.bottom = '0px';
-  container.style.background = 'url("images/grid.gif")';
-  return container
-}
+const { mxEdgeHandler, mxGraphHandler, mxMorphing, mxEvent, 
+  mxCellState, mxRubberband, mxKeyHandler, mxGraphModel, mxGraph } = mx
 
 type IsCellVisibleFn = (cell: any) => boolean
 
@@ -34,11 +16,10 @@ export interface IGraph {
   model: any
 }
 
-export const createIsPort = graph => (cell) => {
-  var geo = graph.getCellGeometry(cell);
-  console.log({geo})
-  return (geo != null) ? geo.relative : false;
-};
+export type DOMPosition = {
+  left: number
+  top: number
+}
 
 export class Graph {
   graph: any
@@ -49,21 +30,46 @@ export class Graph {
   _editing: any
   _guides: any
 
-  constructor(graph: any, editor?: any, { currentPermission }: any = {}) {
+  constructor(graph: any, { editor, currentPermission }: any = {}) {
     this.graph = graph
     this.editor = editor
     this.currentPermission = currentPermission || {}
   }
+  
+  static createGraphWithModel(container: Element, model?: any) {
+    model = model || new mxGraphModel();
+    return new mxGraph(container, model);
+  }
 
+  static createGraphDOMElement({pos, background}: {pos?: DOMPosition, background?: string} = {}): Element {
+    let { left, top} = pos || {}
+    left = left || 24
+    top = top || 26
+    background = background || 'url("images/grid.gif")'
+    const container = document.createElement('div');
+    container.style.position = 'absolute';
+    container.style.overflow = 'hidden';
+    container.style.left = `${left}px`;
+    container.style.top = `${top}px`;
+    container.style.right = '0px';
+    container.style.bottom = '0px';
+    container.style.background = background
+    return container
+  }
+  
   get editing() {
     return this._editing
   }
 
-  setEditing(props?: any) {
-    this._editing = new Editing(this.graph, props)
+  setEditing(editing?: any) {
+    this._editing = editing || this.createEditing(this.graph)
     return this._editing
   }
 
+  protected createEditing(props) {
+    new Editing(this.graph, props)
+  }
+  
   get guides() {
     return this._guides
   }
@@ -72,17 +78,21 @@ export class Graph {
     return new Group(name, label)
   }
 
-  setGuides(props?: any) {
-    this._guides = new Guides(this.graph)
+  setGuides(guides?: any) {
+    this._guides = guides || this.createGuides()
     return this._guides
+  }
+
+  protected createGuides(): any {
+    return new Guides()
   }
 
   get model() {
     return this.graph.model
   }
 
-  isPart(cell: any) {
-    this.graph.isPart(cell)
+  getModel() {
+    return this.graph.getModel()
   }
 
   setDropEnabled(value: boolean) {
@@ -93,15 +103,7 @@ export class Graph {
     this.graph.setSplitEnabled(value)
   }
 
-  setVisibilityDetailLevel() {
-    const { graph } = this
-    graph.isCellVisible = (cell) => {
-      const inView = () => cell.lod / 2 < graph.view.scale;
-      return !cell.lod || inView();
-    };  
-  }
-
-  setResizeContainer(value: boolean) {
+  setResizeContainerEnabled(value: boolean) {
     this.graph.setResizeContainer(value)
   }
 
@@ -138,14 +140,14 @@ export class Graph {
     this.graph.centerZoom = value;
   }
 
-  getModel() {
-    return this.graph.getModel()
+  get draw(): DrawLayer {
+    return this.createDrawLayer()
   }
 
-  draw(): DrawLayer {
+  protected createDrawLayer() {
     return new DrawLayer(this, this.defaultParent)
   }
-
+  
   setGuidesEnabled(value: boolean) {
     mxGraphHandler.prototype.guidesEnabled = true;
   }
