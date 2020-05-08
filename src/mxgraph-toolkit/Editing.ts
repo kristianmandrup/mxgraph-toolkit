@@ -1,4 +1,5 @@
 import mx from "./mx";
+import { IPosition } from './types';
 const { mxEvent, mxUtils, mxGraph } = mx
 
 export interface IRegionCalc {
@@ -12,11 +13,11 @@ export class RegionCalc implements IRegionCalc {
     this.state = state
   }
 
-  inSecondHalf(point) {
+  inSecondHalf(point: IPosition) {
     return point.y > this.state.height / 2
   }
 
-  determine(point: any): string {
+  determine(point: IPosition): string {
     return this.inSecondHalf(point) ? 'second' : 'first'
   }
 }

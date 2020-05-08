@@ -13,25 +13,40 @@ export class Editor {
     this.editor.graph = graph
   }
 
-  createContainers() {
-    this.containers = {
+  init() {
+    this.setContainerMap()
+    return this
+  }
+
+  get defaultContainerMap(): any {
+    return {
       graph: getElem('graphContainer'),
       outline: getElem('outlineContainer'),
       toolbar: getElem('toolbarContainer'),
       sidebar: getElem('sidebarContainer'),
       status: getElem('statusContainer')
-    }    
+    }        
+  }
+
+  setContainerMap(containers: any = {}) {
+    this.containers = {
+      ...this.defaultContainerMap,
+      containers
+    }
+    return this
   }
 
   get graph(): any {
     return this.editor.graph;
   }
 
-  set defaultGroup(group) {
+  setDefaultGroup(group) {
     this.editor.defaultGroup = group
+    return this
   }
 
-  configure(config) {
+  configure(config: any) {
     this.editor.configure(config)
+    return this
   }
 }

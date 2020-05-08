@@ -2,7 +2,7 @@ import mx from "./mx";
 const { mxCellTracker } = mx
 
 export const createCellTooltip = (graph: any): CellTooltip => {
-  return new CellTooltip(graph)
+  return new CellTooltip(graph).init()
 }
 
 export class CellTooltip {
@@ -19,8 +19,9 @@ export class CellTooltip {
 
   init() {
     this.graph.getTooltipForCell = this.getTooltipForCell
+    return this
   }
-  getTooltipForCell(cell) {
+  getTooltipForCell(cell): string {
     const { graph } = this
     const getTooltipForCell = graph.getTooltipForCell;
     const model = graph.getModel()
