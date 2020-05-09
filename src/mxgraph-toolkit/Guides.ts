@@ -16,9 +16,9 @@ export class Guides {
     return this
   }
 
-  snapToTerminals() {
+  snapToTerminals(value: boolean = true) {
     // Enables snapping waypoints to terminals
-    this.handler.snapToTerminals = true;  
+    this.handler.snapToTerminals = value;  
   }
 
   initStyle({color, strokeWidth}: any = {}) {

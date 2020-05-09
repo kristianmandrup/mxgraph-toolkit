@@ -1,12 +1,12 @@
-import mx from "./mx";
+import mx from "@toolkit/mx";
 import { defaults } from './defaults';
-import { StyleCombiner } from './Style';
 import { ISize } from './types';
+import { StyleCombiner } from '@style/StyleCombiner';
 const { mxCodec, mxUtils, mxConstants } = mx
 
-export type ShowModalWindow = (graph: any, title: string, textarea: string, width: number, height: number) => void
+export type ShowModalWindow = (graph: any, title: string, textarea: HTMLTextAreaElement, width: number, height: number) => void
 
-export type ExportModalProps = { size: ISize, title: string }
+export type ExportModalProps = { size?: ISize, title?: string }
 
 const createExportModal = (graph: any, showModalWindow: ShowModalWindow, props: ExportModalProps) => (cell:any) => {
   let { size, title } = props
@@ -29,6 +29,8 @@ const createExportModal = (graph: any, showModalWindow: ShowModalWindow, props: 
 type ActionProps = {
   showModalWindow?: ShowModalWindow
   actionResourceMap?: any
+  size?: ISize,
+  title?: string
 }
 
 export class Actions {

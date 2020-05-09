@@ -14,7 +14,7 @@ export class CellTooltip {
 
   highlightCellOnHover() {
     // Adds a highlight on the cell under the mousepointer
-    new mxCellTracker(this.graph);
+    new mxCellTracker(this.graph, undefined, undefined);
   }
 
   init() {

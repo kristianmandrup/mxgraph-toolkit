@@ -1,4 +1,4 @@
-import mx from "./mx";
+import mx from "../mx";
 const { mxUtils, mxConstants } = mx
 
 export class HoverStyle {

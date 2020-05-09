@@ -1,6 +1,6 @@
 import mx from "./mx";
 import { DrawLayer } from './Layers';
-import { StyleSheet } from './Stylesheet';
+import { StyleSheet } from './style';
 import { VertexToolHandler } from './VertexToolHandler';
 import { Permission } from './Permission';
 import { Editing } from './Editing';

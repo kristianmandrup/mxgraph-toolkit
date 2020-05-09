@@ -24,10 +24,11 @@ export class Hints {
 
   constructor(hints?: Element) {
     this.hints = hints || createHintsElement()
+    this.init()
   }
 
-  init() {
-    mxUtils.setOpacity(this.hints, 50);
+  init({opacity} = {opacity: 50}) {
+    mxUtils.setOpacity(this.hints, opacity || 50);
     return this
   }
 
@@ -35,7 +36,7 @@ export class Hints {
     document.body.appendChild(this.hints);
   }
   
-  addHint(text: string) {
+  addText(text: string) {
     mxUtils.writeln(this.hints, text)
   }
 }

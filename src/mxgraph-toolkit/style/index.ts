@@ -1,3 +1,3 @@
 export { Style } from './Style'
-export { Stylesheet } from './Stylesheet'
+export { StyleSheet } from './Stylesheet'
 export { StyleValidator } from './StyleValidator'

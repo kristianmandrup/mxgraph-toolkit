@@ -1,10 +1,12 @@
 {
   "compilerOptions": {
     "moduleResolution": "node",
-    "target": "es5",
+    "target": "es6",
     "module":"es2015",
     "lib": ["es2015", "es2016", "es2017", "dom"],
+    "baseUrl": "src",
     "strict": true,
+    "pretty": true,
     "sourceMap": true,
     "declaration": true,
     "noImplicitAny": false,
@@ -15,9 +17,22 @@
     "outDir": "dist/lib",
     "typeRoots": [
       "node_modules/@types"
-    ]
-  },
+    ],
+    "paths": {
+      "@toolkit/*": ["mxgraph-toolkit/*"],
+      "@style/*": ["mxgraph-toolkit/style/*"],
+      "@shapes/*": ["mxgraph-toolkit/shapes/*"],
+      "@toolbar/*": ["mxgraph-toolkit/toolbar/*"],
+      "@group/*": ["mxgraph-toolkit/group/*"],
+      "@menu/*": ["mxgraph-toolkit/menu/*"]
+    }
+  },   
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ],   
   "include": [
-    "src"
-  ]
+    "src/**/*"
+  ],
+  "compileOnSave": true
 }

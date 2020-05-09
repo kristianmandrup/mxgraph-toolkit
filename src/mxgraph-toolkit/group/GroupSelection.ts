@@ -1,4 +1,4 @@
-import mx from "./mx";
+import mx from "@toolkit/mx";
 const { mxGraphHandler, mxPopupMenuHandler } = mx
 
 export class GroupSelection {
@@ -27,7 +27,7 @@ export class GroupSelection {
   mouseDown(sender, me) {
     const { graph, graphHandler } = this
     const graphHandlerMouseDown = graphHandler.mouseDown;
-    graphHandlerMouseDown.apply(this, arguments);
+    graphHandlerMouseDown.apply(graphHandler, arguments);
 
     if (graph.isCellSelected(me.getCell()) && graph.getSelectionCount() > 1)
     {
@@ -36,18 +36,19 @@ export class GroupSelection {
   }
   
   getInitialCellForEvent(me) {
+    const { graph, graphHandler } = this
     // Selects descendants before children selection mode
     var graphHandlerGetInitialCellForEvent = mxGraphHandler.prototype.getInitialCellForEvent;
-    var model = this.graph.getModel();
-    var psel = model.getParent(this.graph.getSelectionCell());
-    var cell = graphHandlerGetInitialCellForEvent.apply(this, arguments);
+    var model = graph.getModel();
+    var psel = model.getParent(graph.getSelectionCell());
+    var cell = graphHandlerGetInitialCellForEvent.apply(graphHandler, me);
     var parent = model.getParent(cell);
     
     if (psel == null || (psel !== cell && psel !== parent)) {
-      while (!this.graph.isCellSelected(cell) && !this.graph.isCellSelected(parent) &&
-          model.isVertex(parent) && !this.graph.isValidRoot(parent)) {
+      while (!graph.isCellSelected(cell) && !graph.isCellSelected(parent) &&
+          model.isVertex(parent) && !graph.isValidRoot(parent)) {
         cell = parent;
-        parent = this.graph.getModel().getParent(cell);
+        parent = graph.getModel().getParent(cell);
       }
     }
     
@@ -58,7 +59,7 @@ export class GroupSelection {
     const { graphHandler, graph } = this
     // Selection is delayed to mouseup if child selected
     var graphHandlerIsDelayedSelection = mxGraphHandler.prototype.isDelayedSelection;
-    var result = graphHandlerIsDelayedSelection.apply(graphHandler, arguments);
+    var result = graphHandlerIsDelayedSelection.apply(graphHandler, cell);
     var model = this.graph.getModel();
     var psel = model.getParent(this.graph.getSelectionCell());
     var parent = model.getParent(cell);

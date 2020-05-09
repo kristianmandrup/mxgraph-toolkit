@@ -45,7 +45,7 @@ export class Layout {
   fastOrganic(force: number = 140) {
     // Creates a layout algorithm to be used
     // with the graph
-    const layout = new mxFastOrganicLayout(graph);
+    const layout = new mxFastOrganicLayout(this.graph);
     this.layout = layout
     // Moves stuff wider apart than usual
     layout.forceConstant = force;

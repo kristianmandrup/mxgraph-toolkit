@@ -1,5 +1,5 @@
 import mx from "./mx";
-import { IPosition } from './types';
+import { ISize } from './types';
 const { mxImage, mxConnectionHandler } = mx
 
 export class Connection {
@@ -7,7 +7,7 @@ export class Connection {
     return new mxImage('images/connector.gif', 16, 16)
   }
 
-  setConnectImageByPath(imagePath: string, size?: IPosition) {
+  setConnectImageByPath(imagePath: string, size?: ISize) {
     size = {
       width: 16,
       height: 16,

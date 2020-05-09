@@ -8,12 +8,11 @@ export { Connection } from './Connection'
 export { Drop } from './Drop'
 export { Editing } from './Editing'
 export { Editor } from './Editor'
-export { Graph, createGraphWithModel, createGraphDOMElement } from './Graph'
-export { Group, GroupSelection } from './Group'
+export { Graph } from './Graph'
+export { Group, GroupSelection } from '@group'
 export { Guides } from './Guides'
 export { Handles } from './Handles'
-export { HoverStyle } from './HoverStyle'
-export { HoverIcons, HoverVertexListener } from './HoverIcons'
+export { HoverStyle, HoverIcons, HoverVertexListener } from './hover'
 export { HtmlLabel } from './HtmlLabel'
 export { Hints } from './Hints'
 export { Layout } from './Layout'
@@ -26,16 +25,15 @@ export { Outline } from './Outline'
 export { createImageOverlay, Overlay } from './Overlay';
 export { Permission } from './Permission'
 export { Ports, TrianglePorts, ShapePorts, BasePorts } from './Ports'
-export { PopupMenu } from './PopupMenu'
+export { PopupMenu } from '@menu'
 export { Rubberband } from './Rubberband'
 export { Sidebar } from './Sidebar'
 export { SplashScreen } from './SplashScreen'
 export { ScrollableConnectionHandler, ScrollableCellRenderer } from './ScrollBars'
-export { Style } from './Style';
-export { StyleSheet } from './Stylesheet';
+export { Style, StyleSheet } from './style';
 export { Swimlanes, SwimlaneLayout, SwimlaneLayoutManager } from './Swimlanes'
 export { SecondLabel } from './SecondLabel'
-export { Toolbar, ToolbarItem } from "./Toolbar";
+export { Toolbar, ToolbarItem } from "./toolbar";
 export { IPosition, ISize } from './types'
 export { UserObject } from './UserObject'
 export { Vertex, PortPosition } from './Vertex';
