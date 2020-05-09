@@ -13,3 +13,10 @@ const guides = new Guides().init()
 ```ts
 guides.snapToTerminals()
 ```
+
+## init styles for guides
+
+```ts
+guides.initStyle()
+```
+

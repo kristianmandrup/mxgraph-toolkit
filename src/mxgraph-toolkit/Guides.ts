@@ -21,12 +21,12 @@ export class Guides {
     this.handler.snapToTerminals = true;  
   }
 
-  initStyle() {
+  initStyle({color, strokeWidth}: any = {}) {
     // Defines the guides to be red (default)
-    mxConstants.GUIDE_COLOR = '#FF0000';
+    mxConstants.GUIDE_COLOR = color || '#FF0000';
     
     // Defines the guides to be 1 pixel (default)
-    mxConstants.GUIDE_STROKEWIDTH = 1;
+    mxConstants.GUIDE_STROKEWIDTH = strokeWidth || 1;
   
   }
 								
