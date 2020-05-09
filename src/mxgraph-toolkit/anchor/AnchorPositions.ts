@@ -1,5 +1,5 @@
-import mx from "./mx";
-import { IPosition } from './types';
+import mx from "@toolkit/mx";
+import { IPosition } from '@toolkit/types';
 const { mxPolyline, mxConnectionConstraint, mxPoint } = mx
 
 export const ac = (x, y) => {
