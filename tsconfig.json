@@ -16,7 +16,8 @@
     "declarationDir": "dist/types",
     "outDir": "dist/lib",
     "typeRoots": [
-      "node_modules/@types"
+      "node_modules/@types",
+      "ts-mxgraph"
     ],
     "paths": {
       "@toolkit/*": ["mxgraph-toolkit/*"],
@@ -24,10 +25,12 @@
       "@shapes/*": ["mxgraph-toolkit/shapes/*"],
       "@toolbar/*": ["mxgraph-toolkit/toolbar/*"],
       "@group/*": ["mxgraph-toolkit/group/*"],
+      "@hover/*": ["mxgraph-toolkit/hover/*"],
       "@menu/*": ["mxgraph-toolkit/menu/*"]
     }
   },   
   "exclude": [
+    "dist",
     "node_modules",
     "**/*.spec.ts"
   ],   

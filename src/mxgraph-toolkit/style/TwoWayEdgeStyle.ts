@@ -14,7 +14,10 @@ export class TwoWayEdgeStyle {
 
     // Changes the default vertex style in-place
     let style = graph.getStylesheet().getDefaultVertexStyle();
-    style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_ROUNDED;
+    style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_RECTANGLE;
+    
+    // vertexStyle[mxConstants.STYLE_ROUNDED] = true;
+
     style[mxConstants.STYLE_PERIMETER] = mxPerimeter.RectanglePerimeter;
     style[mxConstants.STYLE_GRADIENTCOLOR] = 'white';
     style[mxConstants.STYLE_PERIMETER_SPACING] = 4;
