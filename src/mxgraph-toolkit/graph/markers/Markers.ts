@@ -16,7 +16,9 @@ export const markers = {
 }
 
 export class Markers {
-  markers: any
+  get markers() {
+    return markers
+  }
 
   constructor(public markerMap: any) {
     this.addMarkers(markerMap)
