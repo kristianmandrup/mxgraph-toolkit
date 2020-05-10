@@ -1,5 +1,5 @@
-import mx from "../../mx";
-import { IPosition, ISize } from '../../types';
+import mx from "mx";
+import { IPosition, ISize } from 'types';
 const { mxRectangle, mxPoint, mxUtils } = mx
 
 const createPort = (graph, vertex, label, pos, size, imagePath, style, offset) => {

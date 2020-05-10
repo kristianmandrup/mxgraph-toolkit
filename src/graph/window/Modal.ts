@@ -12,12 +12,16 @@ export class ModalWindow {
   showModalWindow: any  
   props: any
 
-  constructor(graph: any, showModalWindow: any, props: any) {
-    this.graph = graph
-    this.showModalWindow = showModalWindow
+  constructor(graph: any, props: any) {
+    this.graph = graph    
     this.props = props
   }
 
+  setShowModalWindow(showModalWindow: any): any {
+    this.showModalWindow = showModalWindow
+    return this
+  }
+    
   static showModalWindow(graph, content, {title, size, background}) {
     const backElem = document.createElement('div');
     backElem.style.position = 'absolute';

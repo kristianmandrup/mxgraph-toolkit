@@ -4,16 +4,26 @@ import { Actions } from "./actions";
 import { Cell } from './cell';
 import { Connection } from "./connection";
 import { Drop } from "./drop";
-import { DrawLayer } from './layers';
+import { Layers } from './layers';
 import { Edge } from './edge';
 import { GraphToggler } from './GraphToggler';
 import { StyleSheet } from './style';
-import { Vertex, VertexHandler, VertexToolHandler } from './vertex';
+import { Vertex } from './vertex';
 import { Permission } from './permission';
 import { UserObject } from "./data";
+import { Layout } from "./layout";
+import { Markers } from "./markers";
+import { Model } from "./model";
+import { Monitor } from "./monitor";
+import { Outline } from "./outline";
+import { Overlay } from "./overlay";
+import { Scrollable } from "./scroll";
 
-const { mxMorphing, mxEvent, 
-  mxCellState, mxRubberband, mxKeyHandler, mxGraphModel, mxGraph } = mx
+const { 
+  mxMorphing, mxEvent, 
+  mxCellState, mxRubberband, mxKeyHandler, 
+  mxGraphModel, mxGraph 
+} = mx
 
 type IsCellVisibleFn = (cell: any) => boolean
 
@@ -40,13 +50,18 @@ export const classMap = {
   data: UserObject,
   drop: Drop,
   edge: Edge,
-  drawLayer: DrawLayer,
-  graphToggler: GraphToggler,
+  layers: Layers,
+  layout: Layout,
+  markers: Markers,
+  model: Model,
+  monitor: Monitor,
+  outline: Outline,
+  overlay: Overlay,
   permission: Permission,
+  scrollable: Scrollable,
+  graphToggler: GraphToggler,  
   styleSheet: StyleSheet,
   vertex: Vertex, 
-  vertexHandler: VertexHandler,
-  vertextToolHandler: VertexToolHandler,
 }
 
 export const defaults = {
@@ -70,7 +85,11 @@ export class Graph {
   _wstylesheet: any
   _toggler: any
   _vertex: any
-  _vertexHandler: any
+  _window: any
+  _scroll: any
+  _graphToggler: any
+  _layers: any
+  _layout: any
 
   classMap: {
     [key: string]: any
@@ -165,6 +184,34 @@ export class Graph {
     return new this.classMap.graphToggler(this.graph);
   }
 
+  get layers() {
+    this._layers = this._layers || this.createLayers()
+    return this._layers
+  }
+  
+  setLayers(layers?: any) {
+    this._layers = layers || this.createLayers()
+    return this._layers
+  }
+  
+  protected createLayers() {
+    return new this.classMap.layers(this.graph)
+  }
+  
+  get layout() {
+    this._layout = this._layout || this.createLayout()
+    return this._layout
+  }
+  
+  setLayout(layout?: any) {
+    this._layout = layout || this.createLayout()
+    return this._layout
+  }
+  
+  protected createLayout() {
+    return new this.classMap.layout(this.graph)
+  }
+  
   get style() {
     this._style = this._style || this.createStyle()
     return this._style
@@ -229,17 +276,13 @@ export class Graph {
     return this.graph.getModel()
   }
 
-  // volatile
-  get draw(): DrawLayer {
-    return this.createDrawLayer()
-  }
-
-  protected createDrawLayer() {
-    return new this.classMap.drawLayer(this, this.defaultParent)
-  }
-
   get vertex(): Vertex {
     this._vertex = this._vertex || this.createVertex()
+    return this._vertex
+  }
+
+  setVertex(vertex?: any) {
+    this._vertex = vertex || this.createVertex()
     return this._vertex
   }
 
@@ -247,14 +290,34 @@ export class Graph {
     return new this.classMap.vertex(this.graph)
   }
 
-  get vertexHandler(): Vertex {
-    this._vertexHandler = this._vertexHandler || this.createVertexHandler()
-    return this._vertexHandler
+  get window() {
+    this._window = this._window || this.createWindow()
+    return this._window
   }
 
-  protected createVertexHandler() {
-    return new this.classMap.vertexHandler(this.graph)
+  setWindow(window?: any) {
+    this._window = window || this.createWindow()
+    return this._window
   }
+
+  protected createWindow() {
+    return new this.classMap.window(this.graph)
+  }
+
+  get scroll() {
+    this._scroll = this._scroll || this.createScroll()
+    return this._scroll
+  }
+  
+  setScroll(scroll?: any) {
+    this._scroll = scroll || this.createScroll()
+    return this._scroll
+  }
+  
+  protected createScroll() {
+    return new this.classMap.scroll(this.graph)
+  }
+  
 
   setIsCellVisible(isCellVisible: IsCellVisibleFn) {
     const { graph } = this
@@ -311,14 +374,4 @@ export class Graph {
       return new mxCellState(this.graph.view, edge, graph.getCellStyle(edge));
     };
   }
-
-  createHandler() {
-    const { graph } = this
-    graph.createHandler = (state) => {
-      if (state != null && this.model.isVertex(state.cell)) {
-        return new VertexToolHandler(graph, state);
-      }
-      return mxGraph.prototype.createHandler(state);
-    }
-  };  
 }

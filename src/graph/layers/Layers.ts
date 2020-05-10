@@ -1,55 +1,14 @@
 import mx from "mx";
 import { IGraph } from 'graph/Graph';
-import { IPosition, ISize } from 'types';
+import { DrawLayer } from "./DrawLayer";
 const { mxUtils, mxCell } = mx
-
-export const setGeometryPoints = (cell: any, points?: any) => {
-  if (points) {
-    points = Array.isArray(points) ? points : [points]
-    cell.geometry.points = [points]
-  }
-  return cell
-}
-
-interface InsertVertexOpts {
-  constituent?: boolean
-  id?: string
-  relative?: boolean
-  geometry?: any
-}
-
-export class DrawLayer {
-  layer: any
-  graph: any
-
-  constructor(graph: any, layer: any) {
-    this.graph = graph
-    this.layer = layer
-  }
-
-  insertVertex(labelOrValue: any, pos: IPosition, size: ISize, style: string, {constituent, id, relative, geometry}: InsertVertexOpts = {}): any {
-    if (constituent) {
-      style = 'constituent=1;' + style
-    }
-    const vertex = this.graph.insertVertex(this.layer, id, labelOrValue, pos.x, pos.y, size.width, size.height, style, relative)
-    if (geometry) {
-      vertex.geometry = vertex
-    }    
-    return vertex
-  }
-
-  insertEdge(labelOrValue: any, fromVertex: any, toVertex: any, style: string, {id, relative, points}: any = {}): any {
-    id = id || null
-    const edge = this.graph.insertEdge(this.layer, id, labelOrValue, fromVertex, toVertex, style, relative)
-    if (points) setGeometryPoints(edge)
-    return edge
-  }
-}
 
 export class Layers {
   graph: IGraph
   root: any  
-  layers: { [key:string]: any } = {}
+  layers: { [key:string]: any } = {
+    default: new mxCell()
+  }
 
   constructor(graph: any, root: any = new mxCell()) {
     this.graph = graph
@@ -58,6 +17,24 @@ export class Layers {
 
   drawLayer(name: string) {
     return new DrawLayer(this.graph, this.getLayer(name))
+  }
+
+  // volatile
+  draw(name?: string): DrawLayer {
+    return this.getDrawLayer(name)
+  }
+
+  protected getDrawLayer(name?: string) {
+    const layer = name ? this.getLayer(name) : this.getDefaultLayer()
+    return this.createDrawLayer(layer)
+  }
+
+  createDrawLayer(layer) {
+    return new DrawLayer(this, layer)
+  }
+  
+  getDefaultLayer() {
+    return this.getLayer('default')
   }
 
   getLayer(name: string): any {

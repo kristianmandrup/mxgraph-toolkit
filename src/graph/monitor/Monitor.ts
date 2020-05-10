@@ -1,36 +1,36 @@
 import mx from "mx";
 const { mxEvent, mxCellOverlay, mxUtils, mxConstants } = mx
 
-export const states = mws => {
-  const { graph } = mws
-  return {
-    running: (state, cell) => {
-      if (state !== 'Running') return
-      graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#f8cecc', [cell]);
-    },
-    waiting: (state, cell) => {
-      if (state !== 'Waiting') return
-      graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#fff2cc', [cell]);
-    },
-    completed: (state, cell) => {
-      if (state !== 'Completed') return
-      graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#f8cecc', [cell]);
-    },
-    init: (state, cell) => {
-      if (state !== 'Init') return
-      graph.addCellOverlay(cell, mws.createOverlay(graph.warningImage, 'State: '+state));
-    }
-  }
-}
-
-// WorkflowState
+// use for monitoring Workflow State
 export class Monitor {
   graph: any
   states: any
 
   constructor(graph: any, createStates: any) {
     this.graph = graph
-    this.states = createStates(this)
+    this.states = this.createStates()
+  }
+
+  createStates() {
+    const { graph } = this
+    return {
+      running: (state, cell) => {
+        if (state !== 'Running') return
+        graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#f8cecc', [cell]);
+      },
+      waiting: (state, cell) => {
+        if (state !== 'Waiting') return
+        graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#fff2cc', [cell]);
+      },
+      completed: (state, cell) => {
+        if (state !== 'Completed') return
+        graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#f8cecc', [cell]);
+      },
+      init: (state, cell) => {
+        if (state !== 'Init') return
+        graph.addCellOverlay(cell, this.createOverlay(graph.warningImage, 'State: '+state));
+      }
+    }
   }
 
   get tooltipPostFix() {
