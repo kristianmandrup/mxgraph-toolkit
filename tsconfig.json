@@ -24,6 +24,7 @@
       "@style/*": ["mxgraph-toolkit/style/*"],
       "@shapes/*": ["mxgraph-toolkit/shapes/*"],
       "@toolbar/*": ["mxgraph-toolkit/toolbar/*"],
+      "@graph/*": ["mxgraph-toolkit/graph/*"],
       "@group/*": ["mxgraph-toolkit/group/*"],
       "@hover/*": ["mxgraph-toolkit/hover/*"],
       "@menu/*": ["mxgraph-toolkit/menu/*"]

@@ -1,45 +1,43 @@
 export { Actions } from './Actions'
-export { Anchor } from './Anchors'
-export { AnchorPositions } from './AnchorPositions'
-export { Animation } from './Animation'
-export { Cell } from './Cell'
-export { CellTooltip } from './CellTooltip'
+export * from './anchor'
+export { Animation } from './graph/edge/animate'
+export { Cell, CellTooltip } from './graph/cell'
 export { Connection } from './Connection'
-export { Drop } from './Drop'
+export { Drop } from './graph/drop/Drop'
 export { Editing } from './Editing'
 export { Editor } from './Editor'
-export { Graph } from './Graph'
-export { Group, GroupSelection } from './group'
-export { Guides } from './Guides'
-export { Handles } from './Handles'
-export { HoverStyle, HoverIcons, HoverVertexListener } from './hover'
-export { HtmlLabel } from './HtmlLabel'
-export { Hints } from './Hints'
-export { Layout } from './Layout'
-export { Layers, DrawLayer } from './Layers';
-export { Markers } from './Markers'
+export { Graph } from './graph/Graph'
+export { Group, GroupSelection } from './graph/cell/group'
+export { Guides } from './graph/edge/guides'
+export { Handles } from './graph/vertex/handles'
+export { HoverStyle, HoverIcons, HoverVertexListener } from './graph/cell/hover'
+export { HtmlLabel } from './graph/cell/label/HtmlLabel'
+export { Hints } from './graph/cell/hints/Hints'
+export { Layout } from './graph/layout/Layout'
+export { Layers, DrawLayer } from './graph/layers';
+export { Markers } from './graph/markers/Markers'
 export { ModalWindow } from './Modal'
 export { Model } from './Model'
-export { Monitor } from './Monitor'
+export { Monitor } from './graph/monitor/Monitor'
 export { Outline } from './Outline'
 export { createImageOverlay, Overlay } from './Overlay';
-export { Permission } from './Permission'
-export { Ports, TrianglePorts, ShapePorts, BasePorts } from './Ports'
-export { PopupMenu } from './menu'
+export { Permission } from './graph/permission/Permission'
+export { Ports, TrianglePorts, ShapePorts, BasePorts } from './graph/vertex/ports'
+export { PopupMenu } from './graph/cell/menu'
 export { Rubberband } from './Rubberband'
 export { Sidebar } from './Sidebar'
 export { SplashScreen } from './SplashScreen'
 export { ScrollableConnectionHandler, ScrollableCellRenderer } from './ScrollBars'
-export { Style, StyleSheet } from './style';
+export { Style, StyleSheet } from './graph/style';
 export { Swimlanes, SwimlaneLayout, SwimlaneLayoutManager } from './Swimlanes'
 export { SecondLabel } from './SecondLabel'
-export { Toolbar, ToolbarItem } from "./toolbar";
+export { Toolbar, ToolbarItem } from "./editor/toolbar";
 export { IPosition, ISize } from './types'
 export { UserObject } from './UserObject'
-export { Vertex, PortPosition } from './Vertex';
-export { VertexToolHandler  } from './VertexToolHandler'
-export { VertexHandler } from './VertexHandler'
-export { Window } from './Window'
+export { Vertex, PortPosition } from './graph/vertex/Vertex';
+export { VertexToolHandler  } from './graph/vertex/VertexToolHandler'
+export { VertexHandler } from './graph/vertex/VertexHandler'
+export { Window } from './window/Window'
 
 export { 
   MessageShape, 
@@ -48,4 +46,4 @@ export {
   CustomShape, 
   BoxShape, 
   ConnectorShape 
-} from "./shapes";
+} from "./graph/shapes";

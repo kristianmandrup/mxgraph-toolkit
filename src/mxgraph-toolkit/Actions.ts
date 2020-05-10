@@ -1,7 +1,7 @@
 import mx from "@toolkit/mx";
 import { defaults } from './defaults';
 import { ISize } from './types';
-import { StyleCombiner } from '@style/StyleCombiner';
+import { StyleCombiner } from '@toolkit/graph/style/StyleCombiner';
 const { mxCodec, mxUtils, mxConstants } = mx
 
 export type ShowModalWindow = (graph: any, title: string, textarea: HTMLTextAreaElement, width: number, height: number) => void
