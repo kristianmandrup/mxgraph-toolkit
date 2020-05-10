@@ -1,4 +1,4 @@
-import mx from "./mx";
+import mx from "@toolkit/mx";
 const { mxRubberband, mxEvent } = mx
 
 export class Rubberband {

@@ -1,5 +1,5 @@
 import { CustomShape } from './CustomShape';
-import mx from "../../mx";
+import mx from "@toolkit/mx";
 const { mxArrow } = mx
 
 export class LinkShape extends CustomShape {

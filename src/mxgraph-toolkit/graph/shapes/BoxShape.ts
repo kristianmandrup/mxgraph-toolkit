@@ -1,5 +1,5 @@
 import { CustomShape } from './CustomShape';
-import mx from "../../mx";
+import mx from "@toolkit/mx";
 const { mxCylinder } = mx
 
 export class BoxShape extends CustomShape {

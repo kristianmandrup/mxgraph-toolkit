@@ -1,4 +1,4 @@
-import mx from "./mx";
+import mx from "@toolkit/mx";
 const { mxConstants, mxEvent, mxGraphHandler } = mx
 
 export class Guides {

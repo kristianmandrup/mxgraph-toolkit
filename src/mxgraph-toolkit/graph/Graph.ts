@@ -1,12 +1,12 @@
 import mx from "@toolkit/mx";
 import { DrawLayer } from './layers';
 import { StyleSheet } from './style';
-import { VertexToolHandler } from './vertex/VertexToolHandler';
-import { Permission } from './permission/Permission';
-import { Editing } from '../Editing';
-import { Guides } from './edge/guides';
-import { Group } from './cell/group';
-import { Cell } from './cell';
+import { VertexToolHandler } from './vertex';
+import { Permission } from './permission';
+import { Editing } from './cell/editing/Editing';
+import { Guides } from './edge';
+import { Cell, Group } from './cell';
+import {  } from './cell';
 import { GraphToggler } from './GraphToggler';
 const { mxMorphing, mxEvent, 
   mxCellState, mxRubberband, mxKeyHandler, mxGraphModel, mxGraph } = mx

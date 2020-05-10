@@ -1,5 +1,5 @@
-import mx from "../../mx";
-import { IPosition, ISize } from '../../types';
+import mx from "@toolkit/mx";
+import { IPosition, ISize } from '@toolkit/types';
 const { mxPoint } = mx
 
 type OffsetParams = {

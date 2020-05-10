@@ -1,4 +1,4 @@
-import mx from "./mx";
+import mx from "../../mx";
 const { mxEvent, mxUtils, mxWindow, mxEffects } = mx
 
 const isValidEvt = (evt) => !mxEvent.isConsumed(evt)

@@ -1,4 +1,4 @@
-import mx from "../../../mx";
+import mx from "@toolkit/mx";
 const { mxEvent, mxClient, mxUtils, mxUndoManager } = mx
 
 export class HtmlLabel {

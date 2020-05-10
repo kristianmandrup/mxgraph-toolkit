@@ -1,5 +1,5 @@
-import mx from "./mx";
-import { ISize } from './types';
+import mx from "@toolkit/mx";
+import { ISize } from '@toolkit/types';
 const { mxImage, mxConnectionHandler } = mx
 
 export class Connection {

@@ -1,5 +1,5 @@
-import mx from "../mx";
-import { IPosition, ISize } from '../types';
+import mx from "../../mx";
+import { IPosition, ISize } from '../../types';
 const { mxWindow } = mx
 
 export class Window {

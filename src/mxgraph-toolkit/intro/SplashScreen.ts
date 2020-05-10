@@ -1,4 +1,4 @@
-import mx from "./mx";
+import mx from "../mx";
 const { mxEvent, mxEffects } = mx
 
 export class SplashScreen {

@@ -1,5 +1,5 @@
-import mx from "./mx";
-import { IPosition } from './types';
+import mx from "../../../mx";
+import { IPosition } from '../../../types';
 const { mxEvent, mxUtils, mxGraph } = mx
 
 export interface IRegionCalc {

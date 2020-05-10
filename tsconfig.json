@@ -19,15 +19,34 @@
       "node_modules/@types",
       "ts-mxgraph"
     ],
-    "paths": {
+    "paths": {      
       "@toolkit/*": ["mxgraph-toolkit/*"],
-      "@style/*": ["mxgraph-toolkit/style/*"],
-      "@shapes/*": ["mxgraph-toolkit/shapes/*"],
-      "@toolbar/*": ["mxgraph-toolkit/toolbar/*"],
+      "@editor/*": ["mxgraph-toolkit/editor/*"],      
+      "@toolbar/*": ["mxgraph-toolkit/editor/toolbar/*"],
       "@graph/*": ["mxgraph-toolkit/graph/*"],
-      "@group/*": ["mxgraph-toolkit/group/*"],
-      "@hover/*": ["mxgraph-toolkit/hover/*"],
-      "@menu/*": ["mxgraph-toolkit/menu/*"]
+      "@anchor/*": ["mxgraph-toolkit/graph/anchor/*"],
+      "@permission/*": ["mxgraph-toolkit/graph/permission/*"],
+      "@drop/*": ["mxgraph-toolkit/graph/drop/*"],
+      "@markers/*": ["mxgraph-toolkit/graph/markers/*"],
+      "@model/*": ["mxgraph-toolkit/graph/model/*"],
+      "@monitor/*": ["mxgraph-toolkit/graph/monitor/*"],
+      "@outline/*": ["mxgraph-toolkit/graph/outline/*"],
+      "@overlay/*": ["mxgraph-toolkit/graph/overlay/*"],
+      "@scroll/*": ["mxgraph-toolkit/graph/scroll/*"],
+      "@selection/*": ["mxgraph-toolkit/graph/selection/*"],
+      "@swimlanes/*": ["mxgraph-toolkit/graph/swimlanes/*"],
+      "@layers/*": ["mxgraph-toolkit/graph/layers/*"],
+      "@layout/*": ["mxgraph-toolkit/graph/layout/*"],
+      "@style/*": ["mxgraph-toolkit/graph/style/*"],
+      "@shapes/*": ["mxgraph-toolkit/graph/shapes/*"],
+      "@cell/*": ["mxgraph-toolkit/graph/cell/*"],
+      "@vertex/*": ["mxgraph-toolkit/graph/vertex/*"],
+      "@handles/*": ["mxgraph-toolkit/graph/vertex/handles/*"],
+      "@ports/*": ["mxgraph-toolkit/graph/vertex/ports/*"],
+      "@edge/*": ["mxgraph-toolkit/graph/edge/*"],
+      "@group/*": ["mxgraph-toolkit/graph/cell/group/*"],
+      "@hover/*": ["mxgraph-toolkit/graph/cell/hover/*"],
+      "@menu/*": ["mxgraph-toolkit/graph/cell/menu/*"]
     }
   },   
   "exclude": [

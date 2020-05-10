@@ -1,4 +1,4 @@
-import mx from "../../mx";
+import mx from "@toolkit/mx";
 const { mxEvent, mxCellOverlay, mxUtils, mxConstants } = mx
 
 export const states = mws => {

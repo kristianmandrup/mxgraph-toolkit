@@ -1,3 +1,6 @@
-export { Style } from './Style'
-export { StyleSheet } from './Stylesheet'
-export { StyleValidator } from './StyleValidator'
+export * from "./Style";
+export * from "./StyleCombiner";
+export * from "./StyleValidator";
+export * from "./Stylesheet";
+export * from "./TwoWayEdgeStyle";
+export * from "./styleMaps";

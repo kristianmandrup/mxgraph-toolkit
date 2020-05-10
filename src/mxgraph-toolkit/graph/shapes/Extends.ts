@@ -1,9 +1,6 @@
-import { mxgraphFactory } from "ts-mxgraph";
+import mx from "@toolkit/mx";
 
-const { mxCylinder, mxUtils } = mxgraphFactory({
-  mxLoadResources: false,
-  mxLoadStylesheets: false,
-});
+const { mxCylinder, mxUtils } = mx
 
 export const createShapeExtension = (shapeConstructor = mxCylinder) => {
   function MyShape(this: any, ...args) {

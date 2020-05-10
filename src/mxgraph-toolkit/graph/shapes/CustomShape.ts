@@ -1,10 +1,7 @@
 import { createShapeExtension } from './Extends';
-import { mxgraphFactory } from "ts-mxgraph";
+import mx from "@toolkit/mx";
 
-const { mxCellRenderer } = mxgraphFactory({
-  mxLoadResources: false,
-  mxLoadStylesheets: false,
-});
+const { mxCellRenderer } = mx
 
 interface ICustomShape {
   register(name: string)

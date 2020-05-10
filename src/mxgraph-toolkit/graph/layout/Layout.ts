@@ -1,4 +1,4 @@
-import mx from "../../mx";
+import mx from "@toolkit/mx";
 const { mxFastOrganicLayout, mxConstants, mxHierarchicalLayout, mxRadialTreeLayout, mxCircleLayout } = mx
 
 export enum EDirection {

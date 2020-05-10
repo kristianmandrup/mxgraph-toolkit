@@ -1,4 +1,4 @@
-import mx from "../../../mx";
+import mx from "@toolkit/mx";
 const { mxRectangle, mxUtils } = mx
 
 export class HoverVertexListener {

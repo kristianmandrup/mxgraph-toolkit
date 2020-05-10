@@ -1,5 +1,5 @@
 import { HoverIcons } from './HoverIcons';
-import mx from "../../../mx";
+import mx from "@toolkit/mx";
 const { mxEvent } = mx
 
 export class HoverActions {
