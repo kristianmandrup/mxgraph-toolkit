@@ -3,10 +3,9 @@ import { DrawLayer } from './layers';
 import { StyleSheet } from './style';
 import { VertexToolHandler } from './vertex';
 import { Permission } from './permission';
-import { Editing } from './cell/editing/Editing';
+import { Edit } from './cell';
 import { Guides } from './edge';
 import { Cell, Group } from './cell';
-import {  } from './cell';
 import { GraphToggler } from './GraphToggler';
 const { mxMorphing, mxEvent, 
   mxCellState, mxRubberband, mxKeyHandler, mxGraphModel, mxGraph } = mx
@@ -90,12 +89,12 @@ export class Graph {
   }
 
   setEditing(editing?: any) {
-    this._editing = editing || this.createEditing(this.graph)
+    this._editing = editing || this.createEdit(this.graph)
     return this._editing
   }
 
-  protected createEditing(props) {
-    new Editing(this.graph, props)
+  protected createEdit(props) {
+    new Edit(this.graph, props)
   }
 
   createGroup(name: string = 'Group', label: string = 'group') {

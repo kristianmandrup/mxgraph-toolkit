@@ -7,37 +7,6 @@ const isValidCell = (graph, cell) => cell != null && graph.isCellEditable(cell)
 const canOpenModal = (graph, evt, cell) =>
   graph.isEnabled() && isValidEvt(evt)  && isValidCell(graph, cell)
 
-export const showModalWindow = (graph, content, {title, size, background}) => {
-  const backElem = document.createElement('div');
-  backElem.style.position = 'absolute';
-  backElem.style.left = '0px';
-  backElem.style.top = '0px';
-  backElem.style.right = '0px';
-  backElem.style.bottom = '0px';
-  backElem.style.background = background || 'black';
-  mxUtils.setOpacity(background, 50);
-  document.body.appendChild(backElem);
-    
-  const { width, height } = size
-  const maxWidth = document.body.scrollWidth / 2 - width / 2
-  const x = Math.max(0, maxWidth);
-  const maxHeight = (document.body.scrollHeight || document.documentElement.scrollHeight) / 2-height * 2/3;
-  const y = Math.max(10, maxHeight);
-  const wnd = new mxWindow(title, content, x, y, width, height, false, true);
-  wnd.setClosable(true);
-  
-  // Fades the background out after after the window has been closed
-  wnd.addListener(mxEvent.DESTROY, (evt) => {
-    graph.setEnabled(true);
-    mxEffects.fadeOut(background, 50, true, 
-      10, 30, true);
-  });
-
-  graph.setEnabled(false);
-  graph.tooltipHandler.hide();
-  wnd.setVisible(true);
-};
-
 export class ModalWindow {
   graph: any
   showModalWindow: any  
@@ -48,6 +17,37 @@ export class ModalWindow {
     this.showModalWindow = showModalWindow
     this.props = props
   }
+
+  static showModalWindow(graph, content, {title, size, background}) {
+    const backElem = document.createElement('div');
+    backElem.style.position = 'absolute';
+    backElem.style.left = '0px';
+    backElem.style.top = '0px';
+    backElem.style.right = '0px';
+    backElem.style.bottom = '0px';
+    backElem.style.background = background || 'black';
+    mxUtils.setOpacity(background, 50);
+    document.body.appendChild(backElem);
+      
+    const { width, height } = size
+    const maxWidth = document.body.scrollWidth / 2 - width / 2
+    const x = Math.max(0, maxWidth);
+    const maxHeight = (document.body.scrollHeight || document.documentElement.scrollHeight) / 2-height * 2/3;
+    const y = Math.max(10, maxHeight);
+    const wnd = new mxWindow(title, content, x, y, width, height, false, true);
+    wnd.setClosable(true);
+    
+    // Fades the background out after after the window has been closed
+    wnd.addListener(mxEvent.DESTROY, (evt) => {
+      graph.setEnabled(true);
+      mxEffects.fadeOut(background, 50, true, 
+        10, 30, true);
+    });
+  
+    graph.setEnabled(false);
+    graph.tooltipHandler.hide();
+    wnd.setVisible(true);
+  };
 
   modalContent(cell) {
     return this.graph.convertValueToString(cell);
