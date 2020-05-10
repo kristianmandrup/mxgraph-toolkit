@@ -6,10 +6,14 @@ export class VertexHandler {
   graph: any
   state: any
 
-  constructor(graph: any, state: any = {}) {
+  constructor(graph: any) {
     this.vertexHandlerProto = mxVertexHandler.prototype
-    this.graph = graph
+    this.graph = graph    
+  }
+
+  setState(state: any = {}) {
     this.state = state
+    return this
   }
 
   enableVertexResizePreviews() {

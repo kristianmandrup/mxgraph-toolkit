@@ -1,15 +1,64 @@
 import mx from "mx";
+import { Group } from "./group";
+import { Edit } from "./edit";
 const { mxGraph } = mx
 
 export const createCell = (graph: any): Cell => {
   return new Cell(graph)
 }
 
+export const classMap = {
+  group: Group,
+  edit: Edit,
+}
+
+export const defaults = {
+  classMap
+}
+
 export class Cell {
   graph: any
 
-  constructor(graph: any) {
+  _group: any
+  _edit: any
+  _hints: any 
+  _hover: any
+  _label: any
+  _menu: any
+
+  classMap: {
+    [key: string]: any
+  } = defaults.classMap
+  
+  constructor(graph: any, { classMap }: any = {}) {
     this.graph = graph
+    this.setClassMap(classMap)
+  }
+
+  setClassMap(classMap: any = {}) {
+    this.classMap = {
+      ...defaults.classMap,
+      ...classMap
+    }      
+  }
+
+  get group(): any {
+    if (!this._group) {
+      throw new Error('Missing group: use createGroup to create one')
+    }
+    return this._group
+  }
+
+  setGroup(group: any) {
+    if (!group) {
+      throw new Error('missing group argument')
+    }
+    this._group = group
+    return this
+  }
+
+  createGroup(name: string = 'Group', label: string = 'group') {
+    return new this.classMap.group(name, label)
   }
 
   createIsPort(cell) {

@@ -5,4 +5,4 @@ export * from "./label";
 export * from "./menu";
 export * from "./Cell";
 export * from "./hints";
-export * from "./editing";
+export * from "./edit";

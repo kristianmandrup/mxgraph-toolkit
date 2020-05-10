@@ -1,16 +1,26 @@
 import mx from "mx";
+import { Anchor } from "./anchor";
+import { Actions } from "./actions";
+import { Cell } from './cell';
+import { Connection } from "./connection";
+import { Drop } from "./drop";
 import { DrawLayer } from './layers';
-import { StyleSheet } from './style';
-import { VertexToolHandler } from './vertex';
-import { Permission } from './permission';
-import { Edit } from './cell';
-import { Guides } from './edge';
-import { Cell, Group } from './cell';
+import { Edge } from './edge';
 import { GraphToggler } from './GraphToggler';
+import { StyleSheet } from './style';
+import { Vertex, VertexHandler, VertexToolHandler } from './vertex';
+import { Permission } from './permission';
+import { UserObject } from "./data";
+
 const { mxMorphing, mxEvent, 
   mxCellState, mxRubberband, mxKeyHandler, mxGraphModel, mxGraph } = mx
 
 type IsCellVisibleFn = (cell: any) => boolean
+
+export * as vertex from './vertex';
+export * as permission from './permission';
+export * as cell from './cell';
+export * as edge from './edge';
 
 export interface IGraph {
   graph: any
@@ -22,24 +32,78 @@ export type DOMPosition = {
   top: number
 }
 
+export const classMap = {
+  actions: Actions,
+  anchor: Anchor,
+  cell: Cell,
+  connection: Connection,
+  data: UserObject,
+  drop: Drop,
+  edge: Edge,
+  drawLayer: DrawLayer,
+  graphToggler: GraphToggler,
+  permission: Permission,
+  styleSheet: StyleSheet,
+  vertex: Vertex, 
+  vertexHandler: VertexHandler,
+  vertextToolHandler: VertexToolHandler,
+}
+
+export const defaults = {
+  classMap
+}
+
 export class Graph {
   graph: any
-  editor: any
+
+
   _rubberband: any
   _keyHandler: any
-  currentPermission: Permission
-  _editing: any
-  _guides: any
+  
+  editor: any
+
+  _permission: any
+  _edit: any
   _cell: any
+  _style: any
+  _defaultStyles: any
   _wstylesheet: any
   _toggler: any
+  _vertex: any
+  _vertexHandler: any
 
-  constructor(graph: any, { editor, currentPermission }: any = {}) {
+  classMap: {
+    [key: string]: any
+  } = defaults.classMap
+
+  constructor(graph: any, props: any = {}) {
+    const { editor, classMap } = props
     this.graph = graph
     this.editor = editor
-    this.currentPermission = currentPermission || {}
+    this.setClassMap(classMap)
   }
-  
+
+  get permission() {
+    this._permission = this._permission || this.createPermission()
+    return this._toggler
+  }
+
+  setPermission(permission?: any, props?: any) {
+    this._permission = permission || this.createPermission(props)
+    return this
+  }
+
+  createPermission(props?: any): any {
+    return new this.classMap.permission(this.graph, props);
+  }  
+
+  setClassMap(classMap: any = {}) {
+    this.classMap = {
+      ...defaults.classMap,
+      ...classMap
+    }      
+  }
+
   static createGraphWithModel(container: Element, model?: any) {
     model = model || new mxGraphModel();
     return new mxGraph(container, model);
@@ -65,66 +129,96 @@ export class Graph {
     return this.graph.getDefaultParent();
   }
   
-  get editing() {
-    return this._editing
-  }
-
   get stylesheet() {
     return this.graph.getStylesheet()
   }
 
   get rubberband() {
-    this._rubberband = this._rubberband || new mxRubberband(this.graph)
+    this._rubberband = this._rubberband || this.createRubberband()
     return this._rubberband
   }
 
+  createRubberband(): any {
+    return new mxRubberband(this.graph)
+  }
+
   get keyHandler() {
-    this._keyHandler = this._keyHandler || new mxKeyHandler(this.graph);
+    this._keyHandler = this._keyHandler || this.createKeyHandler()
     return this._keyHandler      
   }
 
-  get toggle() {
-    this._toggler = this._toggler || new GraphToggler(this.graph);
+  createKeyHandler(): any {
+    return new mxKeyHandler(this.graph);
+  }
+
+  get toggler() {
+    this._toggler = this._toggler || this.createToggler()
     return this._toggler
   }
 
-  setEditing(editing?: any) {
-    this._editing = editing || this.createEdit(this.graph)
-    return this._editing
+  setToggler(toggler?: any) {
+    this._toggler = toggler || this.createToggler()
+    return this
   }
 
-  protected createEdit(props) {
-    new Edit(this.graph, props)
+  createToggler(): any {
+    return new this.classMap.graphToggler(this.graph);
   }
 
-  createGroup(name: string = 'Group', label: string = 'group') {
-    return new Group(name, label)
+  get style() {
+    this._style = this._style || this.createStyle()
+    return this._style
   }
 
-  get guides() {
-    return this._guides
+  setStyle(style?: any) {
+    this._style = style || this.createStyle()
+    return this
   }
 
-  setGuides(guides?: any) {
-    this._guides = guides || this.createGuides()
-    return this._guides
+  createStyle(): any {
+    return new this.classMap.style(this.graph);
   }
 
-  protected createGuides(): any {
-    return new Guides()
+  get defaultStyles() {
+    this._defaultStyles = this._defaultStyles || this.createDefaultStyles()
+    return this._defaultStyles
+  }
+
+  setDefaultStyles(defaultStyles?: any) {
+    this._defaultStyles = defaultStyles ||  this.createDefaultStyles()
+    return this
+  }
+
+  createDefaultStyles(): any {
+    return new this.classMap.defaultStyles(this.graph);
+  }
+
+  get edit() {
+    this._edit = this._edit || this.createEdit()
+    return this._edit
+  }
+
+  setEdit(edit?: any, props?: any) {
+    this._edit = edit || this.createEdit(props)
+    return this
+  }
+
+  protected createEdit(props: any = {}) {
+    new this.classMap.edit(this.graph, props)
   }
 
   get cell() {
+    this._cell = this._cell || this.createCell()
     return this._cell
   }
 
   setCell(cell?: any) {
-    this._cell = cell || this.createGuides()
+    this._cell = cell || this.createCell()
     return this._cell
   }
 
   protected createCell(): any {
-    return new Cell(this.graph)
+    return new this.classMap.cell(this.graph)
   }
 
   get model() {
@@ -135,12 +229,31 @@ export class Graph {
     return this.graph.getModel()
   }
 
+  // volatile
   get draw(): DrawLayer {
     return this.createDrawLayer()
   }
 
   protected createDrawLayer() {
-    return new DrawLayer(this, this.defaultParent)
+    return new this.classMap.drawLayer(this, this.defaultParent)
+  }
+
+  get vertex(): Vertex {
+    this._vertex = this._vertex || this.createVertex()
+    return this._vertex
+  }
+
+  protected createVertex() {
+    return new this.classMap.vertex(this.graph)
+  }
+
+  get vertexHandler(): Vertex {
+    this._vertexHandler = this._vertexHandler || this.createVertexHandler()
+    return this._vertexHandler
+  }
+
+  protected createVertexHandler() {
+    return new this.classMap.vertexHandler(this.graph)
   }
 
   setIsCellVisible(isCellVisible: IsCellVisibleFn) {
@@ -199,7 +312,7 @@ export class Graph {
     };
   }
 
-  createVertexHandler() {
+  createHandler() {
     const { graph } = this
     graph.createHandler = (state) => {
       if (state != null && this.model.isVertex(state.cell)) {

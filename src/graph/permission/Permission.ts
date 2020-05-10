@@ -1,25 +1,29 @@
 export class Permission {
   graph: any
+  locked: boolean = false
+  createEdges: boolean = false
+  editEdges: boolean = false
+  editVertices: boolean = false
+  cloneCells: boolean= false
 
-  locked: boolean
-  createEdges: boolean
-  editEdges: boolean
-  editVertices: boolean
-  cloneCells: boolean
-
-  constructor(graph: any, {locked, createEdges, editEdges, editVertices, cloneCells}: any = {}) {
+  constructor(graph: any) {
     this.graph = graph
-    this.locked = (locked != null) ? locked : false;
-    this.createEdges = (createEdges != null) ? createEdges : true;
-    this.editEdges = (editEdges != null) ? editEdges : true;;
-    this.editVertices = (editVertices != null) ? editVertices : true;;
-    this.cloneCells = (cloneCells != null) ? cloneCells : true;;
+  }
+
+  setPermissions({locked, createEdges, editEdges, editVertices, cloneCells}: any = {}) {
+    this.locked = !!locked
+    this.createEdges = !!createEdges
+    this.editEdges = !!editEdges
+    this.editVertices = !!editVertices
+    this.cloneCells = !!cloneCells
+    return this
   }
 
   init() {
     const { graph } = this
     graph.setConnectable(this.createEdges);
     graph.setCellsLocked(this.locked);
-  };  
-};
+    return this
+  }
+}
 
