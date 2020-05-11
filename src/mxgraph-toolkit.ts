@@ -1,6 +1,6 @@
-export * from "./editor";
-export * from "./graph";
-export * from "./intro";
-export * from "./defaults";
+export * as editor from "./editor";
+export * as graph from "./graph";
+export * as intro from "./intro";
+export * as defaults from "./defaults";
 export * from "./mx";
-export * from "./types";
+export * as types from "./types";

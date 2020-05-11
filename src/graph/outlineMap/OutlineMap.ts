@@ -1,7 +1,7 @@
 import mx from "mx";
 const { mxOutline } = mx
 
-export class Outline {
+export class OutlineMap {
   graph: any
   outline: any
   outlineContainer: Element

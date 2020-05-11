@@ -1,8 +1,6 @@
 import mx from "mx";
-import { Anchor } from "./anchor";
 import { Actions } from "./actions";
 import { Cell } from './cell';
-import { Connection } from "./connection";
 import { Drop } from "./drop";
 import { Layers } from './layers';
 import { Edge } from './edge';
@@ -12,11 +10,8 @@ import { Vertex } from './vertex';
 import { Permission } from './permission';
 import { UserObject } from "./data";
 import { Layout } from "./layout";
-import { Markers } from "./markers";
-import { Model } from "./model";
 import { Monitor } from "./monitor";
-import { Outline } from "./outline";
-import { Overlay } from "./overlay";
+import { OutlineMap } from "./outlineMap";
 import { Scrollable } from "./scroll";
 
 const { 
@@ -44,19 +39,14 @@ export type DOMPosition = {
 
 export const classMap = {
   actions: Actions,
-  anchor: Anchor,
   cell: Cell,
-  connection: Connection,
   data: UserObject,
   drop: Drop,
   edge: Edge,
   layers: Layers,
-  layout: Layout,
-  markers: Markers,
-  model: Model,
+  layout: Layout,  
   monitor: Monitor,
-  outline: Outline,
-  overlay: Overlay,
+  outlineMap: OutlineMap,
   permission: Permission,
   scrollable: Scrollable,
   graphToggler: GraphToggler,  
@@ -80,16 +70,20 @@ export class Graph {
   _permission: any
   _edit: any
   _cell: any
+  _drop: any
+  _data: any
   _style: any
   _defaultStyles: any
   _wstylesheet: any
   _toggler: any
   _vertex: any
+  _edge: any
   _window: any
   _scroll: any
   _graphToggler: any
   _layers: any
   _layout: any
+  _outlineMap: any
 
   classMap: {
     [key: string]: any
@@ -184,6 +178,48 @@ export class Graph {
     return new this.classMap.graphToggler(this.graph);
   }
 
+  get outlineMap(): any {
+    this._outlineMap = this._outlineMap || this.createOutlineMap()
+    return this._outlineMap
+  }
+  
+  setOutlineMap(outlineMap?: any) {
+    this._outlineMap = outlineMap || this.createOutlineMap()
+    return this._outlineMap
+  }
+  
+  protected createOutlineMap() {
+    return new this.classMap.outlineMap(this.graph)
+  }
+    
+  get drop() {
+    this._drop = this._drop || this.createDrop()
+    return this._drop
+  }
+  
+  setDrop(drop?: any) {
+    this._drop = drop || this.createDrop()
+    return this._drop
+  }
+  
+  protected createDrop(): any {
+    return new this.classMap.drop(this.graph)
+  }  
+
+  get data() {
+    this._data = this._data || this.createData()
+    return this._data
+  }
+  
+  setData(data?: any) {
+    this._data = data || this.createData()
+    return this._data
+  }
+  
+  protected createData(): any {
+    return new this.classMap.data(this.graph)
+  }  
+    
   get layers() {
     this._layers = this._layers || this.createLayers()
     return this._layers
@@ -239,6 +275,20 @@ export class Graph {
   createDefaultStyles(): any {
     return new this.classMap.defaultStyles(this.graph);
   }
+
+  get edge() {
+    this._edge = this._edge || this.createEdge()
+    return this._edge
+  }
+  
+  setEdge(edge?: any) {
+    this._edge = edge || this.createEdge()
+    return this._edge
+  }
+  
+  protected createEdge(): any {
+    return new this.classMap.edge(this.graph)
+  }  
 
   get edit() {
     this._edit = this._edit || this.createEdit()

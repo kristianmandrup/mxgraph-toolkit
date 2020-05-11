@@ -25,9 +25,9 @@ export const createVertex = (graph, label, pos, size: any = {}) => {
   // pt.x, pt.y, 120, 120, 'image=' + image);
   var parent = graph.getDefaultParent();
   size = {
-    ...size,
     width: 120,
-    height: 120
+    height: 120,
+    ...size
   }
   const vertex = graph.insertVertex(parent, null, label, pos.x, pos.y, size.width, size.height);
   vertex.setConnectable(false);
@@ -37,7 +37,7 @@ export const createVertex = (graph, label, pos, size: any = {}) => {
   return vertex
 }
 
-const createOnDrag = (label, {createPorts, createVertex, vertexSize}) => (graph, evt, cell, x, y) => {
+const createOnDrag = (label, {createPorts, createVertex, vertexSize}: any = {}) => (graph, evt, cell, x, y) => {
   
   var model = graph.getModel();
   
@@ -56,7 +56,9 @@ const createOnDrag = (label, {createPorts, createVertex, vertexSize}) => (graph,
 }
 
 export interface IaddSidebarIcon {
-  vertexSize: ISize
+  dragSize?: ISize,
+  imageSize?: ISize,
+  vertexSize?: ISize
   createPorts(graph: any, vertex: any)
   createVertex(graph: any, label: string, pos: IPosition, size?: ISize)
 }
@@ -70,34 +72,47 @@ export const defaultDragElement = () => {
 }
 
 export class Sidebar {
-  sidebar: any
+  graph: any
+  sidebarElement: any
   _dragElt: Element = defaultDragElement()
 
-  constructor(sidebar: any) {
-    this.sidebar = sidebar
+  constructor(graph: any, sidebarElement: any) {
+    this.sidebarElement = sidebarElement
   }
 
-  addSidebarIcon(graph, sidebar, label: string, image, props: IaddSidebarIcon) {
+  addSidebarIcon(graph, label: string, image, props: IaddSidebarIcon) {
     // Function that is executed when the image is dropped on
     // the graph. The cell argument points to the cell under
     // the mousepointer if there is one.    
     // Creates the image which is used as the sidebar icon (drag source)
+    let { imageSize, dragSize } = props
+    const imgSize = {
+      width: 48,
+      height: 48,
+      ...imageSize
+    }
+    dragSize = {
+      width: 120,
+      height: 120,
+      ...dragSize
+    }
+
     var img = document.createElement('img');
     img.setAttribute('src', image);
-    img.style.width = '48px';
-    img.style.height = '48px';
+    img.style.width = `${imgSize.width}px`;
+    img.style.height = `${imgSize.height}px`;
     img.title = 'Drag this to the diagram to create a new vertex';
-    sidebar.appendChild(img);
+    this.sidebarElement.appendChild(img);
     
-    var dragElt = document.createElement('div');
-    dragElt.style.border = 'dashed black 1px';
-    dragElt.style.width = '120px';
-    dragElt.style.height = '120px';
+    var dragElem = document.createElement('div');
+    dragElem.style.border = 'dashed black 1px';
+    dragElem.style.width = `${dragSize.width}px`;
+    dragElem.style.height = `${dragSize.height}px`;
     
     const onDrag = createOnDrag(label, props)
 
     // Creates the image which is used as the drag icon (preview)
-    var ds = mxUtils.makeDraggable(img, graph, onDrag, dragElt, 0, 0, true, true);
+    var ds = mxUtils.makeDraggable(img, graph, onDrag, dragElem, 0, 0, true, true);
     ds.setGuidesEnabled(true);
   } 
   

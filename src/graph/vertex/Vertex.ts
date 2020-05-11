@@ -4,16 +4,23 @@ const { mxPoint, mxGraph } = mx
 
 import { VertexHandler } from "./VertexHandler";
 import { VertexToolHandler } from "./VertexToolHandler";
-export * from './handles'
-export * from './ports'
 
+export * as anchor from './anchor'
+export * as handles from './handles'
+export * as ports from './ports'
+export * as overlay from './overlay'
+
+import { Anchor } from './anchor'
 import { Handles } from './handles'
 import { Ports } from './ports'
+import { Overlay } from "./overlay";
 
 export const classMap = {
   handler: VertexHandler,
   toolHandler: VertexToolHandler,
+  anchor: Anchor,
   handles: Handles,
+  overlay: Overlay,
   ports: Ports
 }
   
@@ -29,6 +36,8 @@ export class Vertex {
   _toolHandler: any
   _handles: any
   _ports: any
+  _overlay: any
+  _anchor: any
 
   classMap: {
     [key: string]: any
@@ -60,10 +69,38 @@ export class Vertex {
     return this._handler
   }
 
+  get anchor() {
+    this._anchor = this._anchor || this.createAnchor()
+    return this._anchor
+  }
+  
+  setAnchor(anchor?: any) {
+    this._anchor = anchor || this.createAnchor()
+    return this._anchor
+  }
+  
+  protected createAnchor(): any {
+    return new this.classMap.anchor(this.graph)
+  }   
+
   protected createHandler() {
     return new this.classMap.handler(this.graph)
   }
 
+  get overlay(): any {
+    this._overlay = this._overlay || this.createOverlay()
+    return this._overlay
+  }
+  
+  setOverlay(overlay?: any) {
+    this._overlay = overlay || this.createOverlay()
+    return this._overlay
+  }
+  
+  protected createOverlay() {
+    return new this.classMap.overlay(this.graph)
+  }
+  
   get handles(): any {
     this._handles = this._handles || this.createHandles()
     return this._handles
