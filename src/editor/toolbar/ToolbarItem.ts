@@ -1,4 +1,5 @@
 import mx from "../../mx";
+import { createStyledElement, setStyle } from "utils";
 const { mxEvent, mxUtils } = mx
 
 export class ToolbarItem {
@@ -6,10 +7,36 @@ export class ToolbarItem {
   toolbar: any
   editor: any
 
-  constructor(graph: any, toolbar: any, { editor, createOnDropItem }:any = {}) {
+  static defaults = {
+    button: {
+      size: {
+        width: 16,
+        height: 16,  
+      },
+      style: {
+        normal: {
+          margin: 2,
+          verticalAlign: 'middle',    
+        },
+        transparent: {
+          background: 'transparent',
+          color: 'white',
+          border: 'none'
+  
+        }  
+      }
+    }
+  }
+
+  defaults = ToolbarItem.defaults
+
+  constructor(graph: any, toolbar: any, { defaults, editor, createOnDropItem }:any = {}) {
     this.graph = graph
     this.toolbar = toolbar
     this.editor = editor || graph.editor
+
+    this.defaults = defaults || this.defaults
+
     if (createOnDropItem) {
       this.createOnDropItem = createOnDropItem
     }    
@@ -30,8 +57,6 @@ export class ToolbarItem {
       
       graph.setSelectionCells(graph.importCells([vertex], 0, 0, cell));
     }
-
-  
 
   add(cellPrototype: any, image: any) {
     const { graph, toolbar, createOnDropItem } = this
@@ -65,39 +90,55 @@ export class ToolbarItem {
   }
 
   addToolbarButton(action, label, image, props: any = {}) {
-    let {spacer, size, margin, isTransparent} = props
-    const { toolbar, editor } = this
-    var button = document.createElement('button');
-    button.style.fontSize = '10';
+    let {spacer, size, style, isTransparent} = props
+    const { toolbar, editor, defaults } = this
+    const button = createStyledElement({
+      fontSize: '10'
+    }, 'button');    
     size = {
-      width: 16,
-      height: 16,
+      ...defaults.button.size,
       ...size
     }
-    margin = margin || 2
+    style = {
+      ...defaults.button.style.normal,
+      ...style || {}
+    }
+    const { margin, verticalAlign } = style
 
-    if (image != null) {
-      var img = document.createElement('img');
+    if (image) {
+      var img = createStyledElement({
+        width: `${size.width}px`,
+        height: `${size.height}px`,
+        verticalAlign: verticalAlign,
+        marginRight: `${margin}px`
+      }, 'img')
       img.setAttribute('src', image);
-      img.style.width = `${size.width}px`;
-      img.style.height = `${size.height}px`;
-      img.style.verticalAlign = 'middle';
-      img.style.marginRight = `${margin}px`;
       button.appendChild(img);
     }
-    if (isTransparent) {
-      button.style.background = 'transparent';
-      button.style.color = '#FFFFFF';
-      button.style.border = 'none';
+    if (style.transparent) {
+      setStyle(button, {
+        ...defaults.button.style.transparent,
+        ...style.transparent
+      })
     }
-    mxEvent.addListener(button, 'click', (evt) => {
-      editor.execute(action);
-    });
-    mxUtils.write(button, label);
-    toolbar.appendChild(button);
+
+    this.addButton(button, { action, label })
 
     if (spacer || this.spacer) {
-      toolbar.appendChild(this.spacer.cloneNode(true));
-    }    
-  };  
+      this.addSpacer(spacer)
+    }
+  }
+
+  addButton(button, { action, label }) {
+    mxEvent.addListener(button, 'click', (evt) => {
+      this.editor.execute(action);
+    });
+    mxUtils.write(button, label);
+  
+    this.toolbar.appendChild(button);
+  }
+
+  addSpacer(spacer: any) {
+    this.toolbar.appendChild(this.spacer.cloneNode(true));
+  }    
 }

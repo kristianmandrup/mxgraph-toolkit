@@ -1,12 +1,21 @@
 import mx from "mx";
 import { ToolbarItem } from './ToolbarItem';
 import { ElementPos } from "editor/types";
+import { setStyle, createStyledElement } from "utils";
 const { mxGeometry, mxCell, mxToolbar } = mx
 
 export class Toolbar {
   graph: any
   toolbar: any
+  _toolbarItem: any
   toolbarItems: any = {}
+  defaults: any = {
+    toolbarElement: {
+      position: {width: 24, top: 26, left: 0, bottom: 0},
+      style: { padding: 2}    
+    },
+
+  }
 
   constructor(graph: any, toolbar?: any) {  
     this.graph = graph
@@ -17,25 +26,33 @@ export class Toolbar {
     return new Toolbar(graph).setToolbarForElement(tbContainer)
   }
   
-  createToolbarElement(props: ElementPos = {width: 24, top: 26, padding: 2}): Element {
-    let {top, width, padding} = props
-    width = width || 24
-    top = top || 26  
-    padding = padding || 2
+  createToolbarElement(props: ElementPos = {}, style: any = {}): Element {
+    const { defaults } = this
+    const { toolbarElement } = defaults
+    props = {
+      ...toolbarElement.position,
+      ...props || {}
+    }
+    style = {
+      ...toolbarElement.style,
+      ...style || {}
+    }
+    let { left, top, bottom, width } = props
+    let { padding } = style
     // Creates the div for the toolbar
-    var tbContainer = document.createElement('div');
-    tbContainer.style.position = 'absolute';
-    tbContainer.style.overflow = 'hidden';
-    tbContainer.style.padding = `${padding}px`;
-    tbContainer.style.left = '0px';
-    tbContainer.style.top = `${top}px`;
-    tbContainer.style.width = `${width}`;
-    tbContainer.style.bottom = '0px';    
-    return tbContainer
+    return createStyledElement({
+      position: 'absolute',
+      overflow: 'hidden',
+      padding: `${padding}px`,
+      left :`${left}px`,
+      top: `${top}px`,
+      width :`${width}`,
+      bottom: `${bottom}px`
+    })    
   }
   
-  static createToolbarForElement = (tbContainer: Element) => {
-    const toolbar: any = new mxToolbar(tbContainer);
+  createToolbarForElement = (container: Element) => {
+    const toolbar: any = new mxToolbar(container || this.createToolbarElement());
     toolbar.enabled = false  
     return toolbar
   }  
@@ -47,8 +64,8 @@ export class Toolbar {
     this.toolbar = toolbar
   }
 
-  setToolbarForElement(tbContainer: Element) {
-    const toolbar = Toolbar.createToolbarForElement(tbContainer)
+  setToolbarForElement(container: Element) {
+    const toolbar = this.createToolbarForElement(container)
     this.setToolbar(toolbar)
     return this
   }
@@ -58,17 +75,33 @@ export class Toolbar {
     var vertex = new mxCell(null, geometry, style);
     vertex.setVertex(true);
     this.addToolbarItem(name, vertex, icon);
+    return this
   }
 
   getToolbarItem(name: string): any {
     return this.toolbarItems[name]
   }
+
+  get toolbarItem(): any {
+    this._toolbarItem = this._toolbarItem || new ToolbarItem(this.graph, this.toolbar)
+    return this._toolbarItem
+  }
   
-  addToolbarItem(name: string, cellPrototype: any, image: any) {
-    const toolbarItem = new ToolbarItem(this.graph, this.toolbar)
-    this.toolbarItems[name] = toolbarItem
+  addToolbarItem(name: string, cellPrototype: any, image: any): any {    
+    const { toolbarItem } = this
     if (cellPrototype && image) {
       toolbarItem.add(cellPrototype, image)
     }    
+    return this
+  }
+
+  addToolbarItems(itemMap: any) {
+    this.toolbarItem.addMap(itemMap)
+    return this
+  }
+
+  addToolbarButtons(itemMap: any) {
+    this.toolbarItem.addToolbarButtons(itemMap)
+    return this
   }
 }
