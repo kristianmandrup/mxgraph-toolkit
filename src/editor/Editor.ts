@@ -4,11 +4,13 @@ import { Toolbar } from "./toolbar";
 import { Sidebar } from "./sidebar";
 import { Statusbar } from "./statusbar";
 import { OutlineMap } from "./outlineMap";
+import { FileIO } from "io";
 const { mxEditor } = mx
 
 const getElem = (id) => document.getElementById(id)
 
 export const classMap = {
+  io: FileIO,
   animate: Animation,
   graph: Graph,
   toolbar: Toolbar,
@@ -28,6 +30,7 @@ export class Editor {
   _toolbar: any
   _sidebar: any
   _outlineMap: any
+  _io: any
 
   classMap: {
     [key: string]: any
@@ -103,6 +106,20 @@ export class Editor {
     return new this.classMap.graph(this.$graph, {editor: this, ...props})
   }  
   
+  get io() {
+    this._io = this._io || this.createIO()
+    return this._io
+  }
+  
+  setIO(io?: any) {
+    this._io = io || this.createIO()
+    return this._io
+  }
+  
+  protected createIO(): any {
+    return new this.classMap.io(this.graph)
+  }
+
   get toolbar() {
     this._toolbar = this._toolbar || this.createToolbar()
     return this._toolbar
