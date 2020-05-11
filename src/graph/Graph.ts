@@ -12,6 +12,8 @@ import { UserObject } from "./data";
 import { Layout } from "./layout";
 import { Monitor } from "./monitor";
 import { Scrollable } from "./scroll";
+import { ModalWindow, Window } from "./window";
+import { createStyledElement } from "utils";
 
 const { 
   mxMorphing, mxEvent, 
@@ -21,10 +23,22 @@ const {
 
 type IsCellVisibleFn = (cell: any) => boolean
 
-export * as vertex from './vertex';
-export * as permission from './permission';
+export * as actions from './actions';
 export * as cell from './cell';
+export * as data from './data';
+export * as drop from './drop';
 export * as edge from './edge';
+export * as layers from './layers';
+export * as layout from './layout';
+export * as monitor from './monitor';
+export * as permission from './permission';
+export * as scroll from './scroll';
+export * as selection from './selection';
+export * as shapes from './shapes';
+export * as style from './style';
+export * as swimlanes from './swimlanes';
+export * as vertex from './vertex';
+export * as window from './window';
 
 export interface IGraph {
   graph: any
@@ -32,8 +46,10 @@ export interface IGraph {
 }
 
 export type DOMPosition = {
-  left: number
-  top: number
+  left?: number,
+  right?: number
+  top?: number,
+  bottom?: number,
 }
 
 export const classMap = {
@@ -50,6 +66,8 @@ export const classMap = {
   graphToggler: GraphToggler,  
   styleSheet: StyleSheet,
   vertex: Vertex, 
+  modalWindow: ModalWindow,
+  window: Window,
 }
 
 export const defaults = {
@@ -64,22 +82,27 @@ export class Graph {
   _keyHandler: any
   
   editor: any
-
-  _permission: any
+  
+  _actions: any
   _cell: any
-  _drop: any
   _data: any
+  _drop: any
+  _edge: any
+  _layers: any
+  _layout: any  
+  _monitor: any
+  _permission: any
+  _scroll: any
+  _selection: any
+  _shapes: any
   _style: any
   _defaultStyles: any
   _wstylesheet: any
   _toggler: any
   _vertex: any
-  _edge: any
   _window: any
-  _scroll: any
-  _graphToggler: any
-  _layers: any
-  _layout: any  
+  _modalWindow: any
+  
 
   classMap: {
     [key: string]: any
@@ -94,7 +117,7 @@ export class Graph {
 
   get permission() {
     this._permission = this._permission || this.createPermission()
-    return this._toggler
+    return this._permission
   }
 
   setPermission(permission?: any, props?: any) {
@@ -119,19 +142,20 @@ export class Graph {
   }
 
   static createGraphDOMElement({pos, background}: {pos?: DOMPosition, background?: string} = {}): Element {
-    let { left, top} = pos || {}
+    let { left, top, right, bottom } = pos || {}
     left = left || 24
     top = top || 26
     background = background || 'url("images/grid.gif")'
-    const container = document.createElement('div');
-    container.style.position = 'absolute';
-    container.style.overflow = 'hidden';
-    container.style.left = `${left}px`;
-    container.style.top = `${top}px`;
-    container.style.right = '0px';
-    container.style.bottom = '0px';
-    container.style.background = background
-    return container
+    return createStyledElement({
+      position: 'absolute',
+      overflow: 'hidden',
+      left: `${left}px`,
+      top: `${top}px`,
+      right: `${right}px`,
+      bottom: `${bottom}px`,
+      background: background
+  
+    }, 'div');
   }
 
   get defaultParent() {
