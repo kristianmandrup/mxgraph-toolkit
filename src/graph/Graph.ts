@@ -11,7 +11,6 @@ import { Permission } from './permission';
 import { UserObject } from "./data";
 import { Layout } from "./layout";
 import { Monitor } from "./monitor";
-import { OutlineMap } from "./outlineMap";
 import { Scrollable } from "./scroll";
 
 const { 
@@ -46,7 +45,6 @@ export const classMap = {
   layers: Layers,
   layout: Layout,  
   monitor: Monitor,
-  outlineMap: OutlineMap,
   permission: Permission,
   scrollable: Scrollable,
   graphToggler: GraphToggler,  
@@ -68,7 +66,6 @@ export class Graph {
   editor: any
 
   _permission: any
-  _edit: any
   _cell: any
   _drop: any
   _data: any
@@ -82,8 +79,7 @@ export class Graph {
   _scroll: any
   _graphToggler: any
   _layers: any
-  _layout: any
-  _outlineMap: any
+  _layout: any  
 
   classMap: {
     [key: string]: any
@@ -176,20 +172,6 @@ export class Graph {
 
   createToggler(): any {
     return new this.classMap.graphToggler(this.graph);
-  }
-
-  get outlineMap(): any {
-    this._outlineMap = this._outlineMap || this.createOutlineMap()
-    return this._outlineMap
-  }
-  
-  setOutlineMap(outlineMap?: any) {
-    this._outlineMap = outlineMap || this.createOutlineMap()
-    return this._outlineMap
-  }
-  
-  protected createOutlineMap() {
-    return new this.classMap.outlineMap(this.graph)
   }
     
   get drop() {
@@ -289,20 +271,6 @@ export class Graph {
   protected createEdge(): any {
     return new this.classMap.edge(this.graph)
   }  
-
-  get edit() {
-    this._edit = this._edit || this.createEdit()
-    return this._edit
-  }
-
-  setEdit(edit?: any, props?: any) {
-    this._edit = edit || this.createEdit(props)
-    return this
-  }
-
-  protected createEdit(props: any = {}) {
-    new this.classMap.edit(this.graph, props)
-  }
 
   get cell() {
     this._cell = this._cell || this.createCell()

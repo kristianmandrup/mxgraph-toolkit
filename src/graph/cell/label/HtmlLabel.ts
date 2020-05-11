@@ -17,6 +17,7 @@ export class HtmlLabel {
     graph.convertValueToString = this.convertValueToString
     graph.cellLabelChanged = this.cellLabelChanged
     graph.getEditingValue = this.getEditingValue
+    return this
   }
 
   isUserObject(cell, name: string = 'userobject' ): boolean {

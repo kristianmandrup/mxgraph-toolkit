@@ -2,6 +2,8 @@ import mx from "mx";
 import { Graph } from "graph";
 import { Toolbar } from "./toolbar";
 import { Sidebar } from "./sidebar";
+import { Statusbar } from "./statusbar";
+import { OutlineMap } from "./outlineMap";
 const { mxEditor } = mx
 
 const getElem = (id) => document.getElementById(id)
@@ -10,7 +12,9 @@ export const classMap = {
   animate: Animation,
   graph: Graph,
   toolbar: Toolbar,
-  sidebar: Sidebar
+  sidebar: Sidebar,
+  statusbar: Statusbar,
+  outlineMap: OutlineMap,
 }
 
 export const defaults = {
@@ -23,6 +27,7 @@ export class Editor {
   _graph: any
   _toolbar: any
   _sidebar: any
+  _outlineMap: any
 
   classMap: {
     [key: string]: any
@@ -69,6 +74,21 @@ export class Editor {
     return this.editor.graph;
   }
 
+  get outlineMap(): any {
+    this._outlineMap = this._outlineMap || this.createOutlineMap()
+    return this._outlineMap
+  }
+  
+  setOutlineMap(outlineMap?: any, outlineElement?: any) {    
+    this._outlineMap = outlineMap || this.createOutlineMap(outlineElement)
+    return this._outlineMap
+  }
+  
+  protected createOutlineMap(outlineElement?: any) {
+    outlineElement = outlineElement || this.containers.outline
+    return new this.classMap.outlineMap(this.graph, outlineElement)
+  }  
+
   get graph() {
     this._graph = this._graph || this.createGraph()
     return this._graph
@@ -89,6 +109,7 @@ export class Editor {
   }
   
   setToolbar(toolbar?: any, toolbarElement?: any) {
+    toolbarElement = toolbarElement || this.containers.toolbar
     this._toolbar = toolbar || this.createToolbar(toolbarElement)
     return this._toolbar
   }
@@ -103,6 +124,7 @@ export class Editor {
   }
   
   setSidebar(sidebar?: any, sidebarElement?: Element) {
+    sidebarElement = sidebarElement || this.containers.sidebar
     this._sidebar = sidebar || this.createSidebar(sidebarElement)
     return this._sidebar
   }

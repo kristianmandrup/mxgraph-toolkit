@@ -23,8 +23,9 @@ export class Cell {
   _edit: any
   _hints: any 
   _hover: any
-  _label: any
-  _menu: any
+  _htmlLabel: any
+  _popupMenu: any
+  _toolTip: any
 
   classMap: {
     [key: string]: any
@@ -40,6 +41,20 @@ export class Cell {
       ...defaults.classMap,
       ...classMap
     }      
+  }
+
+  get edit() {
+    this._edit = this._edit || this.createEdit()
+    return this._edit
+  }
+
+  setEdit(edit?: any, props?: any) {
+    this._edit = edit || this.createEdit(props)
+    return this
+  }
+
+  protected createEdit(props: any = {}) {
+    new this.classMap.edit(this.graph, props)
   }
 
   get group(): any {
@@ -61,6 +76,62 @@ export class Cell {
     return new this.classMap.group(name, label)
   }
 
+  get hints() {
+    this._hints = this._hints || this.createHints()
+    return this._hints
+  }
+  
+  setHints(hints?: any, hintsElem?: Element) {
+    this._hints = hintsElem || this.createHints(hintsElem)
+    return this
+  }
+  
+  protected createHints(hintsElem?: Element) {
+    new this.classMap.hints(hintsElem)
+  }  
+
+  get popupMenu() {
+    this._popupMenu = this._popupMenu || this.createPopupMenu()
+    return this._popupMenu
+  }
+  
+  setPopupMenu(popupMenu?: any, items?: any) {
+    this._popupMenu = popupMenu || this.createPopupMenu(items)
+    return this
+  }
+  
+  protected createPopupMenu(items?: any) {
+    new this.classMap.popupMenu(this.graph, items)
+  }    
+
+  get toolTip() {
+    this._toolTip = this._toolTip || this.createToolTip()
+    return this._toolTip
+  }
+  
+  setToolTip(toolTip?: any) {
+    this._toolTip = toolTip || this.createToolTip()
+    return this._toolTip
+  }
+  
+  protected createToolTip() {
+    return new this.classMap.toolTip(this.graph)
+  }
+
+  get htmlLabel() {
+    this._htmlLabel = this._htmlLabel || this.createHtmlLabel()
+    return this._htmlLabel
+  }
+  
+  setHtmlLabel(htmlLabel?: any) {
+    this._htmlLabel = htmlLabel || this.createHtmlLabel()
+    return this._htmlLabel
+  }
+  
+  protected createHtmlLabel() {
+    return new this.classMap.htmlLabel(this.graph)
+  }
+  
   createIsPort(cell) {
     const { graph } = this
     var geo = graph.getCellGeometry(cell);

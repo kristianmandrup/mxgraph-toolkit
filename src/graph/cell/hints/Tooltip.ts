@@ -1,10 +1,6 @@
 import mx from "mx";
 const { mxCellTracker } = mx
 
-export const createTooltip = (graph: any): Tooltip => {
-  return new Tooltip(graph).init()
-}
-
 export class Tooltip {
   graph: any
 
@@ -12,6 +8,11 @@ export class Tooltip {
     this.graph = graph
   }
 
+  // factory  
+  static create = (graph: any): Tooltip => {
+    return new Tooltip(graph).init()
+  }
+  
   highlightCellOnHover() {
     // Adds a highlight on the cell under the mousepointer
     new mxCellTracker(this.graph, undefined, undefined);
@@ -21,6 +22,7 @@ export class Tooltip {
     this.graph.getTooltipForCell = this.getTooltipForCell
     return this
   }
+  
   getTooltipForCell(cell): string {
     const { graph } = this
     const getTooltipForCell = graph.getTooltipForCell;

@@ -22,7 +22,8 @@ export class Toolbar {
     return new Toolbar(graph).setToolbarForElement(tbContainer)
   }
   
-  static createToolbarDOMElement({top, width, padding}: ToolbarPosition = {width: 24, top: 26, padding: 2}): Element {
+  createToolbarDOMElement(props: ToolbarPosition = {width: 24, top: 26, padding: 2}): Element {
+    let {top, width, padding} = props
     width = width || 24
     top = top || 26  
     padding = padding || 2
@@ -45,7 +46,9 @@ export class Toolbar {
   }  
 
   setToolbar(toolbar: any) {
-    if (!toolbar) return
+    if (!toolbar) {
+      toolbar = this.createToolbarDOMElement()
+    }
     this.toolbar = toolbar
   }
 
