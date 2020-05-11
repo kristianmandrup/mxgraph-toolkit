@@ -74,13 +74,13 @@ export class Editor {
     return this._graph
   }
   
-  setGraph(graph?: any) {
-    this._graph = graph || this.createGraph()
+  setGraph(graph?: any, props: any = {}) {
+    this._graph = graph || this.createGraph(props)
     return this._graph
   }
   
-  protected createGraph(): any {
-    return new this.classMap.graph(this.$graph, {editor: this})
+  protected createGraph(props: any = {}): any {
+    return new this.classMap.graph(this.$graph, {editor: this, ...props})
   }  
   
   get toolbar() {
@@ -88,13 +88,13 @@ export class Editor {
     return this._toolbar
   }
   
-  setToolbar(toolbar?: any) {
-    this._toolbar = toolbar || this.createToolbar()
+  setToolbar(toolbar?: any, toolbarElement?: any) {
+    this._toolbar = toolbar || this.createToolbar(toolbarElement)
     return this._toolbar
   }
   
-  protected createToolbar(): any {
-    return new this.classMap.toolbar(this.graph)
+  protected createToolbar(toolbarElement?: any): any {
+    return new this.classMap.toolbar(this.graph, toolbarElement)
   }  
   
   get sidebar() {
@@ -102,13 +102,13 @@ export class Editor {
     return this._sidebar
   }
   
-  setSidebar(sidebar?: any) {
-    this._sidebar = sidebar || this.createSidebar()
+  setSidebar(sidebar?: any, sidebarElement?: Element) {
+    this._sidebar = sidebar || this.createSidebar(sidebarElement)
     return this._sidebar
   }
   
-  protected createSidebar(): any {
-    return new this.classMap.sidebar(this.graph)
+  protected createSidebar(sidebarElement?: Element): any {
+    return new this.classMap.sidebar(this.graph, sidebarElement)
   }  
 
   setDefaultGroup(group) {

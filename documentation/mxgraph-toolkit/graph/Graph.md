@@ -89,7 +89,6 @@ graph.model
 graph.hidePopupMenu()
 ```
 
-
 ## set getToolTip function
 
 ```ts

@@ -2,37 +2,35 @@ import mx from "mx";
 import { ToolbarItem } from './ToolbarItem';
 const { mxGeometry, mxCell, mxToolbar } = mx
 
-type IaddToolbarItemFn = (graph: any, toolbar: any, cellPrototype: any, image: any) => void
+type ToolbarPosition = {
+  top: number
+  width: number,
+  padding: number
+}
 
 export class Toolbar {
   graph: any
   toolbar: any
-  addToolbarItem: IaddToolbarItemFn | undefined
+  toolbarItems: any = {}
 
   constructor(graph: any, toolbar?: any) {  
     this.graph = graph
     this.setToolbar(toolbar)
   }
 
-  setToolbar(toolbar: any) {
-    if (!toolbar) return
-    this.toolbar = toolbar
-    this.addToolbarItem = createAddToolbarItem(this.graph, toolbar)  
-  }
-
-
   static create(graph: any, tbContainer: Element) {
     return new Toolbar(graph).setToolbarForElement(tbContainer)
   }
   
-  static createToolbarDOMElement({top, width}: {top: number, width: number} = {width: 24, top: 26}): Element {
+  static createToolbarDOMElement({top, width, padding}: ToolbarPosition = {width: 24, top: 26, padding: 2}): Element {
     width = width || 24
     top = top || 26  
+    padding = padding || 2
     // Creates the div for the toolbar
     var tbContainer = document.createElement('div');
     tbContainer.style.position = 'absolute';
     tbContainer.style.overflow = 'hidden';
-    tbContainer.style.padding = '2px';
+    tbContainer.style.padding = `${padding}px`;
     tbContainer.style.left = '0px';
     tbContainer.style.top = `${top}px`;
     tbContainer.style.width = `${width}`;
@@ -44,6 +42,11 @@ export class Toolbar {
     const toolbar: any = new mxToolbar(tbContainer);
     toolbar.enabled = false  
     return toolbar
+  }  
+
+  setToolbar(toolbar: any) {
+    if (!toolbar) return
+    this.toolbar = toolbar
   }
 
   setToolbarForElement(tbContainer: Element) {
@@ -52,24 +55,22 @@ export class Toolbar {
     return this
   }
   
-  addVertex(icon: any, w: number, h: number, style: any, addToolbarItem?: IaddToolbarItemFn) {
-    const { graph, toolbar } = this
+  addVertex(name: string, icon: any, w: number, h: number, style: any) {
     const geometry = new mxGeometry(0, 0, w, h)
     var vertex = new mxCell(null, geometry, style);
     vertex.setVertex(true);
-    addToolbarItem = addToolbarItem || this.addToolbarItem  
-    if (!addToolbarItem) return
-    addToolbarItem(graph, toolbar, vertex, icon);
-  };  
-}
+    this.addToolbarItem(name, vertex, icon);
+  }
 
-export const createAddToolbarItem = (graph: any, toolbar: any) => (cellPrototype: any, image: any) => {
-  const toolbarItem = new ToolbarItem(graph, toolbar)
-  toolbarItem.add(cellPrototype, image)
+  getToolbarItem(name: string): any {
+    return this.toolbarItems[name]
+  }
+  
+  addToolbarItem(name: string, cellPrototype: any, image: any) {
+    const toolbarItem = new ToolbarItem(this.graph, this.toolbar)
+    this.toolbarItems[name] = toolbarItem
+    if (cellPrototype && image) {
+      toolbarItem.add(cellPrototype, image)
+    }    
+  }
 }
-
-export const addToolbarItem = (graph: any, toolbar: any, cellPrototype: any, image: any) => {
-  const toolbarItem = new ToolbarItem(graph, toolbar)
-  toolbarItem.add(cellPrototype, image)
-}
-

@@ -32,10 +32,72 @@ editor.setContainerMap({
 const { graph, toolbar } = editor.containers
 ```
 
-## graph
+## mxGraph
+
+## get instance
+
+```ts
+editor.$graph
+```
+
+## Graph
+
+### get
 
 ```ts
 editor.graph
+```
+
+### set
+
+```ts
+editor.setGraph(graph)
+```
+
+With properties
+
+```ts
+editor.setGraph(graph, props)
+```
+
+## Toolbar
+
+### get
+
+```ts
+editor.toolbar
+```
+
+### set
+
+```ts
+editor.setToolbar(toolbar)
+```
+
+With DOM element
+
+```ts
+editor.setToolbar(toolbar, toolbarElem)
+```
+
+## Sidebar
+
+### get
+
+```ts
+editor.sidebar
+```
+
+### set
+
+```ts
+editor.setSidebar(sidebar)
+```
+
+With DOM element
+
+```ts
+editor.setSidebar(sidebar, sidebarElem)
 ```
 
 ## set default group
