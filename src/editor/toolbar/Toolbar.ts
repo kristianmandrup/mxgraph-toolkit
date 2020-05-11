@@ -1,12 +1,7 @@
 import mx from "mx";
 import { ToolbarItem } from './ToolbarItem';
+import { ElementPos } from "editor/types";
 const { mxGeometry, mxCell, mxToolbar } = mx
-
-type ToolbarPosition = {
-  top: number
-  width: number,
-  padding: number
-}
 
 export class Toolbar {
   graph: any
@@ -22,7 +17,7 @@ export class Toolbar {
     return new Toolbar(graph).setToolbarForElement(tbContainer)
   }
   
-  createToolbarDOMElement(props: ToolbarPosition = {width: 24, top: 26, padding: 2}): Element {
+  createToolbarElement(props: ElementPos = {width: 24, top: 26, padding: 2}): Element {
     let {top, width, padding} = props
     width = width || 24
     top = top || 26  
@@ -47,7 +42,7 @@ export class Toolbar {
 
   setToolbar(toolbar: any) {
     if (!toolbar) {
-      toolbar = this.createToolbarDOMElement()
+      toolbar = this.createToolbarElement()
     }
     this.toolbar = toolbar
   }
