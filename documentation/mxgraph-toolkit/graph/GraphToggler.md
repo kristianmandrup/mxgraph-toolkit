@@ -6,10 +6,76 @@ Usage
 graph.toggle.dropEnabled(true)
 ```
 
+## using switches
+
+Turning on (enable)
+
+```ts
+graph.drop.on()
+```
+
+Turning off (disable)
+
+```ts
+graph.split.off()
+```
+
+Turn multiple on
+
+```ts
+graph.toggle.on([
+  'drop',
+  'split',
+  'panning'
+]
+```
+
+or directly on graph
+
+```ts
+graph.on([
+  'drop',
+  'split',
+  'panning'
+]
+```
+
+Turn multiple off
+
+```ts
+graph.off([
+  'panning',
+  'centerZoom',
+  'folding'
+]
+```
+
+Fluent API
+
+```ts
+graph.on([
+  'panning',
+  'centerZoom',
+  'folding'
+]).off([
+  'guides'
+])
+```
+
+Switch multiple on/off using object
+
+```ts
+graph.switch({
+  panning: true,
+  folding: false
+}
+```
+
+
 ## Enable/Disable drop
 
 ```ts
-graph,setDropEnabled(true)
+graph.setDropEnabled(true)
 ```
 
 ## Enable/Disable split

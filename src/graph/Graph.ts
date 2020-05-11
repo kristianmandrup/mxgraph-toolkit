@@ -160,18 +160,30 @@ export class Graph {
     return new mxKeyHandler(this.graph);
   }
 
-  get toggler() {
+  switch(nameMap: any) {
+    this.toggler.switch(nameMap)
+  }
+
+  on(names: string[]) {
+    this.toggler.on(names)
+  }
+
+  off(names: string[]) {  
+    this.toggler.off(names)
+  }
+
+  get toggler(): any {
     this._toggler = this._toggler || this.createToggler()
     return this._toggler
   }
 
-  setToggler(toggler?: any) {
-    this._toggler = toggler || this.createToggler()
+  setToggler(toggler?: any, props?: any) {
+    this._toggler = toggler || this.createToggler(props)
     return this
   }
 
-  createToggler(): any {
-    return new this.classMap.graphToggler(this.graph);
+  createToggler(props?: any): any {
+    return new this.classMap.graphToggler(this.graph, props);
   }
     
   get drop() {

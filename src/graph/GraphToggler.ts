@@ -1,12 +1,42 @@
 import mx from "mx";
+import { createSwitch, Switch } from "./Switch";
+import { defaults } from "./defaults";
 const { mxEdgeHandler, mxGraphHandler } = mx
 
 export class GraphToggler {
   graph: any
+  drop?: Switch
+  split?: Switch
+  resizeContainer?: Switch
+  allowLoops?: Switch
+  folding?: Switch
 
-  constructor(graph: any) {
+  constructor(graph: any, { nameMap }: any) {
     this.graph = graph
+    this.setupSwitches(nameMap)
   }
+
+  setupSwitches(nameMap: any = defaults.nameMap) {
+    Object.keys(nameMap).map(name => {
+      const methodName = nameMap[name] 
+      this[name] = createSwitch(this, name, methodName)
+    })
+  }
+
+  switch(nameMap: any) {
+    Object.keys(nameMap).map(name => {
+      nameMap[name] ? this[name].on() : this[name].off() 
+    })
+  }
+
+  on(names: string[]) {
+    names.map(name => this[name].on())
+  }
+
+  off(names: string[]) {
+    names.map(name => this[name].off())
+  }
+
 
   setDropEnabled(value: boolean) {
     this.graph.setDropEnabled(value)
@@ -56,13 +86,6 @@ export class GraphToggler {
     mxEdgeHandler.prototype.snapToTerminals = value;
   }
   
-  // Disables automatic handling of ports. This disables the reset of the
-  // respective style in mxGraph.cellConnected. Note that this feature may
-  // be useful if floating and fixed connections are combined.
-  disableAutoPorts() {
-    this.setPortsEnabled(false);
-  }
-
   setPortsEnabled(value: boolean) {
     this.graph.setPortsEnabled(value);
   }
