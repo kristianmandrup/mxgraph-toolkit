@@ -239,6 +239,20 @@ With DOM element
 editor.setOutlineMap(outlineMap, outlineElem)
 ```
 
+## IO
+
+### get
+
+```ts
+editor.io
+```
+
+### set
+
+```ts
+editor.setIO(io)
+```
+
 ## set default group
 
 ```ts
