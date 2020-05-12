@@ -6,7 +6,7 @@ const { mxUtils, mxCell } = mx
 export class Layers {
   graph: IGraph
   root: any  
-  layers: { [key:string]: any } = {
+  layersMap: { [key:string]: any } = {
     default: new mxCell()
   }
 
@@ -15,22 +15,18 @@ export class Layers {
     this.root = root
   }
 
-  drawLayer(name: string) {
-    return new DrawLayer(this.graph, this.getLayer(name))
-  }
-
   // volatile
   draw(name?: string): DrawLayer {
     return this.getDrawLayer(name)
   }
 
-  protected getDrawLayer(name?: string) {
-    const layer = name ? this.getLayer(name) : this.getDefaultLayer()
-    return this.createDrawLayer(layer)
+  protected createDrawLayerFrom(layer) {
+    return new DrawLayer(this.graph, layer)
   }
 
-  createDrawLayer(layer) {
-    return new DrawLayer(this, layer)
+  protected getDrawLayer(name?: string) {
+    const layer = name ? this.getLayer(name) : this.getDefaultLayer()
+    return this.createDrawLayerFrom(layer)
   }
   
   getDefaultLayer() {
@@ -38,15 +34,15 @@ export class Layers {
   }
 
   getLayer(name: string): any {
-    if (!this.layers[name]) {
+    if (!this.layersMap[name]) {
       throw new Error(`Layer ${name} has not been created`)
     }
-    return this.layers[name]
+    return this.layersMap[name]
   }
 
   addLayer(name: string) {
     const layer = this.root.insert(new mxCell());
-    this.layers[name] = layer
+    this.layersMap[name] = layer
     return layer
   }
 
