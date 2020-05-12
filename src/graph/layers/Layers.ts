@@ -5,7 +5,8 @@ const { mxUtils, mxCell } = mx
 
 export class Layers {
   graph: IGraph
-  root: any  
+  root: any
+  currentLayerName?: string  
   layersMap: { [key:string]: any } = {
     default: new mxCell()
   }
@@ -17,6 +18,7 @@ export class Layers {
 
   // volatile
   draw(name?: string): DrawLayer {
+    this.setCurrentLayerName(name || 'default')
     return this.getDrawLayer(name)
   }
 
@@ -30,7 +32,7 @@ export class Layers {
   }
   
   getDefaultLayer() {
-    return this.getLayer('default')
+    return this.getLayer(this.currentLayerName || 'default')
   }
 
   getLayer(name: string): any {
@@ -46,10 +48,16 @@ export class Layers {
     return layer
   }
 
-  layerButtonFor(name: string, label: string = name) {
+  setCurrentLayerName(name: string) {
+    this.currentLayerName = name
+    return this
+  }
+
+  layerButtonFor(name: string, label: string = name): any {
     const { model } = this.graph.model
     return mxUtils.button(label, () => {
       const layer = this.getLayer(name)
+      this.setCurrentLayerName(name)
       model.setVisible(layer, !model.isVisible(layer));
     })    
   }

@@ -1,6 +1,6 @@
 # Layers
 
-Layout display of graph
+Manage mxGraph layers
 
 ## create
 
@@ -56,9 +56,15 @@ Add new named layer
 layers.addLayer(name)
 ```
 
+## set current layer name
+
+```ts
+layers.setCurrentLayerName(name)
+```
+
 ## layer button for
 
-Add new named layer
+Creates and returns a button which can be used to activate and set a specific layer visible
 
 ```ts
 // label same as name

@@ -9,14 +9,6 @@ interface InsertVertexOpts {
   geometry?: any
 }
 
-export const setGeometryPoints = (cell: any, points?: any) => {
-  if (points) {
-    points = Array.isArray(points) ? points : [points]
-    cell.geometry.points = [points]
-  }
-  return cell
-}
-
 export class DrawLayer {
   layer: any
   graph: any
@@ -40,7 +32,15 @@ export class DrawLayer {
   insertEdge(labelOrValue: any, fromVertex: any, toVertex: any, style: string, {id, relative, points}: any = {}): any {
     id = id || null
     const edge = this.graph.insertEdge(this.layer, id, labelOrValue, fromVertex, toVertex, style, relative)
-    if (points) setGeometryPoints(edge)
+    if (points) this.setGeometryPoints(edge)
     return edge
   }
+
+  protected setGeometryPoints(cell: any, points?: any) {
+    if (points) {
+      points = Array.isArray(points) ? points : [points]
+      cell.geometry.points = [points]
+    }
+    return cell
+  }  
 }
