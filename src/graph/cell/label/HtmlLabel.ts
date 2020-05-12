@@ -3,13 +3,18 @@ const { mxEvent, mxClient, mxUtils, mxUndoManager } = mx
 
 export class HtmlLabel {
   graph: any
-  cached: boolean
-  data: any
+  cached?: boolean
+  data?: any
 
-  constructor(graph: any, data: any, {cached}: {cached: boolean}) {
+  constructor(graph: any, data?: any, {cached}: {cached?: boolean} = {}) {
     this.graph = graph
     this.cached = cached
     this.data = data
+  }
+
+  setData(data) {
+    this.data = data
+    return this
   }
 
   init() {

@@ -1,6 +1,15 @@
 # Html label
 
+Create Html labels for cells, including vertices and edges
+
 ## create
+
+```ts
+const label = new HtmlLabel(graph).setData(data)
+
+// with caching
+const label = new HtmlLabel(graph, data, {cached: true})
+```
 
 ## init
 
@@ -37,3 +46,5 @@ It adds buttons to the document to `undo` and `redo` changes to the model or vie
 ```ts
 getEditingValue(cell)
 ```
+
+TODO: Extract Undo Manager functionality into separate class. Same with Zoom etc.

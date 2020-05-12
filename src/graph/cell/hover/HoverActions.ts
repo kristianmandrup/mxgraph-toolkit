@@ -4,19 +4,26 @@ const { mxEvent } = mx
 
 export class HoverActions {
   graph: any
-  hoverIcons: HoverIcons
+  hoverIcons?: HoverIcons
 
   get state(): any {
     return this.graph.state
   }
 
-  constructor(graph: any, hoverIcons: HoverIcons) {
+  constructor(graph: any, hoverIcons?: HoverIcons) {
     this.graph = graph
-    this.hoverIcons = hoverIcons
+    this.setIcons(hoverIcons)
   }
 
+  setIcons(hoverIcons) {
+    this.hoverIcons = hoverIcons
+    return this
+  }
+  
   destroyIcons() {
+    if (!this.hoverIcons) return
     this.hoverIcons.destroyIcons()
+    return this
   }
 
   duplicate(evt) {
