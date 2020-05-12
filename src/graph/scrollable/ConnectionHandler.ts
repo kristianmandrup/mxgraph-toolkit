@@ -18,11 +18,11 @@ export class ConnectionHandler {
   };  
 
   setTargetPerimeterPoint() {
-    this.handler.getTargetPerimeterPoint = this.targetPerimterPoint
+    this.handler.getTargetPerimeterPoint = this.targetPerimeterPoint
   }
 
   // Overrides target perimeter point for connection previews
-  targetPerimterPoint(state, me) {
+  targetPerimeterPoint(state, me) {
     const handler = this.handler
     // Determines the y-coordinate of the target perimeter point
     // by using the currentRowNode assigned in updateRow

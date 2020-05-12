@@ -8,6 +8,14 @@ export class Permission {
 
   constructor(graph: any) {
     this.graph = graph
+    this.init()
+  }
+
+  init() {
+    const { graph } = this
+    graph.setConnectable(this.createEdges);
+    graph.setCellsLocked(this.locked);
+    return this
   }
 
   setPermissions({locked, createEdges, editEdges, editVertices, cloneCells}: any = {}) {
@@ -16,13 +24,6 @@ export class Permission {
     this.editEdges = !!editEdges
     this.editVertices = !!editVertices
     this.cloneCells = !!cloneCells
-    return this
-  }
-
-  init() {
-    const { graph } = this
-    graph.setConnectable(this.createEdges);
-    graph.setCellsLocked(this.locked);
     return this
   }
 }

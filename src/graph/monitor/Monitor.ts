@@ -11,26 +11,42 @@ export class Monitor {
     this.states = this.createStates()
   }
 
-  createStates() {
+  createStateEntry(props: any = {}) {
     const { graph } = this
-    return {
-      running: (state, cell) => {
-        if (state !== 'Running') return
-        graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#f8cecc', [cell]);
-      },
-      waiting: (state, cell) => {
-        if (state !== 'Waiting') return
-        graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#fff2cc', [cell]);
-      },
-      completed: (state, cell) => {
-        if (state !== 'Completed') return
-        graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#f8cecc', [cell]);
-      },
-      init: (state, cell) => {
-        if (state !== 'Init') return
-        graph.addCellOverlay(cell, this.createOverlay(graph.warningImage, 'State: '+state));
-      }
+    const { stateName, fillColor } = props
+    return  (state, cell) => {
+      if (state !== stateName) return
+      graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, fillColor, [cell]);
     }
+  }
+
+  get stateProps() {
+    return [{
+      label: 'running',
+      stateName: 'Running',
+      fillColor: '#f8cecc'
+    }]
+  }
+
+  createInitState() {
+    const { graph } = this
+    return (state, cell) => {
+      if (state !== 'Init') return
+      graph.addCellOverlay(cell, this.createOverlay(graph.warningImage, 'State: ' + state));
+    }
+  }
+
+  createStates() {
+    let stateMap = this.stateProps.reduce((acc, props) => {
+      const { label } = props
+      acc[label] = this.createStateEntry(props)
+      return acc
+    }, {})
+    stateMap = {
+      ...stateMap,
+      init: this.createInitState()
+    }
+    return stateMap
   }
 
   get tooltipPostFix() {

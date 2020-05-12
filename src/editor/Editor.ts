@@ -5,9 +5,8 @@ import { Sidebar } from "./sidebar";
 import { Statusbar } from "./statusbar";
 import { OutlineMap } from "./outlineMap";
 import { FileIO } from "io";
+import { getElem } from "./utils";
 const { mxEditor } = mx
-
-const getElem = (id) => document.getElementById(id)
 
 export const classMap = {
   io: FileIO,
@@ -36,11 +35,39 @@ export class Editor {
     [key: string]: any
   } = defaults.classMap
 
-  constructor(graph: any, { classMap }: any = {}) {
+  nameMap = {
+    graph: 'graphContainer',
+    outline: 'outlineContainer',
+    toolbar: 'toolbarContainer',
+    sidebar: 'sidebarContainer',
+    status: 'statusContainer'
+  }
+
+  containerMap = {
+    graph: this.getC('graph'),
+    outline: this.getC('outline'),
+    toolbar: this.getC('toolbar'),
+    sidebar: this.getC('sidebar'),
+    status: this.getC('status')
+  } 
+
+  cName(name: string) {
+    return `${name}Container`
+  }
+
+  getC(name: string) {
+    return getElem(this.nameMap[name] || this.cName(name))
+  }
+
+  constructor(graph: any, { classMap, containerMap }: any = {}) {
     const editor = new mxEditor();
     this.editor = editor
     this.editor.graph = graph
     this.setClassMap(classMap)
+    this.containerMap = {
+      ...this.containerMap,
+      ...containerMap || {}
+    }
   }
   
   setClassMap(classMap: any = {}) {
@@ -56,13 +83,7 @@ export class Editor {
   }
 
   get defaultContainerMap(): any {
-    return {
-      graph: getElem('graphContainer'),
-      outline: getElem('outlineContainer'),
-      toolbar: getElem('toolbarContainer'),
-      sidebar: getElem('sidebarContainer'),
-      status: getElem('statusContainer')
-    }        
+    return this.containerMap       
   }
 
   setContainerMap(containers: any = {}) {

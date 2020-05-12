@@ -8,7 +8,35 @@ Monitor and display graph state, such as a workflow
 const monitor = new Monitor(graph)
 ```
 
-## tooltipPostFix
+## state properties
+
+Props to use for `createStates`
+
+```ts
+monitor.stateProps
+```
+
+## create states
+
+Called as part of creation. Sets `states` property
+
+```ts
+monitor.createStates()
+```
+
+## create init state
+
+```ts
+monitor.createInitState()
+```
+
+## create state entry
+
+```ts
+monitor.createStateEntry({label, stateName, fillColor})
+```
+
+## tooltip postfix
 
 ```ts
 monitor.tooltipPostFix
