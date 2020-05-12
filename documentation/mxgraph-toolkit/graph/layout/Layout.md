@@ -40,6 +40,12 @@ Hierarchical layout
 layout.hierarchical(direction)
 ```
 
+## Parallel edge
+
+```ts
+layout.parallelEdge()
+```
+
 ## Execute
 
 Execute vertex

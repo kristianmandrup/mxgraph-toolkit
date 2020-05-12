@@ -1,5 +1,9 @@
 # Connection
 
+Connection image API
+
+## create
+
 ```ts
 const conn = new Connection(graph)
 ```

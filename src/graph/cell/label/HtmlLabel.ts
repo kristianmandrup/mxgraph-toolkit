@@ -4,12 +4,12 @@ const { mxEvent, mxClient, mxUtils, mxUndoManager } = mx
 export class HtmlLabel {
   graph: any
   cached: boolean
-  userObj: any
+  data: any
 
-  constructor(graph: any, userObj: any, {cached}: {cached: boolean}) {
+  constructor(graph: any, data: any, {cached}: {cached: boolean}) {
     this.graph = graph
     this.cached = cached
-    this.userObj = userObj
+    this.data = data
   }
 
   init() {
@@ -85,13 +85,13 @@ export class HtmlLabel {
   // Overrides method to create the editing value
   
   getEditingValue(cell) {
-    const { graph, userObj } = this
+    const { graph, data } = this
     if (this.isUserObject(cell)) {
       return cell.getAttribute('label');
     }
 
     var parent = graph.getDefaultParent();
-    graph.insertVertex(parent, null, userObj, 20, 20, 80, 60);
+    graph.insertVertex(parent, null, data, 20, 20, 80, 60);
     
     // Undo/redo
     var undoManager = new mxUndoManager(200);

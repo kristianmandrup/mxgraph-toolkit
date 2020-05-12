@@ -1,17 +1,27 @@
 import mx from "mx";
-const { mxEvent } = mx
+const { mxEvent, mxPopupMenuHandler, mxPopupMenu } = mx
 
 export class PopupMenu {
   graph: any
   popupMenuHandler: any
-
   items: any = {}
+  menu: any
 
   constructor(graph: any, items?: any) {
     this.graph = graph
-    this.popupMenuHandler = graph.popupMenuHandler
+    this.popupMenuHandler = graph.popupMenuHandler || mxPopupMenuHandler.prototype
     this.setAutoExpand(true)
     this.items = items
+  }
+
+  init() {
+    this.popupMenuHandler.isSelectOnPopup = this.isSelectOnPopup
+    this.popupMenuHandler.factoryMethod = this.factoryMethod
+    this.menu = this.createMenu()
+  }
+
+  createMenu() {
+    return new mxPopupMenu()
   }
 
   setItems(items) {
@@ -21,19 +31,23 @@ export class PopupMenu {
   setAutoExpand(value: boolean) {
     this.popupMenuHandler.autoExpand = value
   }
-
-  init() {
-    this.popupMenuHandler.isSelectOnPopup = this.isSelectOnPopup
-  }
   				
   isSelectOnPopup(me) {
     return mxEvent.isMouseEvent(me.getEvent());
   };
   
     // Installs context menu
-  factoryMethod(menu, cell, evt) {
+  factoryMethod(menu) {
     const { items } = this
     this.addItemsToMenu(menu, items)
+  }
+
+  addItems(items, submenu?: any) {
+    this.addItemsToMenu(this.menu, items, submenu)
+  }
+
+  addItem(item, submenu?: any) {
+    this.addItemToMenu(this.menu, item, submenu)
   }
 
   addItemsToMenu(menu, items, submenu?: any) {

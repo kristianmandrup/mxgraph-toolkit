@@ -1,5 +1,6 @@
 import mx from "mx";
-const { mxFastOrganicLayout, mxConstants, mxHierarchicalLayout, mxRadialTreeLayout, mxCircleLayout } = mx
+const { mxParallelEdgeLayout, mxFastOrganicLayout, 
+  mxConstants, mxHierarchicalLayout, mxRadialTreeLayout, mxCircleLayout } = mx
 
 export enum EDirection {
   North,
@@ -55,6 +56,12 @@ export class Layout {
 
   hierarchical(direction: TDirection) {
     const layout = new mxHierarchicalLayout(this.graph, dirMap[direction]);
+    this.layout = layout
+    return layout
+  }
+
+  parallel() {
+    const layout = new mxParallelEdgeLayout(this.graph);
     this.layout = layout
     return layout
   }
