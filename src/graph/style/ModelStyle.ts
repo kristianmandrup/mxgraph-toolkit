@@ -1,4 +1,4 @@
-export class Model {
+export class ModelStyle {
   model: any
 
   init(style: string) {
@@ -6,7 +6,7 @@ export class Model {
   }
 
   setCellStyle(style: string) {
-    this.model.getStyle = Model.createGetStyleCollapsed(this.model, style)
+    this.model.getStyle = ModelStyle.createGetStyleCollapsed(this.model, style)
   }
 
   static createGetStyleCollapsed = (model, collapsedStyle) => (cell) => {

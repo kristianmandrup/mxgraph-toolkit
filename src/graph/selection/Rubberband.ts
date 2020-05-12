@@ -4,11 +4,19 @@ const { mxRubberband, mxEvent } = mx
 export class Rubberband {
   rubberband: any
 
-  constructor(rubberband: any) {
-    this.rubberband = rubberband
+  constructor(graph: any, rubberband?: any) {
+    this.rubberband = rubberband || new mxRubberband(graph)
   }
 
-  rubberbandTriggerPopup() {
+  enable() {
+    this.rubberband.enable = true
+  }
+
+  disable() {
+    this.rubberband.enable = false
+  }
+
+  init() {
     this.rubberband.isForceRubberbandEvent = (me) => {
       return mxRubberband.prototype.isForceRubberbandEvent.call(this, me) || mxEvent.isPopupTrigger(me.getEvent());
     }  

@@ -2,8 +2,8 @@ import { CellRenderer } from "./CellRenderer";
 import { ConnectionHandler } from "./ConnectionHandler";
 
 export const classMap = {
-  cellRenderer: ScrollableCellRenderer,
-  connectionHandler: ScrollableConnectionHandler,
+  cellRenderer: CellRenderer,
+  connectionHandler: ConnectionHandler,
 }
   
 export const defaults = {

@@ -1,15 +1,31 @@
-import mx from "../../mx";
-import { IPosition, ISize } from '../../types';
+import mx from "mx";
+import { IPosition, ISize } from 'types';
+import { WindowToggler } from "./WindowToggler";
 const { mxWindow } = mx
 
 export class Window {
   graph: any
   container: Element
   window: any
+  _toggler: any
 
   constructor(graph: any, container: Element) {
     this.graph = graph
     this.container = container
+  }
+
+  get toggle(): any {
+    this._toggler = this._toggler || this.createToggler()
+    return this._toggler
+  }
+
+  setToggler(toggler?: any, props?: any) {
+    this._toggler = toggler || this.createToggler()
+    return this
+  }
+
+  createToggler(): any {
+    return new WindowToggler(this.window);
   }
 
   get defaultPos(): IPosition {
@@ -41,19 +57,15 @@ export class Window {
     this.window = new mxWindow(title, container, x, y, width, height, minimizable, movable);
   }
 
-  setMaximizable(value: boolean) {
-    this.window.setMaximizable(true);
+  switch(nameMap: any) {
+    this.toggle.switch(nameMap)
   }
 
-  setResizable(value: boolean) {
-    this.window.setResizable(true);
+  on(names: string[]) {
+    this.toggle.on(names)
   }
 
-  setScrollable(value: boolean) {
-    this.window.setScrollable(true);
-  }
-
-  setVisible(value: boolean) {
-    this.window.setVisible(true);
+  off(names: string[]) {  
+    this.toggle.off(names)
   }
 }

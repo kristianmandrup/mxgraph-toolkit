@@ -1,7 +1,7 @@
 import mx from "mx";
 const { mxConnectionHandler, mxPoint } = mx
 
-export class ScrollableConnectionHandler {
+export class ConnectionHandler {
   handler: any // mxConnectionHandler.prototype
 
   constructor() {

@@ -41,6 +41,7 @@ export class Style {
 
   constructor(props: IStyleArgs) {
     this.setStyles(props)
+    this.configValidator()
   }
 
   configValidator() {
@@ -198,7 +199,7 @@ export class Style {
     return this._labelPosition
   }
 
-  get styles() {
+  protected get styles() {
     return [
       'strokeColor', 'edgeStyle', 'fillColor', 'shape', 
       'verticalLabelPosition', 'verticalAlign', 'startsize',
@@ -207,18 +208,21 @@ export class Style {
     ]
   } 
 
-  addStyle(acc, name, value) {
+  protected addStyle(acc, name, value) {
     if (!value || value === '') return acc
     const item = [name, value].join('=')
     acc.push(item)
     return acc          
-  }
-  
+  }  
 
-  get style() {
+  get strValue(): string {
     return this.styles.reduce((acc, name) => {
       const value = this[name]
       return this.addStyle(acc, name, value)
     }, []).join(';')
+  }
+
+  toString(): string {
+    return this.strValue
   }
 }

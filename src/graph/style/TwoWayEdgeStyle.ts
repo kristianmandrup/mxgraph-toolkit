@@ -9,7 +9,7 @@ export class TwoWayEdgeStyle {
     this.graph = graph
   }
 
-  create() {
+  init() {
     const { graph } = this
 
     // Changes the default vertex style in-place
@@ -28,12 +28,13 @@ export class TwoWayEdgeStyle {
             
     style = mxUtils.clone(style);
     style[mxConstants.STYLE_STARTARROW] = mxConstants.ARROW_CLASSIC;
-    this.style = style    
+    this.style = style
+    return this    
   }
 
-  registerInStylesheet(style) {
+  registerInStylesheet(style, name: string = '2way') {
     const { graph } = this
     style = style || this.style
-    graph.getStylesheet().putCellStyle('2way', style);    
+    graph.getStylesheet().putCellStyle(name, style);    
   }
 }

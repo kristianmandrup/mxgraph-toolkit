@@ -1,9 +1,11 @@
-# Model
+# ModelStyle
+
+Graph model style
 
 ## create
 
 ```ts
-const model = new Model()
+const model = new ModelStyle()
 ```
 
 ## init

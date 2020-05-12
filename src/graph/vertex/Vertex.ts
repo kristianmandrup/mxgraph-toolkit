@@ -69,6 +69,10 @@ export class Vertex {
     return this._handler
   }
 
+  protected createHandler() {
+    return new this.classMap.handler(this.graph)
+  }
+
   get anchor() {
     this._anchor = this._anchor || this.createAnchor()
     return this._anchor
@@ -82,10 +86,6 @@ export class Vertex {
   protected createAnchor(): any {
     return new this.classMap.anchor(this.graph)
   }   
-
-  protected createHandler() {
-    return new this.classMap.handler(this.graph)
-  }
 
   get overlay(): any {
     this._overlay = this._overlay || this.createOverlay()

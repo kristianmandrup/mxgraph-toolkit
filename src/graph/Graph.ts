@@ -11,7 +11,7 @@ import { Permission } from './permission';
 import { UserObject } from "./data";
 import { Layout } from "./layout";
 import { Monitor } from "./monitor";
-import { Scrollable } from "./scroll";
+import { Scrollable } from "./scrollable";
 import { ModalWindow, Window } from "./window";
 import { createStyledElement } from "utils";
 
@@ -32,7 +32,7 @@ export * as layers from './layers';
 export * as layout from './layout';
 export * as monitor from './monitor';
 export * as permission from './permission';
-export * as scroll from './scroll';
+export * as scroll from './scrollable';
 export * as selection from './selection';
 export * as shapes from './shapes';
 export * as style from './style';
@@ -76,13 +76,13 @@ export const defaults = {
 
 export class Graph {
   graph: any
+  editor: any
 
-
+  // mxGraph
   _rubberband: any
   _keyHandler: any
-  
-  editor: any
-  
+
+  // toolkit wrappers
   _actions: any
   _cell: any
   _data: any
@@ -103,7 +103,6 @@ export class Graph {
   _window: any
   _modalWindow: any
   
-
   classMap: {
     [key: string]: any
   } = defaults.classMap
@@ -185,18 +184,18 @@ export class Graph {
   }
 
   switch(nameMap: any) {
-    this.toggler.switch(nameMap)
+    this.toggle.switch(nameMap)
   }
 
   on(names: string[]) {
-    this.toggler.on(names)
+    this.toggle.on(names)
   }
 
   off(names: string[]) {  
-    this.toggler.off(names)
+    this.toggle.off(names)
   }
 
-  get toggler(): any {
+  get toggle(): any {
     this._toggler = this._toggler || this.createToggler()
     return this._toggler
   }

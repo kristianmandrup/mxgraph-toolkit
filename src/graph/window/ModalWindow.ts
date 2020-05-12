@@ -24,6 +24,13 @@ export class ModalWindow {
       },
       style: {
         background: 'black'
+      },
+      content: {
+        title: 'Properties',
+        size: {
+          width: 400, 
+          height: 300
+        }  
       }
     }
   }
@@ -102,20 +109,20 @@ export class ModalWindow {
     if (!canOpenModal(graph, evt, cell)) mxEvent.consume(evt);
     if (graph.model.isEdge(cell) || !graph.isHtmlLabel(cell)) {
       graph.startEditingAtCell(cell);
-    } else {
-      var content = document.createElement('div');
-      content.innerHTML = this.modalContent(cell)
-      const props = {        
-        title: 'Properties',
-        size: {
-          width: 400, 
-          height: 300
-        },
-        ...this.props
-      }
-      this.showModalWindow(content, props);
-    }
+      return
+    } 
+    this.displayModalWindow(cell)
     // Disables any default behaviour
     mxEvent.consume(evt);
+  }
+
+  displayModalWindow(cell) {
+    const content = document.createElement('div');
+    content.innerHTML = this.modalContent(cell)
+    const props = {   
+      ...this.defaults.window.content,
+      ...this.props
+    }
+    this.showModalWindow(content, props)
   }
 }  

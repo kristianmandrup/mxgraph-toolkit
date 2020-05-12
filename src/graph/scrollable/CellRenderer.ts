@@ -1,7 +1,7 @@
 import mx from "mx";
 const { mxEvent } = mx
 
-export class ScrollableCellRenderer {
+export class CellRenderer {
   graph: any
   cellRenderer: any
   oldRedrawLabel: any
