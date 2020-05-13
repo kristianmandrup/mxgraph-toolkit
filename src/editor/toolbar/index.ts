@@ -1,2 +1,2 @@
 export { Toolbar } from './Toolbar'
-export { ToolbarItem } from './ToolbarItem'
+export { ToolbarItems } from './ToolbarItems'

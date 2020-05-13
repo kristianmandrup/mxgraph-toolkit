@@ -1,8 +1,11 @@
 import mx from "mx";
-import { ToolbarItem } from './ToolbarItem';
+import { ToolbarItems } from './ToolbarItems';
 import { ElementPos } from "editor/types";
-import { setStyle, createStyledElement } from "utils";
+import { createStyledElement } from "utils";
+import { IPosition, ISize } from "types";
 const { mxGeometry, mxCell, mxToolbar } = mx
+
+type AddVertexOpts= {pos?: IPosition, size?: ISize, style?: string}
 
 export class Toolbar {
   graph: any
@@ -13,8 +16,7 @@ export class Toolbar {
     toolbarElement: {
       position: {width: 24, top: 26, left: 0, bottom: 0},
       style: { padding: 2}    
-    },
-
+    }
   }
 
   constructor(graph: any, toolbar?: any) {  
@@ -50,11 +52,20 @@ export class Toolbar {
       bottom: `${bottom}px`
     })    
   }
-  
-  createToolbarForElement = (container: Element) => {
-    const toolbar: any = new mxToolbar(container || this.createToolbarElement());
-    toolbar.enabled = false  
-    return toolbar
+
+  enable() {
+    this.toolbar.enable = true
+    return this
+  }
+
+  disable() {
+    this.toolbar.enable = false
+    return this
+  }
+
+
+  createToolbarForElement = (container?: Element) => {
+    return new mxToolbar(container || this.createToolbarElement());
   }  
 
   setToolbar(toolbar: any) {
@@ -64,33 +75,41 @@ export class Toolbar {
     this.toolbar = toolbar
   }
 
-  setToolbarForElement(container: Element) {
+  setToolbarForElement(container?: Element) {
     const toolbar = this.createToolbarForElement(container)
     this.setToolbar(toolbar)
     return this
   }
   
-  addVertex(name: string, icon: any, w: number, h: number, style: any) {
-    const geometry = new mxGeometry(0, 0, w, h)
-    var vertex = new mxCell(null, geometry, style);
+  addVertex(name: string, iconImage, { pos, size, style}: AddVertexOpts = {}) {
+    pos = {
+      x: 0,
+      y: 0,
+      ...pos || {}
+    }
+    size = {
+      width: 16,
+      height: 16,
+      ...size || {}
+    }
+
+    const { width, height } = size
+    const geometry = new mxGeometry(0, 0, width, height)
+    var vertex = new mxCell(null, geometry, style)
     vertex.setVertex(true);
-    this.addToolbarItem(name, vertex, icon);
+    this.addToolbarItem(vertex, iconImage)
     return this
   }
 
-  getToolbarItem(name: string): any {
-    return this.toolbarItems[name]
-  }
-
-  get toolbarItem(): any {
-    this._toolbarItem = this._toolbarItem || new ToolbarItem(this.graph, this.toolbar)
+  protected get toolbarItem(): any {
+    this._toolbarItem = this._toolbarItem || new ToolbarItems(this.graph, this.toolbar)
     return this._toolbarItem
   }
   
-  addToolbarItem(name: string, cellPrototype: any, image: any): any {    
+  addToolbarItem(cellPrototype: any, iconImage: any): any {    
     const { toolbarItem } = this
-    if (cellPrototype && image) {
-      toolbarItem.add(cellPrototype, image)
+    if (cellPrototype && iconImage) {
+      toolbarItem.add(cellPrototype, iconImage)
     }    
     return this
   }

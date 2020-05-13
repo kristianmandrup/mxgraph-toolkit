@@ -1,11 +1,12 @@
-import mx from "../../mx";
+import mx from "mx";
 import { createStyledElement, setStyle } from "utils";
 const { mxEvent, mxUtils } = mx
 
-export class ToolbarItem {
+export class ToolbarItems {
   graph: any
   toolbar: any
   editor: any
+  itemMap: any = {}
 
   static defaults = {
     button: {
@@ -28,7 +29,7 @@ export class ToolbarItem {
     }
   }
 
-  defaults = ToolbarItem.defaults
+  defaults = ToolbarItems.defaults
 
   constructor(graph: any, toolbar: any, { defaults, editor, createOnDropItem }:any = {}) {
     this.graph = graph
@@ -57,20 +58,50 @@ export class ToolbarItem {
       
       graph.setSelectionCells(graph.importCells([vertex], 0, 0, cell));
     }
+    add(cellPrototype: any, iconImagePath: string, label: string, {title} : {title: string}) {
 
-  add(cellPrototype: any, image: any) {
+    if (!label) {
+      throw new Error('Toolbar item missing label')
+    }
+    if (!iconImagePath) {
+      throw new Error('Toolbar item missing icon image path')
+    }
     const { graph, toolbar, createOnDropItem } = this
     const onDropItem = createOnDropItem(cellPrototype)
+
     // Creates the image which is used as the drag icon (preview)    
-    const dragIconImg = toolbar.addMode(null, image, onDropItem);
-    mxUtils.makeDraggable(dragIconImg, graph, onDropItem);
+    const dragIconImg = toolbar.addMode(title, iconImagePath, onDropItem)
+    this.makeDraggable({dragIconImg, onDropItem})
+    const item = { 
+      title,     
+      dragIconImg,
+      onDropItem
+    }
+    this.itemMap[label] = item
     return this
   }
 
+  get(label: string) {
+    return this.itemMap[label]
+  }
+
+  set(label, item) {
+    this.itemMap[label] = item
+    this.makeDraggable(item)
+    return this
+  }
+
+  makeDraggable(item: {dragIconImg: any, onDropItem: any}) {
+    const { dragIconImg, onDropItem } = item
+    mxUtils.makeDraggable(dragIconImg, this.graph, onDropItem)
+    return this
+  }
+  
+
   addMap(itemMap: any) {
     Object.keys(itemMap).map(name => {
-      const { cell, image } = itemMap[name]
-      return this.add(cell, image)
+      const { label, title, cell, image, icon } = itemMap[name]
+      return this.add(cell, image || icon, label || name, {title})
     })
   }
 
@@ -85,13 +116,13 @@ export class ToolbarItem {
     })
   }
 
-  get spacer() {
+  protected get spacer() {
     return this.toolbar.spacer
   }
 
   addToolbarButton(action, label, image, props: any = {}) {
-    let {spacer, size, style, isTransparent} = props
-    const { toolbar, editor, defaults } = this
+    let {spacer, size, style } = props
+    const { defaults } = this
     const button = createStyledElement({
       fontSize: '10'
     }, 'button');    
