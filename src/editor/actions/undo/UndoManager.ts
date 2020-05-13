@@ -16,12 +16,14 @@ export class UndoManager extends BaseActionManager {
     const { graph, listener } = this
     graph.getModel().addListener(mxEvent.UNDO, listener);
     graph.getView().addListener(mxEvent.UNDO, listener);
+    return this
   }
 
   setListener() {
     this.listener = (sender, evt) => {
       this.undoManager.undoableEditHappened(evt.getProperty('edit'));
     }  
+    return this
   }
 
   get buttons() {

@@ -31,7 +31,8 @@ export class EditorActions {
     this.classMap = {
       ...defaults.classMap,
       ...classMap
-    }      
+    }     
+    return this 
   }  
 
   get zoom(): any {
