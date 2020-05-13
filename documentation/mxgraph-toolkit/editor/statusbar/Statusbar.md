@@ -32,7 +32,7 @@ statusbar.setStatusContainer(container)
 By default configures:
 
 - print to statusbar on file saved
-- print to statusbar on file saved
+- print to statusbar on file opened
 
 Override to customize when to print on statusbar
 

@@ -10,8 +10,11 @@ type AddVertexOpts= {pos?: IPosition, size?: ISize, style?: string}
 export class Toolbar {
   graph: any
   toolbar: any
+  editor: any
+
   _toolbarItem: any
   toolbarItems: any = {}
+
   defaults: any = {
     toolbarElement: {
       position: {width: 24, top: 26, left: 0, bottom: 0},
@@ -19,8 +22,9 @@ export class Toolbar {
     }
   }
 
-  constructor(graph: any, toolbar?: any) {  
+  constructor(graph: any, {editor, toolbar}: any = {}) {  
     this.graph = graph
+    this.editor = editor
     this.setToolbar(toolbar)
   }
 
@@ -105,6 +109,10 @@ export class Toolbar {
     this._toolbarItem = this._toolbarItem || new ToolbarItems(this.graph, this.toolbar)
     return this._toolbarItem
   }
+
+  execute(action) {
+    this.editor.execute(action)
+  }    
   
   addToolbarItem(cellPrototype: any, iconImage: any): any {    
     const { toolbarItem } = this

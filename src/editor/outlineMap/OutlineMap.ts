@@ -14,6 +14,15 @@ export class OutlineMap {
     this.init()
   }
 
+  init() {
+    const { graph, outlineElement } = this
+    if (!outlineElement) {
+      throw new Error('missing outline DOM container element')
+    }
+    this.outline = new mxOutline(graph, outlineElement);
+    return this
+  }  
+
   setOutlineElement(outlineElement) {
     this._outlineElement = outlineElement
     return this
@@ -22,14 +31,5 @@ export class OutlineMap {
   get outlineElement() {
     this._outlineElement = this._outlineElement || getElem('outlineContainer')
     return this._outlineElement
-  }
-
-  init() {
-    const { graph, outlineElement } = this
-    if (!outlineElement) {
-      throw new Error('missing outline DOM container element')
-    }
-    this.outline = new mxOutline(graph, outlineElement);
-    return this
   }
 }

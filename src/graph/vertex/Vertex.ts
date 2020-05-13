@@ -152,7 +152,6 @@ export class Vertex {
       return mxGraph.prototype.createHandler(state);
     }
   };  
-
   
   setVertex(vertex: any) {
     this.vertex = vertex

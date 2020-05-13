@@ -1,8 +1,10 @@
 import mx from "mx";
 import { IPosition, ISize } from 'types';
+import { createStyledElement } from "utils";
 const { mxRectangle, mxPoint, mxUtils } = mx
 
 export interface IaddSidebarIcon {
+  title?: string
   dragBorder?: string
   dragSize?: ISize
   imageSize?: ISize
@@ -28,91 +30,26 @@ export class Sidebar {
     this.sidebarElement = sidebarElement
   }
 
-  createPort(vertex, props: any) {
-    const {label, pos, size, imagePath, style, offset} = props
-    // Adds the ports at various relative locations
-    const port = this.graph.insertVertex(vertex, null, label, pos.x, pos.y, size.width, size.height,
-        `port;image=${imagePath};` + style, true);
-    port.geometry.offset = new mxPoint(offset.x, offset.y);
-    return port
+  addPortsToVertex(vertex, ports) {
   }
 
-  portPropsFor(props: any) {
-    let { label, size, pos, style, imagePath, offset } = props
-    const defaults = {
-      pos: {
-        x: 0,
-        y: 0.25,
-      },
-      offset: {
-        x: -6, 
-        y: -8
-      },
-      size: { 
-        height: 16, 
-        width: 16 
-      },      
-    }
-
-    label = label || 'Trigger'
-    size = {
-      ...defaults.size,
-      ...size || {}
-    }
-    pos = {
-      ...defaults.pos,
-      ...pos || {}
-    }
-    offset = {
-      ...defaults.offset,
-      ...offset || {}
-    }      
-    imagePath = imagePath || 'editors/images/overlays/flash.png'
-    style = style || 'align=right;imageAlign=right;spacingRight=18;'   
-    return {label, size, pos, offset, imagePath, style} 
+  enrichVertex(vertex, props) {
+    this.addPortsToVertex(vertex, props.ports)
   }
-  
-  // sample: createPorts
-  createPorts = (vertex, ports: any[]) => {
-    const { graph } = this
 
-    ports.map(port => {
-      const props = this.portPropsFor(port)
-      // Adds the ports at various relative locations
-      this.createPort(vertex, props)
-    })    
+  // use a VertexBuilder
+  createVertex(label, {pos, size, bounds}) {
   }
-  
 
-  // sample: createVertex
-  createVertex = (graph, label, pos, size: any = {}) => {
-    // NOTE: For non-HTML labels the image must be displayed via the style
-    // rather than the label markup, so use 'image=' + image for the style.
-    // as follows: v1 = graph.insertVertex(parent, null, label,
-    // pt.x, pt.y, 120, 120, 'image=' + image);
-    var parent = graph.getDefaultParent();
-    size = {
-      width: 120,
-      height: 120,
-      ...size
-    }
-    const vertex = graph.insertVertex(parent, null, label, pos.x, pos.y, size.width, size.height);
-    vertex.setConnectable(false);
-    
-    // Presets the collapsed size
-    vertex.geometry.alternateBounds = new mxRectangle(0, 0, 120, 40);
-    return vertex
-  }  
-
-  createOnDrag = (label, {createPorts, createVertex, vertexSize, ports}: any = {}) => (graph, evt, cell, x, y) => {  
+  createOnDrag = (label, props: any = {}) => (graph, evt, cell, x, y) => {  
+    const { size, bounds } = props
+    const pos = {x, y}
     var model = graph.getModel();
-    createPorts = createPorts || this.createPorts
-    createVertex = createVertex || this.createVertex
-    const vertex = createVertex(graph, label, {x, y, size: vertexSize})    
+    const vertex = this.createVertex(label, {pos, size, bounds})    
 
     model.beginUpdate();
-    try {                
-      createPorts(vertex, ports)
+    try {                      
+      this.enrichVertex(vertex, props)
     } finally {
       model.endUpdate();
     }
@@ -125,7 +62,7 @@ export class Sidebar {
     // the graph. The cell argument points to the cell under
     // the mousepointer if there is one.    
     // Creates the image which is used as the sidebar icon (drag source)
-    let { imageSize, dragSize, dragBorder } = props
+    let { imageSize, dragSize, dragBorder, title } = props
     const imgSize = {
       width: 48,
       height: 48,
@@ -136,12 +73,8 @@ export class Sidebar {
       height: 120,
       ...dragSize
     }
+    const img = this.createImageIcon(image, imgSize, title)
 
-    var img = document.createElement('img');
-    img.setAttribute('src', image);
-    img.style.width = `${imgSize.width}px`;
-    img.style.height = `${imgSize.height}px`;
-    img.title = 'Drag this to the diagram to create a new vertex';
     this.sidebarElement.appendChild(img);
     const dragElem = this.createDragElement({size: dragSize, border: dragBorder})
     
@@ -152,14 +85,25 @@ export class Sidebar {
     ds.setGuidesEnabled(true);
   } 
 
+  createImageIcon(image, size, title) {
+    const { width, height } = size
+    const img = createStyledElement({
+      width: `${width}px`,
+      height: `${height}px`
+    }, 'img');
+    img.setAttribute('src', image);
+    img.title = title || 'Drag this to the diagram to create a new vertex';  
+    return img
+  }
+
   createDragElement({size, border} : {size: ISize, border?: string}): any {
-    size = size || {}
+    const { width, height } = size
     border = border || 'dashed black 1px'
-    var dragElem = document.createElement('div');
-    dragElem.style.border = border;
-    dragElem.style.width = `${size.width}px`;
-    dragElem.style.height = `${size.height}px`;
-    return dragElem
+    return createStyledElement({
+      border,
+      width: `${width}px`,
+      height: `${height}px`
+    }, 'div');
   }
 
   
