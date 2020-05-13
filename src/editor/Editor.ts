@@ -170,7 +170,7 @@ export class Editor {
   }
   
   protected createToolbar(toolbarElement?: any): any {
-    return new this.classMap.toolbar(this.graph, toolbarElement)
+    return new this.classMap.toolbar(this.graph, {editor: this, toolbar: toolbarElement})
   }  
   
   get sidebar() {

@@ -47,36 +47,40 @@ toolbar.setToolbar($mxtoolbar)
 toolbar.setToolbarForElement(container)
 ```
 
-## addVertex
+## execute
 
-Adds a toolbar item with a vertex attached. This allows the vertex to be drawn on the graph when the toolbar item is dragged onto the graph.
-
-```ts
-toolbar.addVertex(name, icon, { size, pos, style})
-```
-
-## toolbar item
-
-### get toolbar item
+Execute action in `editor`. To be used by toolbar button.
 
 ```ts
-toolbar.getToolbarItem(name)
+execute(action)
 ```
 
-### addToolbarItem
+## items
+
+### get items manager
 
 ```ts
-toolbar.addToolbarItem(cellPrototype: any, image: any)
+const { items } = toolbar
+items.add({
+  // ...
+})
 ```
 
-### addToolbarItems
+### set items manager
+
+TODO
+
+## buttons
+
+### get buttons manager
 
 ```ts
-toolbar.addToolbarItems(itemMap)
+const { buttons } = toolbar
+buttons.add({
+  // ...
+})
 ```
 
-## addToolbarButtons
+### set buttons manager
 
-```ts
-toolbar.addToolbarButtons(itemMap)
-```
+TODO

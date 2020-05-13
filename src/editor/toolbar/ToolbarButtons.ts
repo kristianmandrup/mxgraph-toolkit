@@ -2,7 +2,7 @@ import mx from "mx";
 import { createStyledElement, setStyle } from "utils";
 const { mxEvent, mxUtils } = mx
 
-export class ToolbarButtonManager {
+export class ToolbarButtons {
   graph: any
   toolbar: any
 
@@ -24,7 +24,7 @@ export class ToolbarButtonManager {
     }
   }
 
-  defaults = ToolbarButtonManager.defaults  
+  defaults = ToolbarButtons.defaults  
 
   constructor(graph: any, toolbar: any, props:any = {}) {
     this.graph = graph

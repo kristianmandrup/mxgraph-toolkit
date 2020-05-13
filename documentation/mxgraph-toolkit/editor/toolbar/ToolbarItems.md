@@ -42,7 +42,7 @@ items.makeDraggable({dragIconImg, onDropItem})
 
 ### add item map
 
-Adds a map of toolbar items to the toolbar
+Add items using a map where each entry is a toolbar item definition object
 
 ```ts
 const itemMap = {
@@ -53,28 +53,6 @@ const itemMap = {
   // ...
 }
 items.addMap(itemMap)
-```
-
-## toolbar buttons
-
-Adds a styled button to the toolbar which executes an editor action when clicked
-
-### add toolbar button
-
-```ts
-addToolbarButton(action, label, image, props: any = {})
-```
-
-## add toolbar buttons
-
-```ts
-items.addToolbarButtons(itemMap)
-```
-
-## add button
-
-```ts
-items.addButton(button, { action, label })
 ```
 
 ## protected

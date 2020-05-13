@@ -3,29 +3,50 @@ import { ToolbarItems } from './ToolbarItems';
 import { ElementPos } from "editor/types";
 import { createStyledElement } from "utils";
 import { IPosition, ISize } from "types";
+import { ToolbarButtons } from "./ToolbarButtons";
 const { mxGeometry, mxCell, mxToolbar } = mx
 
 type AddVertexOpts= {pos?: IPosition, size?: ISize, style?: string}
+
+export const defaults= {
+  classMap: {
+    items: ToolbarItems,
+    buttons: ToolbarButtons
+  }  
+}
+
 
 export class Toolbar {
   graph: any
   toolbar: any
   editor: any
 
-  _toolbarItem: any
-  toolbarItems: any = {}
+  _toolbarItems: any
+  _toolbarButtons: any
 
   defaults: any = {
     toolbarElement: {
       position: {width: 24, top: 26, left: 0, bottom: 0},
       style: { padding: 2}    
-    }
+    },
   }
 
-  constructor(graph: any, {editor, toolbar}: any = {}) {  
+  classMap: {
+    [key: string]: any
+  } = defaults.classMap
+
+  constructor(graph: any, {editor, toolbar, classMap}: any = {}) {  
     this.graph = graph
     this.editor = editor
     this.setToolbar(toolbar)
+    this.setClassMap(classMap)
+  }
+
+  setClassMap(classMap: any = {}) {
+    this.classMap = {
+      ...defaults.classMap,
+      ...classMap
+    }      
   }
 
   static create(graph: any, tbContainer: Element) {
@@ -85,50 +106,25 @@ export class Toolbar {
     return this
   }
   
-  addVertex(name: string, iconImage, { pos, size, style}: AddVertexOpts = {}) {
-    pos = {
-      x: 0,
-      y: 0,
-      ...pos || {}
-    }
-    size = {
-      width: 16,
-      height: 16,
-      ...size || {}
-    }
-
-    const { width, height } = size
-    const geometry = new mxGeometry(0, 0, width, height)
-    var vertex = new mxCell(null, geometry, style)
-    vertex.setVertex(true);
-    this.addToolbarItem(vertex, iconImage)
-    return this
+  protected get items(): any {
+    this._toolbarItems = this._toolbarItems || this.createToolbarItems()
+    return this._toolbarItems
   }
 
-  protected get toolbarItem(): any {
-    this._toolbarItem = this._toolbarItem || new ToolbarItems(this.graph, this.toolbar)
-    return this._toolbarItem
+  createToolbarItems() {
+    return new this.classMap.items(this.graph, this.toolbar)
   }
 
+  protected get buttons(): any {
+    this._toolbarButtons = this._toolbarButtons || this.createToolbarButtons()
+    return this._toolbarButtons
+  }
+
+  createToolbarButtons() {
+    return this.classMap.buttons(this.graph, this.toolbar)
+  }
+  
   execute(action) {
     this.editor.execute(action)
   }    
-  
-  addToolbarItem(cellPrototype: any, iconImage: any): any {    
-    const { toolbarItem } = this
-    if (cellPrototype && iconImage) {
-      toolbarItem.add(cellPrototype, iconImage)
-    }    
-    return this
-  }
-
-  addToolbarItems(itemMap: any) {
-    this.toolbarItem.addMap(itemMap)
-    return this
-  }
-
-  addToolbarButtons(itemMap: any) {
-    this.toolbarItem.addToolbarButtons(itemMap)
-    return this
-  }
 }
