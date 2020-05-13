@@ -2,6 +2,7 @@ import mx from "mx";
 import { IPosition, ISize } from 'types';
 const { mxPoint, mxGraph } = mx
 
+import { VertexBuilder } from "./VertexBuilder";
 import { VertexHandler } from "./VertexHandler";
 import { VertexToolHandler } from "./VertexToolHandler";
 
@@ -21,7 +22,8 @@ export const classMap = {
   anchor: Anchor,
   handles: Handles,
   overlay: Overlay,
-  ports: Ports
+  ports: Ports,
+  builder: VertexBuilder
 }
   
 export const defaults = {
@@ -30,7 +32,6 @@ export const defaults = {
 
 export class Vertex {
   graph: any
-  vertex: any
 
   _handler: any
   _toolHandler: any
@@ -38,6 +39,7 @@ export class Vertex {
   _ports: any
   _overlay: any
   _anchor: any
+  _builder: any
 
   classMap: {
     [key: string]: any
@@ -57,6 +59,20 @@ export class Vertex {
       ...defaults.classMap,
       ...classMap
     }      
+  }
+
+  get builder(): any {
+    this._builder = this._builder || this.createBuilder()
+    return this._builder
+  }
+  
+  setBuilder(builder?: any) {
+    this._builder = builder || this.createBuilder()
+    return this._builder
+  }
+  
+  protected createBuilder() {
+    return new this.classMap.builder(this.graph)
   }
 
   get handler(): any {
@@ -151,38 +167,5 @@ export class Vertex {
       }
       return mxGraph.prototype.createHandler(state);
     }
-  };  
-  
-  setVertex(vertex: any) {
-    this.vertex = vertex
-    return this
-  }
-
-  setGeometry(geometry) {
-    this.vertex.geometry = geometry
-    return this
-  }
-
-  addGeometry(geometry) {
-    this.vertex.geometry = {
-      ...this.vertex.geometry,
-      geometry
-    }
-    return this
-  }
-
-  setAlternateBounds(boundsVertex) {
-    this.vertex.geometry.alternateBounds = boundsVertex
-    return this
-  }
-
-  insertPortVertex(pos: IPosition, size: ISize, {id, label}: any = {}) {
-    const midX = -(size.width / 2)
-    const midY = -(size.height / 2)
-
-    var portVertex = this.graph.insertVertex(this.vertex, id, label, pos.x, pos.y, size.width, size.height);
-    portVertex.geometry.offset = new mxPoint(midX, midY);
-    portVertex.geometry.relative = true;  
-    return this
-  }
+  };    
 }

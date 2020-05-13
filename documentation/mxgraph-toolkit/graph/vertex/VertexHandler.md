@@ -3,7 +3,29 @@
 ## create
 
 ```ts
-const vertexHandler = new VertexHandler(graph)
+const handler = new VertexHandler(graph)
 ```
 
-## x
+## setState
+
+```ts
+handler.setState(state)
+```
+
+## vertex resize previews
+
+Enable vertex resize previews
+
+```ts
+handler.enableVertexResizePreviews()
+```
+
+## create vertex selection shape
+
+Uses the shape for resize previews
+
+```ts
+handler.createSelectionShape(bounds)
+```
+
+

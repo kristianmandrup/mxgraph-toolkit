@@ -1,4 +1,5 @@
 import mx from "mx";
+import { createStyledElement, setStyledElement } from "utils";
 const { mxClient, mxVertexHandler, mxUtils, mxEvent } = mx
 
 const noOp = () => {}
@@ -14,23 +15,24 @@ export class VertexToolHandler {
   constructor(graph: any, state: any = {}) {
     this.graph = graph
     this.state = state
-    this.vertexHandler = new mxVertexHandler(state = {});
-    
+    this.vertexHandler = new mxVertexHandler(state = {});    
     this.actions = this.createActions()
+    // this.init()
   }
 
-  init(...args) {
-    this.vertexHandler.init(...args)    
+  init(...args) {    
+    this.vertexHandler.init(...args)
+    this.createContextElement()
   }
 
   createActions() {
     const { graph, state, vertexHandler } = this
     return {
-      'delete': (evt) => {
+      delete: (evt) => {
         graph.removeCells([state.cell]);
         mxEvent.consume(evt);
       },
-      'move': (evt) => {
+      move: (evt) => {
         graph.graphHandler.start(state.cell,
           mxEvent.getClientX(evt), mxEvent.getClientY(evt));
         graph.graphHandler.cellWasClicked = true;
@@ -59,14 +61,27 @@ export class VertexToolHandler {
     this.vertexHandler.redrawTools()
   }
 
+  setRedrawTools() {
+    this.vertexHandler.redrawTools = this.redrawTools
+    return this
+  }
+
   redrawTools() {
-    if (this.state != null && this.domNode != null)
-    {
+    const { state } = this 
+    if (state && this.domNode) {
+      const { x, y, width, height } = state
       var dy = (mxClient.IS_VML && document.compatMode === 'CSS1Compat') ? 20 : 4;
-      this.domNode.style.left = (this.state.x + this.state.width - 56) + 'px';
-      this.domNode.style.top = (this.state.y + this.state.height + dy) + 'px';
+      const _left = x + width - 56
+      const _top = y + height + dy
+
+      const left = `${_left}px`
+      const top =  `${_top}px`
+      setStyledElement(this.domNode, {
+        left,
+        top
+      })
     }
-  };
+  }
   
   destroyContextIcons(...args) {
     this.vertexHandler.destroy(...args);
@@ -78,32 +93,40 @@ export class VertexToolHandler {
     }
   };  
 
-  createContextDiv() {
-    this.domNode = document.createElement('div');
-    this.domNode.style.position = 'absolute';
-    this.domNode.style.whiteSpace = 'nowrap';    
+  createContextElement(opts: any = {}) {
+    const { tagName, style } = opts
+    this.domNode = createStyledElement(style || {
+      position: 'absolute',
+      whiteSpace: 'nowrap'
+    }, tagName || 'div');
+    return this
   }  
   
-  createImage(src) {
+  createImage(src, opts: any = {}) {
+    const { tagName, style } = opts
     if (mxClient.IS_IE && !mxClient.IS_SVG) {
-      var img = document.createElement('div');
-      img.style.backgroundImage = 'url(' + src + ')';
-      img.style.backgroundPosition = 'center';
-      img.style.backgroundRepeat = 'no-repeat';
-      img.style.display = (mxClient.IS_QUIRKS) ? 'inline' : 'inline-block';      
-      return img;
+      const display = (mxClient.IS_QUIRKS) ? 'inline' : 'inline-block';      
+      return createStyledElement(style || {
+        backgroundImage: 'url(' + src + ')',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        display   
+      }, tagName || 'div');
     }
     else {
       return mxUtils.createImage(src);
     }
   };  
 
-  addContextIcon(imagePath, { title, size, type }: any = {}) {
+  addContextIcon(imagePath, { title, size, type, style }: any = {}) {
+    const { width, height } = size
     const img = this.createImage(imagePath);
     img.setAttribute('title', title);
-    img.style.cursor = 'pointer';
-    img.style.width = `${size.width}px`;
-    img.style.height = `${size.height}px`;
+    setStyledElement(img, style || {
+      cursor: 'pointer',
+      width: `${width}px`,
+      height: `${height}px`
+    })
 
     if (type === 'delete')
     var actionFn: any; 
