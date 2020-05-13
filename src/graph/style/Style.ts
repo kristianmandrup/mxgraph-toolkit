@@ -1,4 +1,3 @@
-import mx from "mx";
 import { StyleValidator } from './StyleValidator';
 
 interface IStyleArgs {

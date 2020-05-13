@@ -6,6 +6,7 @@ import { Statusbar } from "./statusbar";
 import { OutlineMap } from "./outlineMap";
 import { FileIO } from "io";
 import { getElem } from "./utils";
+import { Actions } from "graph/actions";
 const { mxEditor } = mx
 
 export const classMap = {
@@ -16,6 +17,7 @@ export const classMap = {
   sidebar: Sidebar,
   statusbar: Statusbar,
   outlineMap: OutlineMap,
+  actions: Actions
 }
 
 export const defaults = {
@@ -30,6 +32,7 @@ export class Editor {
   _sidebar: any
   _outlineMap: any
   _io: any
+  _actions: any
 
   classMap: {
     [key: string]: any
@@ -97,6 +100,20 @@ export class Editor {
   get $graph(): any {
     return this.editor.graph;
   }
+
+  get actions(): any {
+    this._actions = this._actions || this.createActions()
+    return this._actions
+  }
+  
+  setActions(actions?: any, props?: any) {    
+    this._actions = actions || this.createActions(props)
+    return this._actions
+  }
+  
+  protected createActions(props?: any) {
+    return new this.classMap.actions(this.graph, props)
+  }    
 
   get outlineMap(): any {
     this._outlineMap = this._outlineMap || this.createOutlineMap()
