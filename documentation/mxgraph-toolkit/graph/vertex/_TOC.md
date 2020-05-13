@@ -8,9 +8,9 @@ APIs
 - [handles](./handles/_TOC.md)
 - [ports](./ports/_TOC.md)
 - [overlay](./overlay/_TOC.md)
+- [builder](./builder/_TOC.md)
+- [context](./context/_TOC.md) 
 
-Main vertex helper classes
+Handler
 
-- [VertexBuilder](./VertexBuilder.md) used to build vertices
 - [VertexHandler](./VertexHandler.md) used to handle vertices
-- [VertexToolHandler](./VertexToolHandler.md) used to display vertex tools

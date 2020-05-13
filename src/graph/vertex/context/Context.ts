@@ -4,7 +4,7 @@ const { mxClient, mxVertexHandler, mxUtils, mxEvent } = mx
 
 const noOp = () => {}
 
-export class VertexToolHandler {
+export class Context {
   graph: any
   domNode: any
   vertexHandler: any
@@ -15,12 +15,11 @@ export class VertexToolHandler {
   constructor(graph: any, state: any = {}) {
     this.graph = graph
     this.state = state
-    this.vertexHandler = new mxVertexHandler(state = {});    
-    
     // this.init()
   }
 
   init(...args) {    
+    this.vertexHandler = new mxVertexHandler(this.state);
     this.vertexHandler.init(...args)
     this.createContextElement()
     this.setupActions()

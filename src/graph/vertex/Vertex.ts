@@ -2,10 +2,9 @@ import mx from "mx";
 import { IPosition, ISize } from 'types';
 const { mxPoint, mxGraph } = mx
 
-import { VertexBuilder } from "./VertexBuilder";
+import { Builder } from "./builder";
 import { VertexHandler } from "./VertexHandler";
-import { VertexToolHandler } from "./VertexToolHandler";
-
+import { Context } from "./context";
 export * as anchor from './anchor'
 export * as handles from './handles'
 export * as ports from './ports'
@@ -18,12 +17,12 @@ import { Overlay } from "./overlay";
 
 export const classMap = {
   handler: VertexHandler,
-  toolHandler: VertexToolHandler,
+  context: Context,
   anchor: Anchor,
   handles: Handles,
   overlay: Overlay,
   ports: Ports,
-  builder: VertexBuilder
+  builder: Builder
 }
   
 export const defaults = {
@@ -34,7 +33,7 @@ export class Vertex {
   graph: any
 
   _handler: any
-  _toolHandler: any
+  _context: any
   _handles: any
   _ports: any
   _overlay: any
@@ -145,25 +144,25 @@ export class Vertex {
     return new this.classMap.ports(this.graph)
   }
   
-  get toolHandler(): any {
-    this._toolHandler = this._toolHandler || this.createToolHandler()
-    return this._toolHandler
+  get context(): any {
+    this._context = this._context || this.createContext()
+    return this._context
   }
   
-  setToolHandler(toolHandler?: any) {
-    this._toolHandler = toolHandler || this.createToolHandler()
-    return this._toolHandler
+  setContext(context?: any, state?: any) {
+    this._context = context || this.createContext(state)
+    return this._context
   }
   
-  protected createToolHandler() {
-    return new this.classMap.toolHandler(this.graph)
+  protected createContext(state?: any) {
+    return new this.classMap.context(this.graph, state)
   }
 
-  configureToolHandler() {
+  configureContext() {
     const { graph, model } = this
     graph.createHandler = (state) => {
       if (state && model.isVertex(state.cell)) {
-        return new VertexToolHandler(graph, state);
+        return this.createContext(state);
       }
       return mxGraph.prototype.createHandler(state);
     }

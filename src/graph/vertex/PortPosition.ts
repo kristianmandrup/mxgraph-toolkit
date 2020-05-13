@@ -6,19 +6,19 @@ import { IPosition } from "types"
 
 // -1,1: bottom left
 export class PortPosition {
-    static topRight(): IPosition {
-      return {x: 1, y: 0}
-    }
-  
-    static bottomRight(): IPosition {
-      return {x: 1, y: 1}
-    }
-  
-    static topLeft(): IPosition {
-      return {x: -1, y: 0}
-    }
-  
-    static bottomLeft(): IPosition {
-      return {x: -1, y: 1}
-    }
+  static topRight(): IPosition {
+    return {x: 1, y: 0}
   }
+
+  static bottomRight(): IPosition {
+    return {x: 1, y: 1}
+  }
+
+  static topLeft(): IPosition {
+    return {x: -1, y: 0}
+  }
+
+  static bottomLeft(): IPosition {
+    return {x: -1, y: 1}
+  }
+}

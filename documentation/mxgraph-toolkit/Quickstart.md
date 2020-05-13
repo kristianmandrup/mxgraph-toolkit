@@ -15,13 +15,7 @@ const { editor, graph, io } = toolkit
 Create your app
 
 ```ts
-const { Editor } = editor
-const app = {
-  editor: new Editor(
-    // ...
-  ),
-  // ...
-}
+const app = new App()
 ```
 
 Use fluent API to build your Diagram editor

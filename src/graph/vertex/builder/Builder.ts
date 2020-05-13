@@ -1,8 +1,7 @@
 import mx from "mx";
-import { IPosition, ISize } from 'types';
 const { mxPoint, mxRectangle } = mx
 
-export class VertexBuilder {
+export class Builder {
   graph: any
   defaults = {
     port: {
