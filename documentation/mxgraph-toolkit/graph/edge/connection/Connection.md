@@ -21,3 +21,19 @@ conn.setConnectImageByPath(imagePath, { width: 24, height: 24}) {
 const image = new mxImage(imagePath, 16, 16)
 conn.setConnectImage(image)
 ```  
+
+## validate connection
+
+Check if connection is valid by comparing target and source cells
+
+```ts
+mxConnectionHandler.prototype.validateConnection = function(source, target	) {
+  // valid
+  if (source.value == 'Hello,' && target.value == 'World!') return null 
+  // invalid
+  return ''
+
+  // invalid - with error message (alert)
+  //return 'Invalid target'
+}
+```
