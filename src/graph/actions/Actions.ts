@@ -154,8 +154,7 @@ export class Actions {
       let dir = state.style[mxConstants.STYLE_DIRECTION] || 'east' 
       dir = this.rotationMap[dir]
       graph.setCellStyles(mxConstants.STYLE_DIRECTION, dir, [cell]);
-    }
-    finally {
+    } finally {
       graph.getModel().endUpdate();
     }
   }

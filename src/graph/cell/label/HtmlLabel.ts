@@ -97,24 +97,7 @@ export class HtmlLabel {
 
     var parent = graph.getDefaultParent();
     graph.insertVertex(parent, null, data, 20, 20, 80, 60);
-    
-    // Undo/redo
-    var undoManager = new mxUndoManager(200);
-    var listener = function(sender, evt)
-    {
-      undoManager.undoableEditHappened(evt.getProperty('edit'));
-    };
-    graph.getModel().addListener(mxEvent.UNDO, listener);
-    graph.getView().addListener(mxEvent.UNDO, listener);
-    
-    document.body.appendChild(mxUtils.button('Undo', function()
-    {
-      undoManager.undo();
-    }));
-    
-    document.body.appendChild(mxUtils.button('Redo', function()
-    {
-      undoManager.redo();
-    }));    
+
+    // set up undoManager?
   };
 }
