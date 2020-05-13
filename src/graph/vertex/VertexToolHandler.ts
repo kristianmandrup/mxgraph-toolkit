@@ -16,13 +16,19 @@ export class VertexToolHandler {
     this.graph = graph
     this.state = state
     this.vertexHandler = new mxVertexHandler(state = {});    
-    this.actions = this.createActions()
+    
     // this.init()
   }
 
   init(...args) {    
     this.vertexHandler.init(...args)
     this.createContextElement()
+    this.setupActions()
+  }
+
+  setupActions() {
+    this.actions = this.createActions()
+    return this
   }
 
   createActions() {
@@ -118,27 +124,30 @@ export class VertexToolHandler {
     }
   };  
 
-  addContextIcon(imagePath, { title, size, type, style }: any = {}) {
+  addContextIcon(imagePath, { title, size, type, style, cursor }: any = {}) {
     const { width, height } = size
     const img = this.createImage(imagePath);
     img.setAttribute('title', title);
     setStyledElement(img, style || {
-      cursor: 'pointer',
+      cursor: cursor || 'pointer',
       width: `${width}px`,
       height: `${height}px`
     })
+    this.addContextIconClickHandler(img, type)  
+    this.appendIcon(img)  
+    return this
+  }
 
-    if (type === 'delete')
-    var actionFn: any; 
-    actionFn = this.actions[type]
-
+  protected addContextIconClickHandler(img, type) {
+    const actionFn = this.actions[type]
     mxEvent.addGestureListeners(img, (evt) => {
       // Disables dragging the image
       mxEvent.consume(evt);
-    }, noOp, noOp);
-    
-    mxEvent.addListener(img, 'click', actionFn)
+    }, noOp, noOp);    
+    mxEvent.addListener(img, 'click', actionFn)    
+  }
+
+  protected appendIcon(img) {
     this.domNode.appendChild(img);
   }
 } 
-

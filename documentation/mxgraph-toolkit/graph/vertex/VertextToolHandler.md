@@ -1,5 +1,7 @@
 # VertexToolHandler
 
+Manages context icons when hovering over vertex. When clicking on an icon, it can perform an action
+
 ## create
 
 Sets `vertexHandler` property to `mxVertexHandler` instance
@@ -11,11 +13,18 @@ const vertexToolHandler = new VertexToolHandler(graph, state)
 ## init
 
 Initializes `vertexHandler` by calling `init` on it. 
-Also sets `vertexHandler.redrawTools` to `redrawTools` of this class (override to customize)
+Sets `vertexHandler.redrawTools` to `redrawTools` of this class (override to customize).
+Sets `actions` (mapping object) by calling `createActions` method. 
 
 ```ts
 vertexToolHandler.init()
 ```
+
+## actions
+
+`actions` is a mapping object (object lookup via key)
+
+An action is selected for an icon click event in `addContextIconClickHandler` by key lookup via the `type` argument.
 
 ## create actions
 
@@ -70,6 +79,13 @@ Creates and adds context icon to `domNode` (used to display context icons).
 Calls `createImage` to create the icon image to be used.
 
 ```ts
-vertexToolHandler.addContextIcon(imagePath, { title, size, type })
+vertexToolHandler.addContextIcon(imagePath, { title, size, type, cursor })
 ```
+
+Calls `addContextIconClickHandler` and `appendIcon(img)`
+
+## protected
+
+- `addContextIconClickHandler(img, type)`
+- `appendIcon(img)`
 
