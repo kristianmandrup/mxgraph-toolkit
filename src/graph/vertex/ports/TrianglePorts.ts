@@ -1,27 +1,32 @@
 import { IPorts, BasePorts } from "./BasePorts";
+import { IPosition } from "types";
 
 export class TrianglePorts extends BasePorts implements IPorts {
-    ports = [];
-  
-    setPorts() {
-      this.inPorts()
-      this.outPorts()
-    }
-  
-    inPorts() {
-      const { ports } = this
-      // NOTE: Constraint is used later for orthogonal edge routing (currently ignored)
-      ports['in1'] = {x: 0, y: 0, perimeter: true, constraint: 'west'};
-      ports['in2'] = {x: 0, y: 0.25, perimeter: true, constraint: 'west'};
-      ports['in3'] = {x: 0, y: 0.5, perimeter: true, constraint: 'west'};
-      ports['in4'] = {x: 0, y: 0.75, perimeter: true, constraint: 'west'};
-      ports['in5'] = {x: 0, y: 1, perimeter: true, constraint: 'west'};
-    }
-  
-    outPorts() {
-      const { ports } = this
-      ports['out1'] = {x: 0.5, y: 0, perimeter: true, constraint: 'north east'};
-      ports['out2'] = {x: 1, y: 0.5, perimeter: true, constraint: 'east'};
-      ports['out3'] = {x: 0.5, y: 1, perimeter: true, constraint: 'south east'};  
-    }  
+  ports = [];
+
+  setPorts() {
+    this.inPorts()
+    this.outPorts()
   }
+
+  inPorts() {
+    const { ports, createPort } = this
+    // NOTE: Constraint is used later for orthogonal edge routing (currently ignored)
+    ports['in1'] = createPort({x: 0, y: 0})
+    ports['in2'] = createPort({x: 0, y: 0.25})
+    ports['in3'] = createPort({x: 0, y: 0.5})
+    ports['in4'] = createPort({x: 0, y: 0.75})
+    ports['in5'] = createPort({x: 0, y: 1})
+  }
+
+  outPorts() {
+    const { ports, createPort } = this
+    ports['out1'] = createPort({x: 0.5, y: 0}, 'north east')
+    ports['out2'] = createPort({x: 1, y: 0.5}, 'east')
+    ports['out3'] = createPort({x: 0.5, y: 1}, 'south east')  
+  }  
+
+  createPort(pos: IPosition, constraint: string = 'west', perimeter: boolean = true): any {
+    return {x: pos.x, y: pos.y, perimeter, constraint}
+  }
+}

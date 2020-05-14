@@ -14,6 +14,15 @@ import { Monitor } from "./monitor";
 import { Scrollable } from "./scrollable";
 import { ModalWindow, Window } from "./window";
 import { createStyledElement } from "utils";
+import * as shapes from './shapes';
+export { shapes }
+
+export const shapesMap = {
+  box: shapes.BoxShape,
+  connector: shapes.ConnectorShape,
+  link: shapes.LinkShape,
+  message: shapes.MessageShape
+}
 
 const { 
   mxMorphing, mxEvent, 
@@ -34,7 +43,7 @@ export * as monitor from './monitor';
 export * as permission from './permission';
 export * as scroll from './scrollable';
 export * as selection from './selection';
-export * as shapes from './shapes';
+
 export * as style from './style';
 export * as swimlanes from './swimlanes';
 export * as vertex from './vertex';
@@ -71,7 +80,8 @@ export const classMap = {
 }
 
 export const defaults = {
-  classMap
+  classMap,
+  shapesMap
 }
 
 export class Graph {
@@ -103,6 +113,10 @@ export class Graph {
   _window: any
   _modalWindow: any
   
+  shapesMap: {
+    [key: string]: any
+  } = defaults.shapesMap
+
   classMap: {
     [key: string]: any
   } = defaults.classMap
@@ -112,6 +126,14 @@ export class Graph {
     this.graph = graph
     this.editor = editor
     this.setClassMap(classMap)
+  }
+
+  setShapesMap(shapesMap) {
+    this.shapesMap = shapesMap || defaults.shapesMap
+  }
+
+  shape(name: string) {
+    return this.shapesMap[name]
   }
 
   get permission() {

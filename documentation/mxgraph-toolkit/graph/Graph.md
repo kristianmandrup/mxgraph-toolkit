@@ -42,6 +42,20 @@ The background can also be a reference to an image (f.ex a grid), such as: `url(
 const graph = new Graph(graph)
 ```
 
+## get shape class
+
+```ts
+graph.shape('box)
+```
+
+## set shapes map
+
+Set a custom shapes class map
+
+```ts
+graph.sertShapesMap(shapesMap)
+```
+
 ## default parent
 
 Get the default parent (cell) of graph (all cells drawn in graph have a parent, this is the root parent)
