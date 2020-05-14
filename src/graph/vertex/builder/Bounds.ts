@@ -12,6 +12,7 @@ export class Bounds {
 
   setAlternateBounds(altBounds) {
     this.vertex.geometry.alternateBounds = this.createAlternateBounds(altBounds)
+    return this
   }
     
   createAlternateBounds(bounds: any = {}) {

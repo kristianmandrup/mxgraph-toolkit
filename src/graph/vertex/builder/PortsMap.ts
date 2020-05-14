@@ -1,6 +1,6 @@
 import mx from "mx";
 import { portDistribution } from "../ports/PortPosition";
-import { WithPort } from "./WithPort";
+import { Port } from "./Port";
 const { mxPoint } = mx
 
 export class PortsMap {
@@ -24,9 +24,9 @@ export class PortsMap {
     this.labelFn = props.labelFn
   }
 
-  withPort(name: string): WithPort {
+  withPort(name: string): Port {
     const portVertex = this.getNamed(name)
-    return new WithPort(this.graph, portVertex)
+    return new Port(this.graph, portVertex)
   }
   
   getNamed(name: string) {

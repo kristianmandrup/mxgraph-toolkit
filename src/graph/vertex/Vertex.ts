@@ -58,6 +58,10 @@ export class Vertex {
     }      
   }
 
+  get defaultParent() {
+    return this.graph.getDefaultParent();
+  }
+
   get builder(): any {
     this._builder = this._builder || this.createBuilder()
     return this._builder
@@ -68,7 +72,8 @@ export class Vertex {
     return this._builder
   }
   
-  protected createBuilder() {
+  protected createBuilder(vertex?: any) {
+    vertex = vertex || this.defaultParent()
     return new this.classMap.builder(this.graph)
   }
 

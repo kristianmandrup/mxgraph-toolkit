@@ -41,6 +41,10 @@ export class Builder {
     }      
   }
 
+  get defaultParent() {
+    return this.graph.getDefaultParent();
+  }
+
   get ports() {
     const { noPorts } = this.props
     if (noPorts) {

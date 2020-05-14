@@ -10,7 +10,7 @@ export interface IaddSidebarIcon {
   imageSize?: ISize
   vertexSize?: ISize
   createPorts(graph: any, vertex: any)
-  createVertex(graph: any, label: string, pos: IPosition, size?: ISize)
+  createVertex(graph: any, labelOrHtml: string, pos: IPosition, size?: ISize)
 }
 
 export const defaultDragElement = () => {
@@ -21,10 +21,31 @@ export const defaultDragElement = () => {
   return dragElt
 }
 
+const imageIconMap = {
+  mail: {
+    imagePath: 'images/icons48/mail_new.png'
+  }
+}
+
+export const defaults = {
+  imageIconMap
+}
+
 export class Sidebar {
   editor: any
   sidebarElement: any
   _dragElt: Element = defaultDragElement()
+  imageIconMap: {
+    [key:string]: any
+  } = defaults.imageIconMap
+  defaults = {
+    icon: {
+      size: {
+        width: 48,
+        height: 48
+      }
+    }
+  }
 
   constructor(editor: any, sidebarElement: any) {
     this.editor = editor
@@ -33,6 +54,10 @@ export class Sidebar {
 
   get graph() {
     return this.editor.graph
+  }
+
+  get defaultParent() {
+    return this.graph.getDefaultParent();
   }
 
   get vertex() {
@@ -47,6 +72,28 @@ export class Sidebar {
     return this.vertex.ports
   }
 
+  labelOrHtmlFor(name: string) {
+    return this.headerFor(name) + this.imageFor(name)    
+  }
+
+  // TODO: externalise in SideIcon class
+  headerFor(name: string) {
+    return `<h1 style="margin:0px;"><${name}/h1><br>`  
+  }
+
+  imageFor(name: string) {
+    const { imagePath, size } = this.imagePropsFor(name)
+    const { width, height } = size
+    return `<img src="${imagePath}" width="48" height="48">`
+  }
+
+  imagePropsFor(name) {
+    return {
+      ...this.defaults.icon,
+      ...this.imageIconMap[name]
+    }
+  }
+
   // use builder
   addPortsToVertex(vertex, ports) {
     // Adds the ports at various relative locations
@@ -59,15 +106,23 @@ export class Sidebar {
     this.addPortsToVertex(vertex, props.ports)
   }
 
-  // use a VertexBuilder
-  createVertex(label, {pos, size, bounds}) {
+  // TODO: use Builder
+  createIconVertex(labelOrHtml: string, { pos, size, bounds }) {
+    const vertex = this.builder.draw.insertVertex(
+      this.defaultParent(), 
+      labelOrHtml, 
+      pos, 
+      size, 
+      { connectable: false }
+    )
+    return this.builder.bounds(vertex).setAltBounds(bounds).vertex
   }
 
-  createOnDrag = (label, props: any = {}) => (graph, evt, cell, x, y) => {  
+  createOnDrag = (labelOrHtml: string, props: any = {}) => (graph, evt, cell, x, y) => {  
     const { size, bounds } = props
     const pos = {x, y}
     var model = graph.getModel();
-    const vertex = this.createVertex(label, {pos, size, bounds})    
+    const vertex = this.createIconVertex(labelOrHtml, {pos, size, bounds})    
 
     model.beginUpdate();
     try {                      
@@ -80,7 +135,7 @@ export class Sidebar {
   }  
 
   // from ports.html
-  addSidebarIcon(graph, label: string, image, props: IaddSidebarIcon) {
+  addSidebarIcon(graph, labelOrHtml: string, image, props: IaddSidebarIcon) {
     // Function that is executed when the image is dropped on
     // the graph. The cell argument points to the cell under
     // the mousepointer if there is one.    
@@ -101,7 +156,7 @@ export class Sidebar {
     this.sidebarElement.appendChild(img);
     const dragElem = this.createDragElement({size: dragSize, border: dragBorder})
     
-    const onDrag = this.createOnDrag(label, props)
+    const onDrag = this.createOnDrag(labelOrHtml, props)
 
     // Creates the image which is used as the drag icon (preview)
     var ds = mxUtils.makeDraggable(img, graph, onDrag, dragElem, 0, 0, true, true);
