@@ -28,6 +28,31 @@ export class PortsMap {
     const portVertex = this.getNamed(name)
     return new Port(this.graph, portVertex)
   }
+
+  get keys() {
+    return Object.keys(this.portsMap)
+  }
+
+  get count() {
+    return this.keys.length
+  }
+
+  get portPositions(): any[] {
+    return portDistribution[this.count]
+  }
+
+  portPositionsFor(count: number): any[] {
+    return portDistribution[this.count]
+  }
+
+  positionAll(props?: any) {    
+    this.keys.map((key, index)  => {
+      const state = this.getNamed(key).state
+      const pos = this.portPositions[index]
+      this.removeByName(key)      
+      this.addPortToVertex({index, pos, state, ...props})
+    })
+  }
   
   getNamed(name: string) {
     return this.portsMap[name]
@@ -44,6 +69,7 @@ export class PortsMap {
   remove(ports: any | any[]) {
     ports = Array.isArray(ports) ? ports : [ports]
     this.graph.removeCells(ports)
+    this.positionAll()
     return this
   }
 
@@ -53,17 +79,14 @@ export class PortsMap {
     return this
   }
 
-  removeByName(names: string[]) {
+  removeByName(names: string[] | string) {
+    names = Array.isArray(names) ? names : [names]
     const ports = this.getAllNamed(names)
     this.remove(ports)
   }
 
-  portPositions(count) {
-    return portDistribution[count]
-  }
-
   addPorts(count: number, props?: any) {
-    this.portPositions(count).map((pos, index)  => {
+    this.portPositionsFor(count).map((pos, index)  => {
       this.addPortToVertex({index, pos, ...props})
     })
   }

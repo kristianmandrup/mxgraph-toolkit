@@ -60,6 +60,10 @@ export class DrawLayer {
     return edge
   }
 
+  addEdge(parent, edge, source, target) {
+    this.graph.addEdge(edge, this.layer, source, target)
+  }
+
   protected setGeometryPoints(cell: any, points?: any) {
     if (points) {
       points = Array.isArray(points) ? points : [points]

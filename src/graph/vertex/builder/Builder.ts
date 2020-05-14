@@ -65,6 +65,21 @@ export class Builder {
     return this._bounds
   }
 
+  addEdge(edge, source, target) {
+    this.graph.addEdge(edge, this.vertex, source, target)
+    return this
+  }
+
+  addCell(cell: any, source, target, index = null) {
+    this.graph.addCell(cell, this.vertex, index, source, target	)
+    return this      
+  }
+
+  addCells(cells: any[], source, target, index = null) {
+    this.graph.addCells(cells, this.vertex, index, source, target	)
+    return this      
+  }
+
   createBounds() {
     return this.classMap.bounds(this.graph, this.vertex)
   }

@@ -1,4 +1,23 @@
+import mx from "mx";
 import { IAdjustment } from "types"
+const { mxConstants } = mx
+const { 
+  ALIGN_LEFT, 
+  ALIGN_CENTER, 
+  ALIGN_RIGHT, 
+  ALIGN_TOP, 
+  ALIGN_MIDDLE, 
+  ALIGN_BOTTOM 
+} = mxConstants
+
+export const alignMap = {
+  left: ALIGN_LEFT,
+  center: ALIGN_CENTER,
+  right: ALIGN_RIGHT,
+  top: ALIGN_TOP,
+  middle: ALIGN_MIDDLE,
+  bottom:	ALIGN_BOTTOM
+}
 
 export class WithCells {
   graph: any
@@ -23,6 +42,21 @@ export class WithCells {
     }
     const {includeEdges} = props
     this.graph.removeCells(this.cells, includeEdges)
+    return this
+  }
+
+  alignCells(align, params) {
+    const alignment = this.getAlignment(align)
+    this.graph.alignCells(alignment, this.cells, params)    
+    return this
+  }
+
+  getAlignment(align: string) {
+    return alignMap[align] || align
+  }
+
+  orderCells(back: boolean) {
+    this.graph.orderCells(back, this.cells)
     return this
   }
 
