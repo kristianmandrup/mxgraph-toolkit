@@ -17,14 +17,18 @@ export class Zoom extends BaseActionManager {
   }
 
   zoomInButton(label: string = '+') {
-    return mxUtils.button(label, () => {
-      this.graph.zoomIn();
-    })
+    return mxUtils.button(label, this.zoomIn)
+  }
+
+  zoomIn() {
+    this.graph.zoomIn();
   }
 
   zoomOutButton(label: string = '-') {
-    return mxUtils.button(label, () => {
-      this.graph.zoomOut();
-    })
+    return mxUtils.button(label, this.zoomOut)
+  }
+
+  zoomOut() {
+    this.graph.zoomIn();
   }
 }

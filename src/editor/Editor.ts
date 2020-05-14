@@ -29,6 +29,7 @@ export class Editor {
   containers: any
   _graph: any
   _toolbar: any
+  _statusbar: any
   _sidebar: any
   _outlineMap: any
   _io: any
@@ -71,6 +72,10 @@ export class Editor {
       ...this.containerMap,
       ...containerMap || {}
     }
+  }
+
+  getToolbarNamed(name: string) {
+    return name === 'status' ? this.statusbar : this.toolbar
   }
   
   setClassMap(classMap: any = {}) {
@@ -157,6 +162,15 @@ export class Editor {
   protected createIO(): any {
     return new this.classMap.io(this.graph)
   }
+
+  get statusbar() {
+    this._statusbar = this._statusbar || this.createStatusbar()
+    return this._statusbar
+  }
+
+  protected createStatusbar(toolbarElement?: any): any {
+    return new this.classMap.statusbar(this.graph, {editor: this, toolbar: toolbarElement})
+  }  
 
   get toolbar() {
     this._toolbar = this._toolbar || this.createToolbar()
