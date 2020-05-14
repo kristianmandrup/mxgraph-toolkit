@@ -1,6 +1,6 @@
 import mx from "mx";
 import { createStyledElement, setStyledElement } from "utils";
-const { mxClient, mxVertexHandler, mxUtils, mxEvent } = mx
+const { mxCellState, mxClient, mxVertexHandler, mxUtils, mxEvent } = mx
 
 const noOp = () => {}
 
@@ -9,17 +9,19 @@ export class Context {
   domNode: any
   vertexHandler: any
   
-  state: any
+  cellState: any // mxCellState (wrapper of a cell)
+  cell: any
   actions: any
 
-  constructor(graph: any, state: any = {}) {
+  constructor(graph: any, {cellState, cell}: any = {}) {
     this.graph = graph
-    this.state = state
+    this.cellState = cellState || new mxCellState(graph.view, cell, cell.style)
+    this.cell = cellState.cell
     // this.init()
   }
 
   init(...args) {    
-    this.vertexHandler = new mxVertexHandler(this.state);
+    this.vertexHandler = new mxVertexHandler(this.cellState);
     this.vertexHandler.init(...args)
     this.createContextElement()
     this.setupActions()
@@ -31,14 +33,14 @@ export class Context {
   }
 
   createActions() {
-    const { graph, state, vertexHandler } = this
+    const { graph, cell, cellState, vertexHandler } = this
     return {
       delete: (evt) => {
-        graph.removeCells([state.cell]);
+        graph.removeCells([cell]);
         mxEvent.consume(evt);
       },
       move: (evt) => {
-        graph.graphHandler.start(state.cell,
+        graph.graphHandler.start(cell,
           mxEvent.getClientX(evt), mxEvent.getClientY(evt));
         graph.graphHandler.cellWasClicked = true;
         graph.isMouseDown = true;
@@ -52,9 +54,9 @@ export class Context {
         mxEvent.consume(evt);
       },
       connect: (evt) => {
-        var pt = mxUtils.convertPoint(this.graph.container,
+        var pt = mxUtils.convertPoint(graph.container,
             mxEvent.getClientX(evt), mxEvent.getClientY(evt));
-        this.graph.connectionHandler.start(this.state, pt.x, pt.y);
+        this.graph.connectionHandler.start(cellState, pt.x, pt.y);
         this.graph.isMouseDown = true;
         this.graph.isMouseTrigger = mxEvent.isMouseEvent(evt);
         mxEvent.consume(evt);
@@ -72,9 +74,9 @@ export class Context {
   }
 
   redrawTools() {
-    const { state } = this 
-    if (state && this.domNode) {
-      const { x, y, width, height } = state
+    const { cellState } = this 
+    if (cellState && this.domNode) {
+      const { x, y, width, height } = cellState
       var dy = (mxClient.IS_VML && document.compatMode === 'CSS1Compat') ? 20 : 4;
       const _left = x + width - 56
       const _top = y + height + dy

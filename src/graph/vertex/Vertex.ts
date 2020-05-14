@@ -1,10 +1,9 @@
 import mx from "mx";
-import { IPosition, ISize } from 'types';
-const { mxPoint, mxGraph } = mx
+const { mxGraph } = mx
 
 import { Builder } from "./builder";
 import { VertexHandler } from "./VertexHandler";
-import { Context } from "./context";
+import { Context } from "./builder/context";
 export * as anchor from './anchor'
 export * as handles from './handles'
 export * as ports from './ports'
@@ -21,7 +20,6 @@ export const classMap = {
   anchor: Anchor,
   handles: Handles,
   overlay: Overlay,
-  ports: Ports,
   builder: Builder
 }
   

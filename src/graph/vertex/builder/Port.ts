@@ -1,8 +1,8 @@
 import mx from "mx";
-import { WithVertex } from "./WithVertex";
+import { Builder } from "./Builder";
 const { mxPoint } = mx
 
-export class WithPort {
+export class Port {
   graph: any 
   portVertex: any
   portsMap: any
@@ -22,12 +22,12 @@ export class WithPort {
     this.graph.removeCells([this.portVertex])
   }
 
-  asVertex(props: any = {noPorts: true}): WithVertex {
-    return new WithVertex(this.graph, this.portVertex, props)
+  builder(props: any = {noPorts: true}) {
+    return new Builder(this.graph, this.portVertex, props)
   }
 
   get context() {
-    return this.asVertex().context
+    return this.builder().context
   }
 
   setGeo(geo: any) {
