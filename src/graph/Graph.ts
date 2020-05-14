@@ -230,6 +230,11 @@ export class Graph {
   createToggler(props?: any): any {
     return new this.classMap.graphToggler(this.graph, props);
   }
+
+  setGridSize(size: number) {
+    this.graph.gridSize = size
+    return this
+  }
     
   get drop() {
     this._drop = this._drop || this.createDrop()

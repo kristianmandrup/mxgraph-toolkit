@@ -18,7 +18,9 @@ export const nameMap = {
   graph: 'setEnabled',
   connectable: 'setConnectable',  
   multigraph: 'setMultigraph',  
-  tooltips: 'setTooltips'
+  tooltips: 'setTooltips',
+  grid: 'setGridEnabled',
+  autoScroll: 'setAutoScroll',
 }
 
 

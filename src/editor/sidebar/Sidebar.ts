@@ -22,15 +22,37 @@ export const defaultDragElement = () => {
 }
 
 export class Sidebar {
-  graph: any
+  editor: any
   sidebarElement: any
   _dragElt: Element = defaultDragElement()
 
-  constructor(graph: any, sidebarElement: any) {
+  constructor(editor: any, sidebarElement: any) {
+    this.editor = editor
     this.sidebarElement = sidebarElement
   }
 
+  get graph() {
+    return this.editor.graph
+  }
+
+  get vertex() {
+    return this.graph.vertex
+  }
+
+  get builder() {
+    return this.vertex.builder
+  }
+
+  get ports() {
+    return this.vertex.ports
+  }
+
+  // use builder
   addPortsToVertex(vertex, ports) {
+    // Adds the ports at various relative locations
+    // var port = graph.insertVertex(v1, null, 'Trigger', 0, 0.25, 16, 16,
+    //     'port;image=editors/images/overlays/flash.png;align=right;imageAlign=right;spacingRight=18', true);
+    // port.geometry.offset = new mxPoint(-6, -8);
   }
 
   enrichVertex(vertex, props) {
@@ -57,6 +79,7 @@ export class Sidebar {
     graph.setSelectionCell(vertex);
   }  
 
+  // from ports.html
   addSidebarIcon(graph, label: string, image, props: IaddSidebarIcon) {
     // Function that is executed when the image is dropped on
     // the graph. The cell argument points to the cell under

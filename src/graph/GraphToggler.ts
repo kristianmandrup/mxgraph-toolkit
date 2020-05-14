@@ -37,7 +37,6 @@ export class GraphToggler {
     names.map(name => this[name].off())
   }
 
-
   setDropEnabled(value: boolean) {
     this.graph.setDropEnabled(value)
   }
@@ -76,6 +75,16 @@ export class GraphToggler {
   
   setCenterZoom(value: boolean) {
     this.graph.centerZoom = value;
+  }
+
+  setGridEnabled(value: boolean) {
+    this.graph.gridEnabled = value;
+    return this
+  }
+
+  setAutoScroll(value: boolean) {
+    this.graph.autoScroll = value;
+    return this
   }
   
   setGuidesEnabled(value: boolean) {

@@ -3,34 +3,9 @@ const { mxPoint, mxRectangle } = mx
 
 export class Builder {
   graph: any
-  defaults = {
-    port: {
-      style: 'align=right;imageAlign=right;spacingRight=18;'
-    }
-  }
 
   constructor(graph: any) {
     this.graph = graph
-  }
-
-  addPortTo(vertex, props: any) {
-    const {label, pos, size, imagePath, style, offset} = props
-    // Adds the ports at various relative locations
-    const port = this.graph.insertVertex(vertex, null, label, pos.x, pos.y, size.width, size.height,
-        `port;image=${imagePath};` + style, true);
-    port.geometry.offset = new mxPoint(offset.x, offset.y);
-    return port
-  }
-    
-  // sample: createPorts
-  addPortsTo = (vertex, ports: any[]): any[] => {
-    const { graph } = this
-  
-    return ports.map(port => {
-      const props = this.portPropsFor(port)
-      // Adds the ports at various relative locations
-      this.addPortTo(vertex, props)
-    })    
   }
   
   // sample: createVertex
@@ -84,41 +59,7 @@ export class Builder {
     return new mxRectangle(x, y, width, height);
   }
 
-  protected portPropsFor(props: any) {
-    let { label, size, pos, style, imagePath, offset } = props
-    const defaults = {
-      pos: {
-        x: 0,
-        y: 0.25,
-      },
-      offset: {
-        x: -6, 
-        y: -8
-      },
-      size: { 
-        height: 16, 
-        width: 16 
-      },      
-    }
-    size = {
-      ...defaults.size,
-      ...size || {}
-    }
-    pos = {
-      ...defaults.pos,
-      ...pos || {}
-    }
-    offset = {
-      ...defaults.offset,
-      ...offset || {}
-    }
-    style = style || this.defaults.port.style
-    if (!label) {
-      throw new Error('Missing label')
-    }
-    if (!imagePath) {
-      throw new Error('Missing imagePath')
-    }
-    return {label, size, pos, offset, imagePath, style} 
-  }  
+  addPortsTo(vertex, ports) {
+    // use WithVertex
+  }
 }

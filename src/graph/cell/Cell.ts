@@ -1,6 +1,11 @@
 import mx from "mx";
 import { Group } from "./group";
 import { Edit } from "./edit";
+import { WithCells } from "./WithCells";
+import { Hints } from "./hints";
+import { Hover } from "./hover/Hover";
+import { Label } from "./label/Label";
+import { PopupMenu } from "./menu";
 const { mxGraph } = mx
 
 export const createCell = (graph: any): Cell => {
@@ -8,8 +13,13 @@ export const createCell = (graph: any): Cell => {
 }
 
 export const classMap = {
-  group: Group,
   edit: Edit,
+  group: Group,
+  hints: Hints,
+  hover: Hover,
+  label: Label,
+  menu: PopupMenu,  
+  withCells: WithCells
 }
 
 export const defaults = {
@@ -34,6 +44,10 @@ export class Cell {
   constructor(graph: any, { classMap }: any = {}) {
     this.graph = graph
     this.setClassMap(classMap)
+  }
+
+  allCells() {
+    return this.graph.getChildCells(null, true, true)
   }
 
   setClassMap(classMap: any = {}) {
@@ -182,7 +196,33 @@ export class Cell {
     {
       cell = graph.model.getParent(cell);
     }  
-    mxGraph.prototype.selectCellForEvent(cell);
+    graph.selectCellForEvent(cell);
     return this
-  };
+  }
+
+  setCellsRemoved() {
+    mxGraph.prototype.cellsRemoved = this.cellsRemoved
+    return this
+  }
+
+  autoSize(cell, recurse: boolean = true) {
+    this.graph.autoSize(cell, recurse)
+  }
+    
+  withCells(cells, props) {
+    return this.createWithCells(cells, props)
+  }
+
+  createWithCells(cells, props) {
+    return this.classMap.withCells(this.graph, cells, props)
+  }
+
+  scaleCell(cell, factor = 2, recurse: boolean = true) {
+    this.graph.scaleCell(cell, factor, factor, recurse)
+    return this
+  }
+
+  cellsRemoved(cells) {    
+    // handle when cells are removed
+  }
 }
