@@ -24,16 +24,33 @@ conn.setConnectImage(image)
 
 ## validate connection
 
-Check if connection is valid by comparing target and source cells
+Check if connection is valid by comparing target and source cells.
+Override to customize validation behaviour and logic.
 
 ```ts
-mxConnectionHandler.prototype.validateConnection = function(source, target	) {
-  // valid
-  if (source.value == 'Hello,' && target.value == 'World!') return null 
-  // invalid
-  return ''
+validateConnection(source, target)
+```
 
-  // invalid - with error message (alert)
-  //return 'Invalid target'
+### isValidCellConnection
+
+Validate if cells can be connected.
+Override to customize validation behaviour and logic.
+
+```ts
+isValidCellConnection({source, target}): boolean {
+  // validation logic  
+}
+```
+
+## isValidPortConnection
+
+Validate if ports for those cells can be connected.
+Override to customize validation behaviour and logic.
+
+```ts
+isValidPortConnection({sourcePort, targetPort}, cells): boolean {
+  const {source, target} = cells
+
+  // validation logic
 }
 ```

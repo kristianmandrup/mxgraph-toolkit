@@ -36,17 +36,19 @@ export class Connection {
     const edge = source.edges[source.edges.length -1]
     const edgeTerminal = new mxCellState(graph.view, edge, graph.getCellStyle(edge));
     const { sourcePort, targetPort } = edgeTerminal.style
-    if (this.isValidCellConnection(source, target) && this.isValidPortConnection(sourcePort, targetPort)) {
+    const ports = { sourcePort, targetPort }
+    const cells = { source, target }
+    if (this.isValidCellConnection(cells) && this.isValidPortConnection(ports, cells)) {
       return null
     }
     return ''
   }
 
-  isValidCellConnection(source, target) {
+  isValidCellConnection({source, target}) {
     return true
   }
 
-  isValidPortConnection(sourcePort, targetPort) {
+  isValidPortConnection({sourcePort, targetPort}, cells) {
     return true
   }
 }
