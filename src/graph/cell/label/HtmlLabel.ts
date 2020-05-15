@@ -1,15 +1,19 @@
 import mx from "mx";
+import { check } from "prettier";
+import { Checkbox } from "./Checkbox";
 const { mxEvent, mxClient, mxUtils, mxUndoManager } = mx
 
 export class HtmlLabel {
   graph: any
   cached?: boolean
   data?: any
+  hasCheckbox?: boolean
 
-  constructor(graph: any, data?: any, {cached}: {cached?: boolean} = {}) {
+  constructor(graph: any, data?: any, {cached, hasCheckbox}: {cached?: boolean, hasCheckbox?: boolean} = {}) {
     this.graph = graph
     this.cached = cached
     this.data = data
+    this.hasCheckbox = hasCheckbox
   }
 
   setData(data) {
@@ -31,8 +35,8 @@ export class HtmlLabel {
 
   // Overrides method to provide a cell label in the display
   convertValueToString(cell) {
-    const { cached, graph } = this
-    if (cached && cell.div != null) {
+    const { cached } = this
+    if (cached && cell.div) {
       // Uses cached label
       return cell.div;
     }
@@ -43,37 +47,25 @@ export class HtmlLabel {
       div.innerHTML = cell.getAttribute('label');
       mxUtils.br(div);
       
-      var checkbox = document.createElement('input');
-      checkbox.setAttribute('type', 'checkbox');
-
-      if (cell.getAttribute('checked') === 'true') {
-        checkbox.setAttribute('checked', 'checked');
-        checkbox.defaultChecked = true;
+      if (this.hasCheckbox) {
+        const checkbox = this.createCheckBox(cell)
+        div.appendChild(checkbox);
       }
-      
-      // Writes back to cell if checkbox is clicked
-      mxEvent.addListener(checkbox, (mxClient.IS_QUIRKS) ? 'click' : 'change', function(evt) {
-        var elt = cell.value.cloneNode(true);
-        elt.setAttribute('checked', (checkbox.checked) ? 'true' : 'false');
-        
-        graph.model.setValue(cell, elt);
-      });
-      
-      div.appendChild(checkbox);
-      
+                      
       if (cached) {
         // Caches label
         cell.div = div;
-      }
-      
+      }      
       return div;
     }
-
     return '';
   };
 
-  // Overrides method to store a cell label in the model
-  
+  createCheckBox(cell): Element {
+    return new Checkbox(this.graph, cell).createElement()
+  }
+
+  // Overrides method to store a cell label in the model  
   cellLabelChanged(cell, newValue, autoSize) {
     const { graph } = this
     const cellLabelChanged = graph.cellLabelChanged;
