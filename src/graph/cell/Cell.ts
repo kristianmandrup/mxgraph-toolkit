@@ -6,23 +6,25 @@ import { Hints } from "./hints";
 import { Hover } from "./hover/Hover";
 import { Label } from "./label/Label";
 import { PopupMenu } from "./menu";
+import { WithCell } from "./WithCell";
 const { mxGraph } = mx
 
 export const createCell = (graph: any): Cell => {
   return new Cell(graph)
 }
 
-export const classMap = {
+const classMap = {
   edit: Edit,
   group: Group,
   hints: Hints,
   hover: Hover,
   label: Label,
   menu: PopupMenu,  
+  withCell: WithCell,
   withCells: WithCells
 }
 
-export const defaults = {
+const defaults = {
   classMap
 }
 
@@ -209,12 +211,20 @@ export class Cell {
     this.graph.autoSize(cell, recurse)
   }
     
-  withCells(cells, props) {
+  withCells(cells: any[], props) {
     return this.createWithCells(cells, props)
   }
 
   createWithCells(cells, props) {
     return this.classMap.withCells(this.graph, cells, props)
+  }
+
+  withCell(cell: any, props) {
+    return this.createWithCell(cell, props)
+  }
+
+  createWithCell(cell, props) {
+    return this.classMap.withCell(this.graph, cell, props)
   }
 
   scaleCell(cell, factor = 2, recurse: boolean = true) {

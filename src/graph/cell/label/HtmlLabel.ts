@@ -59,7 +59,9 @@ export class HtmlLabel {
   }
 
   isUserObject(cell, name: string = 'userobject' ): boolean {
-    return mxUtils.isNode(cell.value, cell.value.nodeName) && cell.value.nodeName.toLowerCase() === name    
+    const { value } = cell
+    const { nodeName } = value || {}
+    return mxUtils.isNode(value, nodeName) && nodeName.toLowerCase() === name    
   }
 
   // Overrides method to provide a cell label in the display

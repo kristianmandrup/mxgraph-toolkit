@@ -1,5 +1,5 @@
-export * from "./Graph";
-export * from "./GraphToggler";
+export * as graph from "./Graph";
+export * as toggler from "./GraphToggler";
 export * as actions from './actions'
 export * as cell from './cell'
 export * as data from './data'

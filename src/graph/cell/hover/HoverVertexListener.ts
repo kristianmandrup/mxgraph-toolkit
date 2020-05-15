@@ -22,32 +22,26 @@ export class HoverVertexListener {
 
   mouseMove(sender, me) {
     const { graph } = this
-    if (this.currentState !== null && (me.getState() === this.currentState ||
-      me.getState() == null)) {
-      const tol = this.iconTolerance;
-      const tmp = new mxRectangle(me.getGraphX() - tol,
-        me.getGraphY() - tol, 2 * tol, 2 * tol);
-
-      if (mxUtils.intersects(tmp, this.currentState)) {
+    if (this.currentState != null && me.getState() === this.currentState) {
         return;
-      }
     }
-    
-    let tmp = graph.view.getState(me.getCell());
-    
+
+    var tmp = graph.view.getState(me.getCell());
+
     // Ignores everything but vertices
-    if (graph.isMouseDown || (tmp != null && !graph.getModel().isVertex(tmp.cell))) {
+    const isNotVertex = tmp && !graph.getModel().isVertex(tmp.cell)
+    const shouldIgnore = graph.isMouseDown || isNotVertex
+    if (shouldIgnore) {
       tmp = null;
     }
-
     if (tmp !== this.currentState) {
-      if (this.currentState != null) {
-          this.dragLeave(me.getEvent(), this.currentState);
-      }    
-      this.currentState = tmp;    
-      if (this.currentState != null) {
-          this.dragEnter(me.getEvent(), this.currentState);
-      }
+        if (this.currentState != null) {
+            this.dragLeave(me.getEvent(), this.currentState);
+        }
+        this.currentState = tmp;
+        if (this.currentState){
+            this.dragEnter(me.getEvent(), this.currentState);
+        }
     }
   }
 

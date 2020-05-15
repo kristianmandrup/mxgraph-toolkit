@@ -22,27 +22,52 @@ export class Tooltip {
     this.graph.getTooltipForCell = this.getTooltipForCell
     return this
   }
+
+  get model() {
+    return this.graph.getModel()
+  }
   
   getTooltipForCell(cell): string {
     const { graph } = this
     const getTooltipForCell = graph.getTooltipForCell;
-    const model = graph.getModel()
-    
+        
     if (!cell) return ''
+
     let tip = '';
-    var src = model.getTerminal(cell, true);      
-    if (src) {
-      tip += this.getTooltipForCell(src) + ' ';
+    // edge source name
+    const source = this.cellSource(cell)
+    if (source) {
+      tip += this.getTooltipForCell(source) + ' ';
     }      
-    var parent = model.getParent(cell);      
-    if (model.isVertex(parent)) {
+
+    // vertex name (with parent hierarchy)
+    const parent = this.cellParent(cell)
+    if (this.isVertex(parent)) {
       tip += this.getTooltipForCell(parent) + '.';
     }
     tip += getTooltipForCell.apply(graph, arguments);      
-    const trg = model.getTerminal(cell, false);      
-    if (trg) {
-      tip += ' ' + this.getTooltipForCell(trg);
+
+    // edge target name
+    const target = this.cellTarget(cell)
+    if (target) {
+      tip += ' ' + this.getTooltipForCell(target);
     }
     return tip;
   } 
+
+  isVertex(cell) {
+    return this.model.isVertex(parent)
+  }
+
+  cellParent(cell) {
+    return this.model.getParent(cell)
+  }
+
+  cellSource(cell) {
+    return this.model.getTerminal(cell, true)
+  }
+
+  cellTarget(cell) {
+    return this.model.getTerminal(cell, false)
+  }
 }

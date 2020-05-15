@@ -19,6 +19,13 @@ export const alignMap = {
   bottom:	ALIGN_BOTTOM
 }
 
+type AddOpts = {
+  index?: number
+  source?: any
+  target?: any
+  absolute: boolean
+}
+
 export class WithCells {
   graph: any
   cells: any[]
@@ -43,6 +50,12 @@ export class WithCells {
     const {includeEdges} = props
     this.graph.removeCells(this.cells, includeEdges)
     return this
+  }
+
+  add(parent, opts: AddOpts) {
+    const { index, source, target, absolute } = opts  
+    this.graph.addCells(this.cells, parent, index, source, target, absolute)
+    return this  
   }
 
   alignCells(align, params) {
@@ -103,6 +116,18 @@ export class WithCells {
     const {checkFoldable, recurse} = props
     this.graph.foldCells(false, recurse, this.cells, checkFoldable)
     return this
+  }
+
+  group(groupCell, border: number = 0) {
+    this.graph.groupCells(groupCell, border, this.cells)
+  }
+
+  createGroup(border: number = 0) {
+    this.graph.groupCells(null, border, this.cells)
+  }
+
+  ungroup() {
+    this.graph.ungroupCells(this.cells)
   }
 
   getAllEdges() {

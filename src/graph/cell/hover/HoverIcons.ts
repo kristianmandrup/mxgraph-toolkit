@@ -1,5 +1,6 @@
 import mx from "mx";
 import { ISize } from 'types';
+import { setStyledElement } from "utils";
 const { mxUtils, mxEvent } = mx
 
 interface Icon { 
@@ -22,6 +23,20 @@ export class HoverIcons {
   graph: any
   images: any[] = []
 
+  defaults = {
+    icon: {
+      title: 'no title',
+      calc: {
+        left: (x, width) => x + width,
+        top: (y, height) => y + height    
+      },
+      size: {
+        width: 16,
+        height: 16,  
+      }
+    }
+  }
+
   constructor(graph: any) {
     this.graph = graph
     this.images = []
@@ -32,39 +47,8 @@ export class HoverIcons {
   }
 
   add({ gestureAction, clickAction, icon }: AddParams) {
-    const { state  } = this
-    let { imagePath, title, size, calcLeft, calcTop } = icon || {}
-
-    const defaults = {
-      calcLeft: (x, width) => x + width,
-      calcTop: (y, height) => y + height
-    }
-
-    calcLeft = calcLeft || defaults.calcLeft
-    calcTop = calcTop || defaults.calcTop
-
-    size = {      
-      width: 16,
-      height: 16,
-      ...size,      
-    }
-    title = title || 'missing title'
-    const { width, height } = size
-
-    if (!imagePath) {
-      throw new Error('missing imagePath')
-    }
-
-    // Icon1
-    var img = mxUtils.createImage(imagePath);
-    img.setAttribute('title', title);
-    img.style.position = 'absolute';
-    img.style.cursor = 'pointer';
-    img.style.width = `${width}px`;
-    img.style.height = `${height}px`;
-    img.style.left = calcLeft(state.x, state.width) + 'px';
-    img.style.top = calcTop(state.y, state.height) + 'px';
-    
+    const { state, defaults } = this
+    const img = this.createImageIcon(state, icon)
     if (gestureAction) {
       mxEvent.addGestureListeners(img, gestureAction, undefined, undefined)
     }    
@@ -75,6 +59,44 @@ export class HoverIcons {
     state.view.graph.container.appendChild(img);
     this.images.push(img);
   }
+
+  iconPropsFor(icon) {
+    const { defaults } = this
+    let { title, size, calc } = icon || {}
+    calc = { 
+      ...defaults.icon.calc,
+      ...calc,      
+    }
+    size = { 
+      ...defaults.icon.size,
+      ...size,      
+    }
+    title = title || defaults.icon.title
+    return { ...icon, title, size, calc}
+  }
+
+  createImageIcon(state, icon) {
+    let { imagePath, title, size, calc } = this.iconPropsFor(icon)
+    if (!imagePath) {
+      throw new Error('missing imagePath')
+    }
+    // Icon
+    const img = mxUtils.createImage(imagePath);
+    img.setAttribute('title', title);
+    const left = calc.left(state.x, state.width) + 'px'
+    const top = calc.top(state.y, state.height) + 'px'
+    
+    const { width, height } = size    
+    setStyledElement(img, {
+      position: 'absolute',
+      cursor: 'pointer',
+      width: `${width}px`,
+      height: `${height}px`,
+      left,
+      top  
+    })  
+    return img
+  }     
 
   disableDrag(evt) {
     // Disables dragging the image
