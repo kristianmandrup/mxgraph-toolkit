@@ -7,6 +7,7 @@ import { Edge } from './edge';
 import { GraphToggler } from './GraphToggler';
 import { StyleSheet } from './style';
 import { Vertex } from './vertex';
+import { Validation } from './validation'
 import { Permission } from './permission';
 import { UserObject } from "./data";
 import { Layout } from "./layout";
@@ -74,6 +75,7 @@ export const classMap = {
   scrollable: Scrollable,
   graphToggler: GraphToggler,  
   styleSheet: StyleSheet,
+  validation: Validation,
   vertex: Vertex, 
   modalWindow: ModalWindow,
   window: Window,
@@ -109,6 +111,7 @@ export class Graph {
   _defaultStyles: any
   _wstylesheet: any
   _toggler: any
+  _validation
   _vertex: any
   _window: any
   _modalWindow: any
@@ -398,6 +401,19 @@ export class Graph {
     return new this.classMap.scroll(this.graph)
   }
   
+  get validation() {
+    this._validation = this._validation || this.createValidation()
+    return this._validation
+  }
+  
+  setValidation(validation?: any) {
+    this._validation = validation || this.createValidation()
+    return this._validation
+  }
+  
+  protected createValidation() {
+    return new this.classMap.validation(this.graph)
+  }  
 
   setIsCellVisible(isCellVisible: IsCellVisibleFn) {
     const { graph } = this
@@ -453,5 +469,5 @@ export class Graph {
       var edge = graph.createEdge(null, null, null, null, null);      
       return new mxCellState(this.graph.view, edge, graph.getCellStyle(edge));
     };
-  }
+  } 
 }

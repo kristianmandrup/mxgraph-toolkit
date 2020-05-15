@@ -41,6 +41,37 @@ export class WithCell {
     return this.cell
   }
 
+  enterGroup() {
+    this.graph.enterGroup(this.cell)
+    return this
+  }
+
+  exitGroup() {
+    this.graph.exitGroup(this.cell)
+    return this
+  }
+
+  scrollToVisible() {
+    this.graph.scrollCellToVisible(this.cell)
+    return this    
+  }
+
+  isVisible(): boolean {
+    return this.graph.isCellVisible(this.cell)
+  }
+
+  isCollapsed(): boolean {
+    return this.graph.isCellCollapsed(this.cell)
+  }
+  
+  isConnectable(): boolean {
+    return this.graph.isCellConnectable(this.cell)
+  }
+  
+  getCellBounds({includeEdges, includeDescendants}:any = {}) {
+    return this.graph.getCellBounds(this.cell, includeEdges, includeDescendants)
+  }
+
   alignCells(align, params) {
     this.withCells().alignCells(align, params)
     return this

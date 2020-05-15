@@ -53,6 +53,11 @@ export class PortsMap {
       this.addPortToVertex({index, pos, state, ...props})
     })
   }
+
+  getParentVertexFor(name: string) {
+    const port = this.getNamed(name)
+    return this.graph.getTerminalForPort(port)
+  }    
   
   getNamed(name: string) {
     return this.portsMap[name]
