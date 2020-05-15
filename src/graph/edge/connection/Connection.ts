@@ -1,15 +1,7 @@
 import mx from "mx";
 import { ISize } from 'types';
+import { Dispatcher, IDispatcher } from "messaging";
 const { mxGraph, mxEvent, mxCellState, mxImage, mxConnectionHandler } = mx
-
-interface IDispatcher {
-  notify(event)
-}
-
-export class Dispatcher implements IDispatcher {
-  notify(event) {
-  }
-}
 
 export class Connection {
   graph: any
@@ -43,7 +35,8 @@ export class Connection {
 
   // TODO: notify app of connection event
   dispatch(event) {
-
+    this.dispatcher.dispatch(event)
+    return this
   }
 
   setConnectedListener() {
