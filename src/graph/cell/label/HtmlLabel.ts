@@ -1,19 +1,48 @@
 import mx from "mx";
-import { check } from "prettier";
-import { Checkbox } from "./Checkbox";
+import { Input } from "./Input";
+import { CheckboxInput } from "./CheckboxInput";
+import { SelectInput } from "./SelectInput";
 const { mxEvent, mxClient, mxUtils, mxUndoManager } = mx
+
+type ConstructOpts = {
+  cached?: boolean 
+  hasInputs?: boolean
+  inputType?: string
+  classMap?: any
+} 
+
+export const classMap = {
+  text: Input,
+  checkbox: CheckboxInput,
+  select: SelectInput
+}
+
+export const defaults = {
+  classMap
+}
 
 export class HtmlLabel {
   graph: any
   cached?: boolean
   data?: any
-  hasCheckbox?: boolean
+  hasInputs?: boolean
+  classMap: any = {}
+  inputType: string = 'text'
 
-  constructor(graph: any, data?: any, {cached, hasCheckbox}: {cached?: boolean, hasCheckbox?: boolean} = {}) {
+  constructor(graph: any, data?: any, {classMap, cached, hasInputs, inputType}: ConstructOpts = {}) {
     this.graph = graph
     this.cached = cached
     this.data = data
-    this.hasCheckbox = hasCheckbox
+    this.hasInputs = hasInputs
+    this.inputType = inputType || this.inputType
+    this.setClassMap(classMap)
+  }
+
+  setClassMap(classMap: any = {}) {
+    this.classMap = {
+      ...defaults.classMap,
+      ...classMap
+    }      
   }
 
   setData(data) {
@@ -44,14 +73,8 @@ export class HtmlLabel {
     if (this.isUserObject(cell)) {
       // Returns a DOM for the label
       var div = document.createElement('div');
-      div.innerHTML = cell.getAttribute('label');
-      mxUtils.br(div);
-      
-      if (this.hasCheckbox) {
-        const checkbox = this.createCheckBox(cell)
-        div.appendChild(checkbox);
-      }
-                      
+      div.innerHTML = cell.getAttribute('label');      
+      this.enrichCellElement(cell, div)                      
       if (cached) {
         // Caches label
         cell.div = div;
@@ -61,8 +84,21 @@ export class HtmlLabel {
     return '';
   };
 
-  createCheckBox(cell): Element {
-    return new Checkbox(this.graph, cell).createElement()
+  enrichCellElement(cell, div) {
+    this.addLineBreak(div)
+    if (this.hasInputs) {
+      const inputElem = this.createInputElem(cell)
+      div.appendChild(inputElem);
+    }  
+  }
+
+  addLineBreak(element) {
+    mxUtils.br(element);
+  }
+
+  createInputElem(cell): Element {
+    const clazz = this.classMap[this.inputType]
+    return new clazz(this.graph, cell).createElement()
   }
 
   // Overrides method to store a cell label in the model  

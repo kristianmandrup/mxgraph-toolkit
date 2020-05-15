@@ -1,11 +1,54 @@
 import mx from "mx";
-const { mxRectangle, mxRectangleShape } = mx
+import { setObjectProp } from "utils";
+const { mxConstants, mxEvent, mxText, mxRectangle, mxRectangleShape } = mx
+
+type TextProps = {
+  align?: any
+  valign?: any
+  color?: any
+  family?: any
+  size?: any
+  fontStyle?: any
+  spacing?: any
+  spacingTop?: any
+  spacingRight?: any
+  spacingBottom?: any
+  spacingLeft?: any
+  horizontal?: any
+  background?: any
+  border?: any
+  wrap?: any
+  clipped?: any
+  overflow?: any
+  labelPadding?: any
+  textDirection?: any  
+}
 
 export class SecondLabel {
   graph: any
+  secondLabelVisible: boolean = true
 
-  constructor(graph: any) {
-    this.graph = graph
+  defaults = {
+    text: {
+      align: mxConstants.ALIGN_LEFT, 
+      valign: mxConstants.ALIGN_BOTTOM      
+    },
+    secondLabel: {
+      color: 'black',
+      family: 'Verdana',
+      size: 8,
+      fontStyle: mxConstants.FONT_ITALIC,
+      background: 'yellow',
+      border: 'black',
+      valign: 'bottom',
+      dialect: mxConstants.DIALECT_STRICTHTML,
+      wrap: true
+    }
+  }
+
+  constructor(graph: any, { secondLabelVisible } = {secondLabelVisible: true}) {
+    this.graph = graph    
+    this.secondLabelVisible = secondLabelVisible
   }
 
   setHtmlAllowed() {    
@@ -50,16 +93,82 @@ export class SecondLabel {
   }  
 
   redrawShape(state, force, rendering) {
-    const { graph } = this
+    const { graph, secondLabelVisible } = this
     const redrawShape = graph.cellRenderer.redrawShape;    
     var result = redrawShape.apply(this, arguments);
+
+    var result = redrawShape.apply(this, arguments);
+
+    const isNotRelative = state.cell.geometry && !state.cell.geometry.relative
+    const shouldDrawLabel = result && secondLabelVisible && isNotRelative
+
+    if (shouldDrawLabel) {
+      const secondLabel = graph.getSecondLabel(state.cell);
+      const hasSecondLabel = secondLabel && state.shape && state.secondLabel
+      if (hasSecondLabel) {
+        this.setSecondLabel(state, secondLabel)
+        graph.cellRenderer.initializeLabel(state, state.secondLabel);
+      }
+    }    
+
     if (state.secondLabel) {
-      var scale = graph.getView().getScale();
-      var bounds = this.createBoundsRectangle(state, { scale })
+      const { scale } = this
+      const bounds = this.createBoundsRectangle(state, { scale })
       this.setState(state, { scale, bounds })
     }      
     return result;
   }    
+
+  get scale() {
+    return this.graph.getView().getScale();
+  }
+
+  setSecondLabel(state, secondLabel) {
+    state.secondLabel = this.createText(secondLabel)
+
+    // Styles the label
+    this.styleSecondLabel(state)
+    return state  
+  }
+
+
+  protected styleSecondLabel(state) {
+    const style = this.defaults.secondLabel
+    setObjectProp(state, style, 'secondLabel')
+    state.secondLabel.dialect = state.shape.dialect;    
+    return state
+  }  
+
+  protected createText(label: string, props: TextProps = {}) {
+    props = {
+      ...this.defaults.text,
+      ...props
+    }
+    let {
+      align,
+      valign,
+      color,
+      family,
+      size,
+      fontStyle,
+      spacing,
+      spacingTop,
+      spacingRight,
+      spacingBottom,
+      spacingLeft,
+      horizontal,
+      background,
+      border,
+      wrap,
+      clipped,
+      overflow,
+      labelPadding,
+      textDirection,
+     } = props     
+    return new mxText(label, new mxRectangle(), align, valign, color, family, size, fontStyle,
+          spacing, spacingTop, spacingRight, spacingBottom, spacingLeft, horizontal, background, 
+          border, wrap, clipped, overflow, labelPadding, textDirection);
+  }
 
   protected createBoundsRectangle(state, { scale }: any) {
     return new mxRectangle(state.x + state.width - 8 * scale, state.y + 8 * scale, 35, 0);

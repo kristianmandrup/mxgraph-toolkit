@@ -4,9 +4,14 @@ export const createStyledElement = (styleMap: any, tagName: string = 'div') => {
 }
 
 export const setStyledElement = (element, styleMap) => {
-  Object.keys(styleMap).map(key => {
-    const val = styleMap[key]
-    element.style[key] = val
+  return setObjectProp(element, styleMap, 'style')
+}
+
+export const setObjectProp = (obj, objMap, propName = 'style') => {
+  const keys = Object.keys(objMap)
+  keys.map(key => {
+    const val = objMap[key]
+    obj[propName][key] = val
   })
-  return element
+  return obj
 }
