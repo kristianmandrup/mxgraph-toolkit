@@ -12,7 +12,11 @@ import {
 import { Openfile } from "sample/OpenFile";
 import { FilenameDialog } from "sample/FilenameDialog";
 import { ChangePageSetup } from "sample/ChangePageSetup";
+import { Toolbar } from "./toolbar/Toolbar";
+import { Sidebar } from "./sidebar/Sidebar";
+import { Format } from "./format/Format";
 const {
+  mxOutline,
   mxMorphing,
   mxImage,
   mxClient,
@@ -65,8 +69,13 @@ export class EditorUI {
   menubar: any;
   hsplit: any;
   format: any;
+  $openFile: any;
+  updateDocumentTitle: any; // fn
+  addListener: any;
 
-  refresh() {}
+  refresh() {
+    // use Refresher
+  }
 
   /**
  * Global config that specifies if the compact UI elements should be used.
@@ -685,7 +694,7 @@ export class EditorUI {
   /**
    * Displays a print dialog.
    */
-  hideDialog(cancel, isEsc) {
+  hideDialog(cancel, isEsc?) {
     if (this.dialogs != null && this.dialogs.length > 0) {
       var dlg = this.dialogs.pop();
 
@@ -753,7 +762,7 @@ export class EditorUI {
    */
   openFile() {
     // Closes dialog after open
-    window.openFile = new Openfile(
+    this.$openFile = new Openfile(
       (cancel) => {
         this.hideDialog(cancel);
       },
@@ -767,7 +776,7 @@ export class EditorUI {
       true,
       true,
       () => {
-        window.openFile = null;
+        this.$openFile = null;
       },
       null,
       null,
@@ -1096,15 +1105,15 @@ export class EditorUI {
    * Creates the keyboard event handler for the current graph and history.
    */
   createOutline(wnd) {
-    var outline = new mxOutline(this.editor.graph);
+    var outline = new mxOutline(this.editor.graph, undefined);
     outline.border = 20;
 
     mxEvent.addListener(window, "resize", () => {
-      outline.update();
+      outline.update(null);
     });
 
     this.addListener("pageFormatChanged", () => {
-      outline.update();
+      outline.update(null);
     });
     return outline;
   }

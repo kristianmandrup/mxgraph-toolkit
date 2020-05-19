@@ -8,7 +8,14 @@ const {
 const {} = resources;
 
 export class Thumbnail {
+  editorUi: any;
   graph: any;
+  documentMode: any;
+  thumbBorder: any;
+  thumbHeight: any;
+  thumbPadding: any;
+  sidebarTitles: any;
+  sidebarTitleSize: any;
 
   /**
  * Creates a thumbnail for the given cells.
@@ -41,7 +48,7 @@ export class Thumbnail {
       Math.floor((width - bounds.width * s) / 2 / s - bounds.x),
       Math.floor((height - bounds.height * s) / 2 / s - bounds.y),
     );
-    var node = null;
+    var node: any;
 
     // For supporting HTML labels in IE9 standards mode the container is cloned instead
     if (
@@ -55,7 +62,7 @@ export class Thumbnail {
       node.innerHTML = this.graph.container.innerHTML;
 
       // Workaround for clipping in older IE versions
-      if (mxClient.IS_QUIRKS || document.documentMode == 8) {
+      if (mxClient.IS_QUIRKS || this.documentMode == 8) {
         node.firstChild.style.overflow = "visible";
       }
     }

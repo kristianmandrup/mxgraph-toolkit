@@ -1,5 +1,6 @@
 import mx from "mx";
 import resources from "resources/resources";
+import { Graph } from "ui/graph/Graph";
 const {
   mxPopupMenu,
   mxPoint,
@@ -26,6 +27,11 @@ export class Tooltip {
   triangleDown: any;
   currentSearch: any;
   entries: any;
+  tooltipBorder: any;
+  maxTooltipHeight: any;
+  maxTooltipWidth: any;
+  tooltipTitles: any;
+  tooltipDelay: any;
 
   /**
    * Specifies if tooltips should be visible. Default is true.
