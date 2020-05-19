@@ -3,7 +3,7 @@ import { CellCreator } from './CellCreator'
 export class AbstractShaper {
   cellCreator: CellCreator
 
-  constructor(cellCreator) {
+  constructor(cellCreator?) {
     this.cellCreator = cellCreator || this.createCellCreator()
   }
 
@@ -12,11 +12,44 @@ export class AbstractShaper {
   }
 
   addEntry(tags, fn?) {
-    this.cellCreator.addEntry(tags, fn)
+    return this.cellCreator.addEntry(tags, fn)
   }
 
-  cloneCell(cell, label) {
-    this.cellCreator.cloneCell(cell, label)
+  cloneCell(cell, label): any {
+    return this.cellCreator.cloneCell(cell, label)
+  }
+
+  createEdgeTemplateFromCells(cells, width, height, title, showLabel?, allowCellsInserted?) {
+    return this.cellCreator.createEdgeTemplateFromCells(
+      cells,
+      width,
+      height,
+      title,
+      showLabel,
+      allowCellsInserted
+    )
+  }
+
+  createEdgeTemplateEntry(
+    style,
+    width,
+    height,
+    value,
+    title,
+    showLabel?,
+    tags?,
+    allowCellsInserted?
+  ) {
+    return this.cellCreator.createEdgeTemplateEntry(
+      style,
+      width,
+      height,
+      value,
+      title,
+      showLabel,
+      tags,
+      allowCellsInserted
+    )
   }
 
   createVertexTemplateFromCells(
@@ -28,7 +61,7 @@ export class AbstractShaper {
     showTitle?,
     allowCellsInserted?
   ) {
-    this.cellCreator.createVertexTemplateFromCells(
+    return this.cellCreator.createVertexTemplateFromCells(
       cells,
       width,
       height,

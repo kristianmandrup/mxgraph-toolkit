@@ -1,345 +1,329 @@
-export class GeneralPalette {
+import mx from 'mx'
+import { AbstractPalette } from './AbstractPalette'
+const { mxCell, mxGeometry, mxPoint, mxResources } = mx
+
+export class GeneralPalette extends AbstractPalette {
   /**
- * Adds the general palette to the sidebar.
- */
+   * Adds the general palette to the sidebar.
+   */
   addGeneralPalette(expand) {
-    var lineTags =
-      "line lines connector connectors connection connections arrow arrows ";
+    var lineTags = 'line lines connector connectors connection connections arrow arrows '
 
     var fns = [
       this.createVertexTemplateEntry(
-        "rounded=0;whiteSpace=wrap;html=1;",
+        'rounded=0;whiteSpace=wrap;html=1;',
         120,
         60,
-        "",
-        "Rectangle",
+        '',
+        'Rectangle',
         null,
         null,
-        "rect rectangle box",
+        'rect rectangle box'
       ),
       this.createVertexTemplateEntry(
-        "rounded=1;whiteSpace=wrap;html=1;",
+        'rounded=1;whiteSpace=wrap;html=1;',
         120,
         60,
-        "",
-        "Rounded Rectangle",
+        '',
+        'Rounded Rectangle',
         null,
         null,
-        "rounded rect rectangle box",
+        'rounded rect rectangle box'
       ),
       // Explicit strokecolor/fillcolor=none is a workaround to maintain transparent background regardless of current style
       this.createVertexTemplateEntry(
-        "text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;",
+        'text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;',
         40,
         20,
-        "Text",
-        "Text",
+        'Text',
+        'Text',
         null,
         null,
-        "text textbox textarea label",
+        'text textbox textarea label'
       ),
       this.createVertexTemplateEntry(
-        "text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;",
+        'text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;',
         190,
         120,
-        "<h1>Heading</h1><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>",
-        "Textbox",
+        '<h1>Heading</h1><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>',
+        'Textbox',
         null,
         null,
-        "text textbox textarea",
+        'text textbox textarea'
       ),
       this.createVertexTemplateEntry(
-        "ellipse;whiteSpace=wrap;html=1;",
+        'ellipse;whiteSpace=wrap;html=1;',
         120,
         80,
-        "",
-        "Ellipse",
+        '',
+        'Ellipse',
         null,
         null,
-        "oval ellipse state",
+        'oval ellipse state'
       ),
       this.createVertexTemplateEntry(
-        "whiteSpace=wrap;html=1;aspect=fixed;",
+        'whiteSpace=wrap;html=1;aspect=fixed;',
         80,
         80,
-        "",
-        "Square",
+        '',
+        'Square',
         null,
         null,
-        "square",
+        'square'
       ),
       this.createVertexTemplateEntry(
-        "ellipse;whiteSpace=wrap;html=1;aspect=fixed;",
+        'ellipse;whiteSpace=wrap;html=1;aspect=fixed;',
         80,
         80,
-        "",
-        "Circle",
+        '',
+        'Circle',
         null,
         null,
-        "circle",
+        'circle'
       ),
       this.createVertexTemplateEntry(
-        "shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;",
-        120,
-        60,
-        "",
-        "Process",
-        null,
-        null,
-        "process task",
-      ),
-      this.createVertexTemplateEntry(
-        "rhombus;whiteSpace=wrap;html=1;",
-        80,
-        80,
-        "",
-        "Diamond",
-        null,
-        null,
-        "diamond rhombus if condition decision conditional question test",
-      ),
-      this.createVertexTemplateEntry(
-        "shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;",
+        'shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;',
         120,
         60,
-        "",
-        "Parallelogram",
-      ),
-      this.createVertexTemplateEntry(
-        "shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;",
-        120,
-        80,
-        "",
-        "Hexagon",
+        '',
+        'Process',
         null,
         null,
-        "hexagon preparation",
+        'process task'
       ),
       this.createVertexTemplateEntry(
-        "triangle;whiteSpace=wrap;html=1;",
-        60,
+        'rhombus;whiteSpace=wrap;html=1;',
         80,
-        "",
-        "Triangle",
+        80,
+        '',
+        'Diamond',
         null,
         null,
-        "triangle logic inverter buffer",
+        'diamond rhombus if condition decision conditional question test'
       ),
       this.createVertexTemplateEntry(
-        "shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;",
-        60,
-        80,
-        "",
-        "Cylinder",
-        null,
-        null,
-        "cylinder data database",
-      ),
-      this.createVertexTemplateEntry(
-        "ellipse;shape=cloud;whiteSpace=wrap;html=1;",
-        120,
-        80,
-        "",
-        "Cloud",
-        null,
-        null,
-        "cloud network",
-      ),
-      this.createVertexTemplateEntry(
-        "shape=document;whiteSpace=wrap;html=1;boundedLbl=1;",
-        120,
-        80,
-        "",
-        "Document",
-      ),
-      this.createVertexTemplateEntry(
-        "shape=internalStorage;whiteSpace=wrap;html=1;backgroundOutline=1;",
-        80,
-        80,
-        "",
-        "Internal Storage",
-      ),
-      this.createVertexTemplateEntry(
-        "shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;",
-        120,
-        80,
-        "",
-        "Cube",
-      ),
-      this.createVertexTemplateEntry(
-        "shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;",
-        120,
-        80,
-        "",
-        "Step",
-      ),
-      this.createVertexTemplateEntry(
-        "shape=trapezoid;perimeter=trapezoidPerimeter;whiteSpace=wrap;html=1;",
+        'shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;',
         120,
         60,
-        "",
-        "Trapezoid",
+        '',
+        'Parallelogram'
       ),
       this.createVertexTemplateEntry(
-        "shape=tape;whiteSpace=wrap;html=1;",
+        'shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;',
         120,
-        100,
-        "",
-        "Tape",
+        80,
+        '',
+        'Hexagon',
+        null,
+        null,
+        'hexagon preparation'
       ),
       this.createVertexTemplateEntry(
-        "shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;",
+        'triangle;whiteSpace=wrap;html=1;',
+        60,
+        80,
+        '',
+        'Triangle',
+        null,
+        null,
+        'triangle logic inverter buffer'
+      ),
+      this.createVertexTemplateEntry(
+        'shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;',
+        60,
+        80,
+        '',
+        'Cylinder',
+        null,
+        null,
+        'cylinder data database'
+      ),
+      this.createVertexTemplateEntry(
+        'ellipse;shape=cloud;whiteSpace=wrap;html=1;',
+        120,
+        80,
+        '',
+        'Cloud',
+        null,
+        null,
+        'cloud network'
+      ),
+      this.createVertexTemplateEntry(
+        'shape=document;whiteSpace=wrap;html=1;boundedLbl=1;',
+        120,
+        80,
+        '',
+        'Document'
+      ),
+      this.createVertexTemplateEntry(
+        'shape=internalStorage;whiteSpace=wrap;html=1;backgroundOutline=1;',
+        80,
+        80,
+        '',
+        'Internal Storage'
+      ),
+      this.createVertexTemplateEntry(
+        'shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;',
+        120,
+        80,
+        '',
+        'Cube'
+      ),
+      this.createVertexTemplateEntry(
+        'shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;',
+        120,
+        80,
+        '',
+        'Step'
+      ),
+      this.createVertexTemplateEntry(
+        'shape=trapezoid;perimeter=trapezoidPerimeter;whiteSpace=wrap;html=1;',
+        120,
+        60,
+        '',
+        'Trapezoid'
+      ),
+      this.createVertexTemplateEntry('shape=tape;whiteSpace=wrap;html=1;', 120, 100, '', 'Tape'),
+      this.createVertexTemplateEntry(
+        'shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;',
         80,
         100,
-        "",
-        "Note",
+        '',
+        'Note'
       ),
+      this.createVertexTemplateEntry('shape=card;whiteSpace=wrap;html=1;', 80, 100, '', 'Card'),
       this.createVertexTemplateEntry(
-        "shape=card;whiteSpace=wrap;html=1;",
-        80,
-        100,
-        "",
-        "Card",
-      ),
-      this.createVertexTemplateEntry(
-        "shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;",
+        'shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;',
         120,
         80,
-        "",
-        "Callout",
+        '',
+        'Callout',
         null,
         null,
-        "bubble chat thought speech message",
+        'bubble chat thought speech message'
       ),
       this.createVertexTemplateEntry(
-        "shape=umlActor;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;html=1;outlineConnect=0;",
+        'shape=umlActor;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;html=1;outlineConnect=0;',
         30,
         60,
-        "Actor",
-        "Actor",
+        'Actor',
+        'Actor',
         false,
         null,
-        "user person human stickman",
+        'user person human stickman'
       ),
       this.createVertexTemplateEntry(
-        "shape=xor;whiteSpace=wrap;html=1;",
+        'shape=xor;whiteSpace=wrap;html=1;',
         60,
         80,
-        "",
-        "Or",
+        '',
+        'Or',
         null,
         null,
-        "logic or",
+        'logic or'
       ),
       this.createVertexTemplateEntry(
-        "shape=or;whiteSpace=wrap;html=1;",
+        'shape=or;whiteSpace=wrap;html=1;',
         60,
         80,
-        "",
-        "And",
+        '',
+        'And',
         null,
         null,
-        "logic and",
+        'logic and'
       ),
       this.createVertexTemplateEntry(
-        "shape=dataStorage;whiteSpace=wrap;html=1;",
+        'shape=dataStorage;whiteSpace=wrap;html=1;',
         100,
         80,
-        "",
-        "Data Storage",
+        '',
+        'Data Storage'
       ),
-      this.addEntry(
-        "curve",
-        mxUtils.bind(this, function () {
-          var cell = new mxCell(
-            "",
-            new mxGeometry(0, 0, 50, 50),
-            "curved=1;endArrow=classic;html=1;",
-          );
-          cell.geometry.setTerminalPoint(new mxPoint(0, 50), true);
-          cell.geometry.setTerminalPoint(new mxPoint(50, 0), false);
-          cell.geometry.points = [new mxPoint(50, 50), new mxPoint(0, 0)];
-          cell.geometry.relative = true;
-          cell.edge = true;
+      this.addEntry('curve', () => {
+        var cell = new mxCell('', new mxGeometry(0, 0, 50, 50), 'curved=1;endArrow=classic;html=1;')
+        cell.geometry.setTerminalPoint(new mxPoint(0, 50), true)
+        cell.geometry.setTerminalPoint(new mxPoint(50, 0), false)
+        cell.geometry.points = [new mxPoint(50, 50), new mxPoint(0, 0)]
+        cell.geometry.relative = true
+        cell.edge = true
 
-          return this.createEdgeTemplateFromCells(
-            [cell],
-            cell.geometry.width,
-            cell.geometry.height,
-            "Curve",
-          );
-        }),
+        return this.createEdgeTemplateFromCells(
+          [cell],
+          cell.geometry.width,
+          cell.geometry.height,
+          'Curve'
+        )
+      }),
+      this.createEdgeTemplateEntry(
+        'shape=flexArrow;endArrow=classic;startArrow=classic;html=1;',
+        50,
+        50,
+        '',
+        'Bidirectional Arrow',
+        null,
+        lineTags + 'bidirectional'
       ),
       this.createEdgeTemplateEntry(
-        "shape=flexArrow;endArrow=classic;startArrow=classic;html=1;",
+        'shape=flexArrow;endArrow=classic;html=1;',
         50,
         50,
-        "",
-        "Bidirectional Arrow",
+        '',
+        'Arrow',
         null,
-        lineTags + "bidirectional",
+        lineTags + 'directional directed'
       ),
       this.createEdgeTemplateEntry(
-        "shape=flexArrow;endArrow=classic;html=1;",
+        'shape=link;html=1;',
         50,
         50,
-        "",
-        "Arrow",
+        '',
+        'Link',
         null,
-        lineTags + "directional directed",
+        lineTags + 'link'
       ),
       this.createEdgeTemplateEntry(
-        "shape=link;html=1;",
+        'endArrow=none;dashed=1;html=1;',
         50,
         50,
-        "",
-        "Link",
+        '',
+        'Dashed Line',
         null,
-        lineTags + "link",
+        lineTags + 'dashed undirected no'
       ),
       this.createEdgeTemplateEntry(
-        "endArrow=none;dashed=1;html=1;",
+        'endArrow=none;html=1;',
         50,
         50,
-        "",
-        "Dashed Line",
+        '',
+        'Line',
         null,
-        lineTags + "dashed undirected no",
+        lineTags + 'simple undirected plain blank no'
       ),
       this.createEdgeTemplateEntry(
-        "endArrow=none;html=1;",
+        'endArrow=classic;startArrow=classic;html=1;',
         50,
         50,
-        "",
-        "Line",
+        '',
+        'Bidirectional Connector',
         null,
-        lineTags + "simple undirected plain blank no",
+        lineTags + 'bidirectional'
       ),
       this.createEdgeTemplateEntry(
-        "endArrow=classic;startArrow=classic;html=1;",
+        'endArrow=classic;html=1;',
         50,
         50,
-        "",
-        "Bidirectional Connector",
+        '',
+        'Directional Connector',
         null,
-        lineTags + "bidirectional",
+        lineTags + 'directional directed'
       ),
-      this.createEdgeTemplateEntry(
-        "endArrow=classic;html=1;",
-        50,
-        50,
-        "",
-        "Directional Connector",
-        null,
-        lineTags + "directional directed",
-      ),
-    ];
+    ]
 
     this.addPaletteFunctions(
-      "general",
-      mxResources.get("general"),
-      (expand != null) ? expand : true,
-      fns,
-    );
+      'general',
+      mxResources.get('general'),
+      expand != null ? expand : true,
+      fns
+    )
   }
 }
