@@ -1,4 +1,11 @@
+import mx from "mx";
+const { mxClient } = mx;
+
 export class PaletteManager {
+  container: any;
+  palettes: any = {};
+  createTitle: any; // fn
+  addFoldingHandler: any; // fn
   /**
   * Removes the palette for the given ID.
   */
@@ -26,11 +33,11 @@ export class PaletteManager {
       id,
       title,
       expanded,
-      mxUtils.bind(this, function (content) {
+      (content) => {
         for (var i = 0; i < fns.length; i++) {
           content.appendChild(fns[i](content));
         }
-      }),
+      },
     );
   }
 

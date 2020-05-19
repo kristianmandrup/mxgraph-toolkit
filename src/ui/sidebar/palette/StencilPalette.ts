@@ -13,7 +13,7 @@ export class StencilPalette extends AbstractPalette {
   /**
  * Adds the given stencil palette.
  */
-  addStencilPalette(
+  create(
     id,
     title,
     stencilFile,

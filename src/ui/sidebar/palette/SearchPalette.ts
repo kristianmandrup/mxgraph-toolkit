@@ -17,7 +17,7 @@ export class SearchPalette extends AbstractPalette {
   /**
  * Adds shape search UI.
  */
-  addSearchPalette(expand) {
+  create(expand) {
     var elt = document.createElement("div");
     elt.style.visibility = "hidden";
     this.container.appendChild(elt);

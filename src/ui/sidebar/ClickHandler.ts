@@ -1,4 +1,11 @@
+import mx from "mx";
+const { mxUtils, mxEvent, mxPoint } = mx;
+
 export class ClickHandler {
+  editorUi: any;
+  dragElement: any;
+  currentGraph: any;
+
   /**
  * Adds a handler for inserting the cell with a single click.
  */
@@ -8,8 +15,8 @@ export class ClickHandler {
     var oldMouseMove = ds.mouseMove;
     var oldMouseUp = ds.mouseUp;
     var tol = graph.tolerance;
-    var first = null;
-    var sb = this;
+    var first: any;
+    var sb: any;
 
     ds.mouseDown = function (evt) {
       oldMouseDown.apply(this, arguments);
