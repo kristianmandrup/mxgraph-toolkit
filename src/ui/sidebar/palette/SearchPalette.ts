@@ -1,4 +1,19 @@
-export class SearchPalette {
+import mx from "mx";
+import { AbstractPalette } from "./AbstractPalette";
+import { Dialog } from "sample/Dialog";
+const { mxEvent, mxUtils, mxClient, mxResources } = mx;
+
+export class SearchPalette extends AbstractPalette {
+  container: any;
+  editorUi: any;
+  searchImage: any;
+  currentSearch: any;
+  thumbWidth: number = 16;
+  hideTooltip: any; //() => void
+  searchEntries: any; //fn
+  palettes: any;
+  insertSearchHint: any; // fn
+
   /**
  * Adds shape search UI.
  */
@@ -150,7 +165,7 @@ export class SearchPalette {
               searchTerm,
               count,
               page,
-              mxUtils.bind(this, function (results, len, more, terms) {
+              (results, len, more, terms) => {
                 if (this.currentSearch == current) {
                   results = (results != null) ? results : [];
                   active = false;
@@ -201,11 +216,11 @@ export class SearchPalette {
                   button.style.cursor = "";
                   div.appendChild(center);
                 }
-              }),
-              mxUtils.bind(this, function () {
+              },
+              () => {
                 // TODO: Error handling
                 button.style.cursor = "";
-              }),
+              },
             );
           }
         }

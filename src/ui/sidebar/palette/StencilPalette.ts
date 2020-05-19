@@ -1,4 +1,15 @@
-export class StencilPalette {
+import mx from "mx";
+import { AbstractPalette } from "./AbstractPalette";
+const { mxStencilRegistry, mxUtils } = mx;
+
+export class StencilPalette extends AbstractPalette {
+  addStencilsToIndex: any; // fn
+  getTagsForStencil: any;
+  filterTags: any;
+
+  // PaletteAdder
+  addPaletteFunctions: any;
+  addPalette: any;
   /**
  * Adds the given stencil palette.
  */
@@ -11,13 +22,13 @@ export class StencilPalette {
     onInit?,
     scale?,
     tags?,
-    customFns?,
+    customFns: any[] = [],
   ) {
     scale = (scale != null) ? scale : 1;
 
     if (this.addStencilsToIndex) {
       // LATER: Handle asynchronous loading dependency
-      var fns = [];
+      var fns: any[] = [];
 
       if (customFns != null) {
         for (var i = 0; i < customFns.length; i++) {
@@ -25,34 +36,31 @@ export class StencilPalette {
         }
       }
 
-      mxStencilRegistry.loadStencilSet(
+      mxStencilRegistry["loadStencilSet"](
         stencilFile,
-        mxUtils.bind(
-          this,
-          function (packageName, stencilName, displayName, w, h) {
-            if (ignore == null || mxUtils.indexOf(ignore, stencilName) < 0) {
-              var tmp = this.getTagsForStencil(packageName, stencilName);
-              var tmpTags = (tags != null) ? tags[stencilName] : null;
+        (packageName, stencilName, displayName, w, h) => {
+          if (ignore == null || mxUtils.indexOf(ignore, stencilName) < 0) {
+            var tmp = this.getTagsForStencil(packageName, stencilName);
+            var tmpTags = (tags != null) ? tags[stencilName] : null;
 
-              if (tmpTags != null) {
-                tmp.push(tmpTags);
-              }
-
-              fns.push(
-                this.createVertexTemplateEntry(
-                  "shape=" + packageName + stencilName.toLowerCase() + style,
-                  Math.round(w * scale),
-                  Math.round(h * scale),
-                  "",
-                  stencilName.replace(/_/g, " "),
-                  null,
-                  null,
-                  this.filterTags(tmp.join(" ")),
-                ),
-              );
+            if (tmpTags != null) {
+              tmp.push(tmpTags);
             }
-          },
-        ),
+
+            fns.push(
+              this.createVertexTemplateEntry(
+                "shape=" + packageName + stencilName.toLowerCase() + style,
+                Math.round(w * scale),
+                Math.round(h * scale),
+                "",
+                stencilName.replace(/_/g, " "),
+                null,
+                null,
+                this.filterTags(tmp.join(" ")),
+              ),
+            );
+          }
+        },
         true,
         true,
       );
@@ -63,7 +71,7 @@ export class StencilPalette {
         id,
         title,
         false,
-        mxUtils.bind(this, function (content) {
+        (content) => {
           if (style == null) {
             style = "";
           }
@@ -78,31 +86,28 @@ export class StencilPalette {
             }
           }
 
-          mxStencilRegistry.loadStencilSet(
+          mxStencilRegistry["loadStencilSet"](
             stencilFile,
-            mxUtils.bind(
-              this,
-              function (packageName, stencilName, displayName, w, h) {
-                if (
-                  ignore == null || mxUtils.indexOf(ignore, stencilName) < 0
-                ) {
-                  content.appendChild(
-                    this.createVertexTemplate(
-                      "shape=" + packageName + stencilName.toLowerCase() +
-                        style,
-                      Math.round(w * scale),
-                      Math.round(h * scale),
-                      "",
-                      stencilName.replace(/_/g, " "),
-                      true,
-                    ),
-                  );
-                }
-              },
-            ),
+            (packageName, stencilName, displayName, w, h) => {
+              if (
+                ignore == null || mxUtils.indexOf(ignore, stencilName) < 0
+              ) {
+                content.appendChild(
+                  this.createVertexTemplate(
+                    "shape=" + packageName + stencilName.toLowerCase() +
+                      style,
+                    Math.round(w * scale),
+                    Math.round(h * scale),
+                    "",
+                    stencilName.replace(/_/g, " "),
+                    true,
+                  ),
+                );
+              }
+            },
             true,
           );
-        }),
+        },
       );
     }
   }

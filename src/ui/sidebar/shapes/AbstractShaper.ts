@@ -1,33 +1,40 @@
-import { CellCreator } from './CellCreator'
+import { CellCreator } from "./CellCreator";
 
 export class AbstractShaper {
-  cellCreator: CellCreator
+  cellCreator: CellCreator;
 
   constructor(cellCreator?) {
-    this.cellCreator = cellCreator || this.createCellCreator()
+    this.cellCreator = cellCreator || this.createCellCreator();
   }
 
   createCellCreator() {
-    return new CellCreator()
+    return new CellCreator();
   }
 
   addEntry(tags, fn?) {
-    return this.cellCreator.addEntry(tags, fn)
+    return this.cellCreator.addEntry(tags, fn);
   }
 
   cloneCell(cell, label): any {
-    return this.cellCreator.cloneCell(cell, label)
+    return this.cellCreator.cloneCell(cell, label);
   }
 
-  createEdgeTemplateFromCells(cells, width, height, title, showLabel?, allowCellsInserted?) {
+  createEdgeTemplateFromCells(
+    cells,
+    width,
+    height,
+    title,
+    showLabel?,
+    allowCellsInserted?,
+  ) {
     return this.cellCreator.createEdgeTemplateFromCells(
       cells,
       width,
       height,
       title,
       showLabel,
-      allowCellsInserted
-    )
+      allowCellsInserted,
+    );
   }
 
   createEdgeTemplateEntry(
@@ -38,7 +45,7 @@ export class AbstractShaper {
     title,
     showLabel?,
     tags?,
-    allowCellsInserted?
+    allowCellsInserted?,
   ) {
     return this.cellCreator.createEdgeTemplateEntry(
       style,
@@ -48,8 +55,8 @@ export class AbstractShaper {
       title,
       showLabel,
       tags,
-      allowCellsInserted
-    )
+      allowCellsInserted,
+    );
   }
 
   createVertexTemplateFromCells(
@@ -59,7 +66,7 @@ export class AbstractShaper {
     title,
     showLabel?,
     showTitle?,
-    allowCellsInserted?
+    allowCellsInserted?,
   ) {
     return this.cellCreator.createVertexTemplateFromCells(
       cells,
@@ -68,8 +75,8 @@ export class AbstractShaper {
       title,
       showLabel,
       showTitle,
-      allowCellsInserted
-    )
+      allowCellsInserted,
+    );
   }
 
   createVertexTemplateFromData(
@@ -79,7 +86,7 @@ export class AbstractShaper {
     title,
     showLabel?,
     showTitle?,
-    allowCellsInserted?
+    allowCellsInserted?,
   ) {
     return this.cellCreator.createVertexTemplateFromData(
       data,
@@ -88,11 +95,20 @@ export class AbstractShaper {
       title,
       showLabel,
       showTitle,
-      allowCellsInserted
-    )
+      allowCellsInserted,
+    );
   }
 
-  createVertexTemplateEntry(style, width, height, value, title, showLabel?, showTitle?, tags?) {
+  createVertexTemplateEntry(
+    style,
+    width,
+    height,
+    value,
+    title,
+    showLabel?,
+    showTitle?,
+    tags?,
+  ) {
     return this.cellCreator.createVertexTemplateEntry(
       style,
       width,
@@ -101,8 +117,8 @@ export class AbstractShaper {
       title,
       showLabel,
       showTitle,
-      tags
-    )
+      tags,
+    );
   }
 
   createVertexTemplate(
@@ -111,9 +127,9 @@ export class AbstractShaper {
     height,
     value,
     title,
-    showLabel,
-    showTitle,
-    allowCellsInserted
+    showLabel?,
+    showTitle?,
+    allowCellsInserted?,
   ) {
     return this.cellCreator.createVertexTemplate(
       style,
@@ -123,7 +139,7 @@ export class AbstractShaper {
       title,
       showLabel,
       showTitle,
-      allowCellsInserted
-    )
+      allowCellsInserted,
+    );
   }
 }
