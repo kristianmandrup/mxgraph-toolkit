@@ -17,7 +17,7 @@ export class ColorDialog {
 
   init: () => void;
 
-  constructor(editorUi, color, apply, cancelFn) {
+  constructor(editorUi, color?, apply?, cancelFn?) {
     this.editorUi = editorUi;
 
     var input: any = document.createElement("input");

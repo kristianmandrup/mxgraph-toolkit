@@ -1,4 +1,10 @@
+import { ColorDialog } from 'sample/dialogs'
+import mx from 'mx'
+const { mxConstants, mxUtils } = mx
+
 export class ColorPicker {
+  editorUi: any
+  colorDialog?: ColorDialog
   /**
    * Adds a handler for showing a menu in the given element.
    */

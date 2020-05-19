@@ -1,8 +1,15 @@
 import mx from 'mx'
-import { Menu } from '../../Menu'
 import { Menubar } from '../../Menubar'
-import { FilenameDialog } from 'sample/FilenameDialog'
-const { mxResources, mxConstants, mxClient, mxEvent, mxUtils } = mx
+const {
+  mxMouseEvent,
+  mxEdgeHandler,
+  mxEventObject,
+  mxResources,
+  mxConstants,
+  mxClient,
+  mxEvent,
+  mxUtils,
+} = mx
 
 /**
  * Copyright (c) 2006-2012, JGraph Ltd
@@ -16,6 +23,7 @@ export class Menus {
   checkmarkImage: any
   customFonts: any[] = []
   customFontSizes: any[] = []
+  documentMode: any
 
   constructor(editorUi) {
     this.editorUi = editorUi
@@ -128,7 +136,7 @@ export class Menus {
     insertFn =
       insertFn != null
         ? insertFn
-        : mxUtils.bind(this, function (evt, rows, cols) {
+        : (evt, rows, cols) => {
             var graph = this.editorUi.editor.graph
             var td = graph.getParentByName(mxEvent.getSource(evt), 'TD')
 
@@ -137,8 +145,8 @@ export class Menus {
 
               // To find the new link, we create a list of all existing links first
               // LATER: Refactor for reuse with code for finding inserted image below
-              var tmp = graph.cellEditor.textarea.getElementsByTagName('table')
-              var oldTables = []
+              var tmp: any = graph.cellEditor.textarea.getElementsByTagName('table')
+              var oldTables: any[] = []
 
               for (var i = 0; i < tmp.length; i++) {
                 oldTables.push(tmp[i])
@@ -161,12 +169,12 @@ export class Menus {
                 }
               }
             }
-          })
+          }
 
     // KNOWN: Does not work in IE8 standards and quirks
     var graph = this.editorUi.editor.graph
-    var row2 = null
-    var td = null
+    var row2: any
+    var td: any
 
     function createTable(rows, cols) {
       var html = ['<table>']
@@ -238,10 +246,10 @@ export class Menus {
         }
       }
 
-      for (var i = 0; i < picker.rows.length; i++) {
+      for (var i: any = 0; i < picker.rows.length; i++) {
         var row = picker.rows[i]
 
-        for (var j = row.cells.length; j < cols; j++) {
+        for (var j: number = row.cells.length; j < cols; j++) {
           var cell = row.insertCell(-1)
 
           if (mxClient.IS_QUIRKS) {
@@ -257,7 +265,7 @@ export class Menus {
 
     var label = document.createElement('div')
     label.style.padding = '4px'
-    label.style.fontSize = defaultFontSize + 'px'
+    label.style.fontSize = this.defaultFontSize + 'px'
     label.innerHTML = '1x1'
     elt2.firstChild.appendChild(label)
 
@@ -295,14 +303,14 @@ export class Menus {
     return menu.addItem(
       label,
       null,
-      mxUtils.bind(this, function () {
+      () => {
         var graph = this.editorUi.editor.graph
         graph.stopEditing(false)
 
         graph.getModel().beginUpdate()
         try {
           var cells = graph.getSelectionCells()
-          var edges = []
+          var edges: any[] = []
 
           for (var i = 0; i < cells.length; i++) {
             var cell = cells[i]
@@ -333,7 +341,7 @@ export class Menus {
         } finally {
           graph.getModel().endUpdate()
         }
-      }),
+      },
       parent,
       sprite
     )
@@ -348,7 +356,7 @@ export class Menus {
     return menu.addItem(
       label,
       null,
-      mxUtils.bind(this, function () {
+      () => {
         var graph = this.editorUi.editor.graph
 
         if (fn != null && graph.cellEditor.isContentEditing()) {
@@ -356,7 +364,7 @@ export class Menus {
         } else {
           apply(post)
         }
-      }),
+      },
       parent,
       sprite
     )
@@ -366,7 +374,7 @@ export class Menus {
    *
    */
   createStyleChangeFunction(keys, values) {
-    return mxUtils.bind(this, function (post) {
+    return (post) => {
       var graph = this.editorUi.editor.graph
       graph.stopEditing(false)
 
@@ -405,7 +413,7 @@ export class Menus {
       } finally {
         graph.getModel().endUpdate()
       }
-    })
+    }
   }
 
   /**
@@ -430,7 +438,7 @@ export class Menus {
   /**
    * Creates the keyboard event handler for the current graph and history.
    */
-  addMenuItem(menu, key, parent, trigger, sprite, label) {
+  addMenuItem(menu, key, parent, trigger, sprite?, label?) {
     var action = this.editorUi.actions.get(key)
 
     if (action != null && (menu.showDisabled || action.isEnabled()) && action.visible) {
@@ -474,7 +482,7 @@ export class Menus {
   /**
    * Creates the keyboard event handler for the current graph and history.
    */
-  addMenuItems(menu, keys, parent, trigger, sprites) {
+  addMenuItems(menu, keys, parent, trigger, sprites?) {
     for (var i = 0; i < keys.length; i++) {
       if (keys[i] == '-') {
         menu.addSeparator(parent)
@@ -650,23 +658,23 @@ export class Menus {
   /**
    * Creates the keyboard event handler for the current graph and history.
    */
-  menuCreated(menu, elt, className) {
+  menuCreated(menu, elt, className?) {
     if (elt != null) {
       className = className != null ? className : 'geItem'
-
+      const { documentMode } = this
       menu.addListener('stateChanged', function () {
         elt.enabled = menu.enabled
 
         if (!menu.enabled) {
           elt.className = className + ' mxDisabled'
 
-          if (document.documentMode == 8) {
+          if (documentMode == 8) {
             elt.style.color = '#c3c3c3'
           }
         } else {
           elt.className = className
 
-          if (document.documentMode == 8) {
+          if (documentMode == 8) {
             elt.style.color = ''
           }
         }

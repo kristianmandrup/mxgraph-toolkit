@@ -1,4 +1,9 @@
+import { FilenameDialog } from 'sample/FilenameDialog'
+import mx from 'mx'
+const { mxResources, mxUtils } = mx
+
 export class MenuPrompt {
+  editorUi: any
   /**
    * Adds a style change item with a prompt to the given menu.
    */
