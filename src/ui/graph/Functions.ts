@@ -67,19 +67,7 @@ export class Functionas {
       }
     }
   };
-  
-  /**
-   * Hook for creating the canvas used in getSvg.
-   */
-  createSvgCanvas(node)
-  {
-    var canvas = new mxSvgCanvas2D(node);
     
-    canvas.pointerEvents = true;
-    
-    return canvas;
-  };
-  
   /**
    * Returns the first ancestor of the current selection with the given name.
    */
